@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pasticceria Giotto — Customer Journey</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: #f5f4f0;
+      color: #1a1a1a;
+      min-height: 100vh;
+    }
+
+    /* ── Header ─────────────────────────────────────────── */
+    .header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      height: 60px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: #111;
+      white-space: nowrap;
+    }
+
+    .logo span { color: #c8973a; }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+    }
+
+    .tab {
+      padding: 6px 16px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .tab:hover { background: #f0ede6; color: #333; }
+    .tab.active { background: #1a1a1a; color: #fff; }
+
+    /* ── Canvas ──────────────────────────────────────────── */
+    .canvas {
+      padding: 40px 32px 60px;
+      overflow-x: auto;
+      min-height: calc(100vh - 60px);
+    }
+
+    .journey-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 28px;
+    }
+
+    /* ── Flow ─────────────────────────────────────────────── */
+    .flow {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      min-width: max-content;
+    }
+
+    /* ── Connector ───────────────────────────────────────── */
+    .connector {
+      display: flex;
+      align-items: center;
+      padding-top: 60px; /* align with card header center */
+      flex-shrink: 0;
+    }
+
+    .connector-line {
+      width: 36px;
+      height: 1.5px;
+      background: #ccc;
+      position: relative;
+    }
+
+    .connector-line::after {
+      content: '';
+      position: absolute;
+      right: -1px;
+      top: -4px;
+      border: 5px solid transparent;
+      border-left-color: #bbb;
+    }
+
+    /* ── Stage Card ───────────────────────────────────────── */
+    .stage-wrap { flex-shrink: 0; }
+
+    .stage-card {
+      background: #fff;
+      border: 1.5px solid #d8d5cf;
+      border-radius: 10px;
+      width: 200px;
+      transition: box-shadow 0.15s, border-color 0.15s;
+      overflow: hidden;
+    }
+
+    .stage-card.persona {
+      border-radius: 14px;
+      border-style: solid;
+    }
+
+    .stage-card.muted {
+      background: #f8f8f7;
+      border-color: #e0ddd8;
+    }
+
+    .stage-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+    .stage-card.expanded { border-color: #c8973a; box-shadow: 0 4px 20px rgba(200,151,58,0.12); }
+
+    .stage-header {
+      padding: 14px 16px 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      min-height: 52px;
+    }
+
+    .stage-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #111;
+      line-height: 1.35;
+      flex: 1;
+    }
+
+    .stage-card.muted .stage-title { color: #888; }
+    .stage-card.persona .stage-title { font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; color: #888; }
+
+    .stage-desc {
+      font-size: 11.5px;
+      color: #555;
+      line-height: 1.55;
+      margin-top: 4px;
+    }
+
+    .expand-btn {
+      width: 20px;
+      height: 20px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: #aaa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border-radius: 4px;
+      font-size: 11px;
+      margin-top: 1px;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .expand-btn:hover { background: #f0f0f0; color: #444; }
+
+    /* ── Sub-stages ───────────────────────────────────────── */
+    .sub-stages {
+      padding: 0 10px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sub-stage {
+      border: 1px dashed #c8c5be;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 11.5px;
+      color: #444;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s;
+      position: relative;
+    }
+
+    .sub-stage:hover { background: #faf9f6; border-color: #b0a898; }
+    .sub-stage.muted { color: #aaa; border-color: #ddd; }
+    .sub-stage.expanded { border-color: #c8973a; background: #fffdf7; }
+
+    .sub-stage-title { font-weight: 500; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #c8973a;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* ── Expanded Panel ────────────────────────────────────── */
+    .expand-panel {
+      padding: 12px 16px 14px;
+      border-top: 1px solid #f0ede6;
+      background: #fffdf9;
+    }
+
+    .panel-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+
+    .notes-area {
+      width: 100%;
+      border: 1px solid #e5e0d8;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-family: inherit;
+      color: #333;
+      resize: vertical;
+      min-height: 64px;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .notes-area:focus { border-color: #c8973a; }
+
+    .upload-zone {
+      border: 1.5px dashed #d0ccc4;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.15s, border-color 0.15s;
+      background: #faf9f6;
+    }
+
+    .upload-zone:hover { background: #f5f1e8; border-color: #c8973a; }
+
+    .upload-icon { font-size: 20px; margin-bottom: 4px; opacity: 0.5; }
+    .upload-text { font-size: 11px; color: #888; line-height: 1.4; }
+    .upload-text strong { color: #c8973a; }
+
+    .hidden-input { display: none; }
+
+    /* ── Files Grid ────────────────────────────────────────── */
+    .files-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .file-item {
+      border: 1px solid #e5e0d8;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #fff;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .file-item img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+    }
+
+    .file-item-info {
+      padding: 5px 7px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .file-icon { font-size: 12px; }
+    .file-name { font-size: 10px; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+
+    .file-remove {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 18px;
+      height: 18px;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      font-size: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .file-item:hover .file-remove { opacity: 1; }
+
+    /* ── Lightbox ─────────────────────────────────────────── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .lightbox img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .lightbox-close {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Sub-stage expand panel ───────────────────────────── */
+    .sub-expand-panel {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed #e5e0d8;
+    }
+
+    /* ── Scrollbar ─────────────────────────────────────────── */
+    .canvas::-webkit-scrollbar { height: 6px; }
+    .canvas::-webkit-scrollbar-track { background: transparent; }
+    .canvas::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+    .canvas::-webkit-scrollbar-thumb:hover { background: #aaa; }
+
+    /* ── Fade animation ────────────────────────────────────── */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeIn 0.18s ease-out; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useRef, useCallback, useEffect } = React;
+
+    /* ══════════════════════════════════════════════
+       DATA
+    ══════════════════════════════════════════════ */
+    const JOURNEYS = {
+      ecommerce: {
+        label: "E-commerce (DTC)",
+        stages: [
+          {
+            id: "persona",
+            title: "CHI?",
+            isPersona: true,
+            description: "Persona che vive in Italia, con capacità di spesa medio-alta e preferenze per prodotti di qualità. Ha già incontrato Pasticceria Giotto prima, ma non ha un interesse attivo verso il brand e i suoi prodotti ecommerce.",
+            subStages: []
+          },
+          {
+            id: "inattivo",
+            title: "Inattivo, disinteressato",
+            subStages: [
+              { id: "contatto", title: "In contatto, non collegato" },
+              { id: "cmilano", title: "Sta incontrando PG in C.Milano" },
+              { id: "viaroma", title: "Sta incontrando PG in Via Roma" },
+              { id: "casa", title: "Sta incontrando PG a casa (di amici o tramite regalo)" },
+              { id: "hotel", title: "Sta incontrando PG in un hotel o buffet di altro tipo" }
+            ]
+          },
+          {
+            id: "coinvolto",
+            title: "Coinvolto e collegato",
+            subStages: []
+          },
+          {
+            id: "valutando",
+            title: "Sta valutando un acquisto e-commerce",
+            subStages: []
+          },
+          {
+            id: "effettuando",
+            title: "Sta effettuando l'acquisto su e-commerce",
+            subStages: [
+              { id: "acquistato", title: "Ha effettuato l'acquisto", muted: true },
+              { id: "abbandonato", title: "Ha abbandonato l'acquisto", muted: true }
+            ]
+          }
+        ]
+      },
+
+      store: {
+        label: "Store",
+        stages: [
+          {
+            id: "persona-store",
+            title: "CHI?",
+            isPersona: true,
+            description: "Cliente che visita fisicamente i punti vendita Pasticceria Giotto. Interessato all'esperienza in negozio, ai prodotti freschi e alla consulenza del personale.",
+            subStages: []
+          },
+          {
+            id: "scoperta",
+            title: "Scoperta del brand",
+            subStages: [
+              { id: "passante", title: "Passa davanti al negozio" },
+              { id: "consigliato", title: "Consigliato da amici o famiglia" },
+              { id: "social-store", title: "Scoperto tramite social media" },
+              { id: "evento", title: "Incontro in fiera o evento" }
+            ]
+          },
+          {
+            id: "prima-visita",
+            title: "Prima visita in store",
+            subStages: []
+          },
+          {
+            id: "acquisto-store",
+            title: "Acquisto in store",
+            subStages: [
+              { id: "acquistato-store", title: "Ha effettuato l'acquisto", muted: true },
+              { id: "uscito", title: "È uscito senza acquistare", muted: true }
+            ]
+          },
+          {
+            id: "fidelizzato",
+            title: "Cliente fidelizzato",
+            subStages: [
+              { id: "ritorno", title: "Ritorna regolarmente" },
+              { id: "ambassador", title: "Diventa ambassador del brand" }
+            ]
+          }
+        ]
+      },
+
+      b2b: {
+        label: "B2B",
+        stages: [
+          {
+            id: "persona-b2b",
+            title: "CHI?",
+            isPersona: true,
+            description: "Buyer o responsabile acquisti di hotel, ristoranti, catering o aziende. Cerca prodotti di alta qualità per eventi, omaggi aziendali o fornitura continuativa.",
+            subStages: []
+          },
+          {
+            id: "prospect",
+            title: "Prospect",
+            subStages: [
+              { id: "fiera-b2b", title: "Incontro in fiera o evento di settore" },
+              { id: "referral-b2b", title: "Referral da altro cliente B2B" },
+              { id: "outbound", title: "Contatto outbound del team sales" },
+              { id: "inbound", title: "Richiesta inbound dal sito" }
+            ]
+          },
+          {
+            id: "trattativa",
+            title: "In trattativa",
+            subStages: [
+              { id: "demo", title: "Richiesta campioni / degustazione" },
+              { id: "offerta", title: "Riceve offerta commerciale" }
+            ]
+          },
+          {
+            id: "primo-ordine",
+            title: "Primo ordine B2B",
+            subStages: []
+          },
+          {
+            id: "cliente-b2b",
+            title: "Cliente B2B attivo",
+            subStages: [
+              { id: "riordino", title: "Riordino regolare" },
+              { id: "upsell", title: "Espansione ordini / upsell" },
+              { id: "churned", title: "Cliente perso", muted: true }
+            ]
+          }
+        ]
+      },
+
+      retail: {
+        label: "Retail / GDO",
+        stages: [
+          {
+            id: "persona-retail",
+            title: "CHI?",
+            isPersona: true,
+            description: "Consumatore che acquista prodotti Pasticceria Giotto attraverso la grande distribuzione organizzata (GDO) o rivenditori specializzati. Non necessariamente conosce il brand.",
+            subStages: []
+          },
+          {
+            id: "esposizione",
+            title: "Esposizione al prodotto",
+            subStages: [
+              { id: "scaffale", title: "Vede il prodotto sullo scaffale" },
+              { id: "promo-retail", title: "Trova una promozione in store" },
+              { id: "volantino", title: "Scopre tramite volantino GDO" },
+              { id: "pubblicita", title: "Vede pubblicità o ADV" }
+            ]
+          },
+          {
+            id: "considerazione",
+            title: "Considerazione",
+            subStages: [
+              { id: "confronto", title: "Confronta con brand concorrenti" },
+              { id: "recensioni", title: "Cerca recensioni online" }
+            ]
+          },
+          {
+            id: "acquisto-retail",
+            title: "Acquisto al punto vendita",
+            subStages: [
+              { id: "acquistato-retail", title: "Ha acquistato", muted: true },
+              { id: "preferito-altro", title: "Ha preferito un altro brand", muted: true }
+            ]
+          },
+          {
+            id: "riacquisto",
+            title: "Riacquisto e fedeltà",
+            subStages: [
+              { id: "ripetuto", title: "Acquisto ripetuto" },
+              { id: "cerca-online", title: "Cerca il brand online → DTC" }
+            ]
+          }
+        ]
+      }
+    };
+
+    const JOURNEY_KEYS = Object.keys(JOURNEYS);
+
+    /* ══════════════════════════════════════════════
+       HELPERS
+    ══════════════════════════════════════════════ */
+    function fileIcon(type) {
+      if (type.startsWith('image/')) return '🖼';
+      if (type === 'application/pdf') return '📄';
+      if (type.includes('word')) return '📝';
+      if (type.includes('presentation') || type.includes('powerpoint')) return '📊';
+      return '📎';
+    }
+
+    function readFileAsDataURL(file) {
+      return new Promise(res => {
+        const r = new FileReader();
+        r.onload = e => res(e.target.result);
+        r.readAsDataURL(file);
+      });
+    }
+
+    /* ══════════════════════════════════════════════
+       UPLOAD ZONE
+    ══════════════════════════════════════════════ */
+    function UploadZone({ files, onAdd, onRemove, onPreview }) {
+      const inputRef = useRef();
+
+      const handleFiles = useCallback(async (list) => {
+        for (const f of list) {
+          const dataUrl = await readFileAsDataURL(f);
+          onAdd({ name: f.name, type: f.type, url: dataUrl });
+        }
+      }, [onAdd]);
+
+      const onDrop = useCallback(e => {
+        e.preventDefault();
+        handleFiles([...e.dataTransfer.files]);
+      }, [handleFiles]);
+
+      const onDragOver = e => e.preventDefault();
+
+      return (
+        <div>
+          {files.length > 0 && (
+            <div className="files-grid">
+              {files.map((f, i) => (
+                <div key={i} className="file-item" onClick={() => f.type.startsWith('image/') && onPreview(f.url)}>
+                  {f.type.startsWith('image/')
+                    ? <img src={f.url} alt={f.name} />
+                    : <div className="file-item-info" style={{padding:'16px 8px', justifyContent:'center', flexDirection:'column', alignItems:'center', gap:'4px'}}>
+                        <span style={{fontSize:24}}>{fileIcon(f.type)}</span>
+                      </div>
+                  }
+                  <div className="file-item-info">
+                    <span className="file-icon">{fileIcon(f.type)}</span>
+                    <span className="file-name" title={f.name}>{f.name}</span>
+                  </div>
+                  <button className="file-remove" onClick={e => { e.stopPropagation(); onRemove(i); }}>✕</button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div
+            className="upload-zone"
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+            onClick={() => inputRef.current.click()}
+          >
+            <div className="upload-icon">↑</div>
+            <div className="upload-text">
+              <strong>Carica materiali</strong><br />
+              Trascina o clicca · Immagini, PDF, presentazioni
+            </div>
+          </div>
+          <input
+            ref={inputRef}
+            type="file"
+            className="hidden-input"
+            multiple
+            accept="image/*,.pdf,.ppt,.pptx,.doc,.docx"
+            onChange={e => handleFiles([...e.target.files])}
+          />
+        </div>
+      );
+    }
+
+    /* ══════════════════════════════════════════════
+       EXPAND PANEL (shared by stage + sub-stage)
+    ══════════════════════════════════════════════ */
+    function ExpandPanel({ storeKey, isSubPanel }) {
+      const [notes, setNotes] = useState(() => {
+        try { return JSON.parse(localStorage.getItem(`notes_${storeKey}`)) || ''; } catch { return ''; }
+      });
+      const [files, setFiles] = useState(() => {
+        try { return JSON.parse(localStorage.getItem(`files_${storeKey}`)) || []; } catch { return []; }
+      });
+      const [preview, setPreview] = useState(null);
+
+      useEffect(() => {
+        localStorage.setItem(`notes_${storeKey}`, JSON.stringify(notes));
+      }, [notes, storeKey]);
+
+      useEffect(() => {
+        localStorage.setItem(`files_${storeKey}`, JSON.stringify(files));
+      }, [files, storeKey]);
+
+      const addFile = useCallback(f => setFiles(prev => [...prev, f]), []);
+      const removeFile = useCallback(i => setFiles(prev => prev.filter((_, idx) => idx !== i)), []);
+
+      const cls = isSubPanel ? 'sub-expand-panel fade-in' : 'expand-panel fade-in';
+
+      return (
+        <>
+          <div className={cls}>
+            <div className="panel-section-title">Note</div>
+            <textarea
+              className="notes-area"
+              placeholder="Aggiungi note, obiettivi, KPI..."
+              value={notes}
+              onChange={e => setNotes(e.target.value)}
+            />
+            <div className="panel-section-title" style={{marginTop:10}}>Creatività e materiali</div>
+            <UploadZone
+              files={files}
+              onAdd={addFile}
+              onRemove={removeFile}
+              onPreview={url => setPreview(url)}
+            />
+          </div>
+          {preview && (
+            <div className="lightbox" onClick={() => setPreview(null)}>
+              <button className="lightbox-close" onClick={() => setPreview(null)}>✕</button>
+              <img src={preview} alt="preview" onClick={e => e.stopPropagation()} />
+            </div>
+          )}
+        </>
+      );
+    }
+
+    /* ══════════════════════════════════════════════
+       SUB-STAGE
+    ══════════════════════════════════════════════ */
+    function SubStage({ sub, stageId, journeyKey }) {
+      const [expanded, setExpanded] = useState(false);
+      const fileCount = (() => {
+        try { return (JSON.parse(localStorage.getItem(`files_${journeyKey}_${stageId}_${sub.id}`)) || []).length; } catch { return 0; }
+      })();
+
+      return (
+        <div className={`sub-stage ${sub.muted ? 'muted' : ''} ${expanded ? 'expanded' : ''}`}>
+          <div onClick={() => setExpanded(x => !x)} style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+            <span className="sub-stage-title">{sub.title}</span>
+            <div style={{display:'flex', alignItems:'center', gap:4, flexShrink:0, marginLeft:6}}>
+              {fileCount > 0 && <span className="badge">{fileCount}</span>}
+              <span style={{fontSize:10, color:'#bbb', transform: expanded ? 'rotate(180deg)' : 'none', transition:'transform 0.15s', display:'inline-block'}}>▼</span>
+            </div>
+          </div>
+          {expanded && (
+            <ExpandPanel
+              storeKey={`${journeyKey}_${stageId}_${sub.id}`}
+              isSubPanel={true}
+            />
+          )}
+        </div>
+      );
+    }
+
+    /* ══════════════════════════════════════════════
+       STAGE CARD
+    ══════════════════════════════════════════════ */
+    function StageCard({ stage, journeyKey }) {
+      const [expanded, setExpanded] = useState(false);
+
+      const fileCount = (() => {
+        try { return (JSON.parse(localStorage.getItem(`files_${journeyKey}_${stage.id}`)) || []).length; } catch { return 0; }
+      })();
+
+      const cardClass = [
+        'stage-card',
+        stage.isPersona ? 'persona' : '',
+        expanded ? 'expanded' : ''
+      ].filter(Boolean).join(' ');
+
+      return (
+        <div className="stage-wrap">
+          <div className={cardClass}>
+            <div className="stage-header" onClick={() => setExpanded(x => !x)}>
+              <div style={{flex:1}}>
+                <div className="stage-title">{stage.title}</div>
+                {stage.isPersona && stage.description && (
+                  <div className="stage-desc">{stage.description}</div>
+                )}
+              </div>
+              <div style={{display:'flex', alignItems:'center', gap:4, flexShrink:0}}>
+                {fileCount > 0 && <span className="badge">{fileCount}</span>}
+                <button
+                  className="expand-btn"
+                  title={expanded ? 'Chiudi' : 'Espandi'}
+                  onClick={e => { e.stopPropagation(); setExpanded(x => !x); }}
+                >
+                  <span style={{transform: expanded ? 'rotate(180deg)' : 'none', display:'inline-block', transition:'transform 0.15s'}}>▼</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Sub-stages always visible */}
+            {stage.subStages.length > 0 && (
+              <div className="sub-stages">
+                {stage.subStages.map(sub => (
+                  <SubStage
+                    key={sub.id}
+                    sub={sub}
+                    stageId={stage.id}
+                    journeyKey={journeyKey}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Expand panel for notes + files on this stage */}
+            {expanded && (
+              <ExpandPanel
+                storeKey={`${journeyKey}_${stage.id}`}
+                isSubPanel={false}
+              />
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    /* ══════════════════════════════════════════════
+       APP
+    ══════════════════════════════════════════════ */
+    function App() {
+      const [activeJourney, setActiveJourney] = useState('ecommerce');
+      const journey = JOURNEYS[activeJourney];
+
+      return (
+        <>
+          <header className="header">
+            <div className="logo">Pasticceria <span>Giotto</span> — Customer Journey</div>
+            <nav className="tabs">
+              {JOURNEY_KEYS.map(key => (
+                <button
+                  key={key}
+                  className={`tab ${activeJourney === key ? 'active' : ''}`}
+                  onClick={() => setActiveJourney(key)}
+                >
+                  {JOURNEYS[key].label}
+                </button>
+              ))}
+            </nav>
+          </header>
+
+          <main className="canvas">
+            <div className="journey-label">{journey.label}</div>
+            <div className="flow">
+              {journey.stages.map((stage, i) => (
+                <React.Fragment key={stage.id}>
+                  {i > 0 && (
+                    <div className="connector">
+                      <div className="connector-line" />
+                    </div>
+                  )}
+                  <StageCard stage={stage} journeyKey={activeJourney} />
+                </React.Fragment>
+              ))}
+            </div>
+          </main>
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
