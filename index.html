@@ -46,88 +46,59 @@
 
     /* ─── HEADER ─────────────────────────────────── */
     .header {
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      background: var(--header-bg);
-      height: 54px;
+      padding: 40px 52px 0;
+      background: #fff;
+    }
+
+    .header-top {
       display: flex;
-      align-items: center;
-      padding: 0 28px;
-      gap: 24px;
+      align-items: baseline;
+      justify-content: space-between;
+      padding-bottom: 28px;
       border-bottom: 1px solid var(--border);
     }
 
     .logo {
       display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-shrink: 0;
-    }
-
-    .logo-mark {
-      width: 26px;
-      height: 26px;
-      background: var(--gold);
-      border-radius: 6px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.5px;
+      flex-direction: column;
+      gap: 3px;
     }
 
     .logo-text {
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 20px;
+      font-weight: 700;
       color: var(--text-primary);
-      letter-spacing: -0.2px;
+      letter-spacing: -0.5px;
+      line-height: 1;
     }
 
-    .logo-sep {
-      width: 1px;
-      height: 16px;
-      background: var(--border);
-      flex-shrink: 0;
-    }
-
-    .header-label {
+    .logo-sub {
       font-size: 12px;
       color: var(--text-muted);
       font-weight: 400;
-      letter-spacing: 0.1px;
+      letter-spacing: 0.2px;
     }
 
     /* ─── TABS ───────────────────────────────────── */
     .tabs-bar {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 28px;
       display: flex;
-      align-items: center;
-      gap: 2px;
-      height: 44px;
+      gap: 0;
+      padding-top: 20px;
     }
 
     .tab {
       position: relative;
-      padding: 0 14px;
-      height: 44px;
-      display: flex;
-      align-items: center;
+      padding: 0 0 14px;
+      margin-right: 28px;
       border: none;
       background: transparent;
       font-family: inherit;
-      font-size: 13px;
-      font-weight: 500;
+      font-size: 13.5px;
+      font-weight: 400;
       color: var(--text-muted);
       cursor: pointer;
       transition: color var(--transition);
       white-space: nowrap;
-      border-radius: 0;
       letter-spacing: -0.1px;
     }
 
@@ -137,31 +108,26 @@
       bottom: 0;
       left: 0;
       right: 0;
-      height: 2px;
-      background: var(--gold);
-      border-radius: 2px 2px 0 0;
+      height: 1.5px;
+      background: var(--text-primary);
       opacity: 0;
-      transform: scaleX(0.4);
-      transition: opacity var(--transition), transform var(--transition);
+      transition: opacity var(--transition);
     }
 
-    .tab:hover { color: var(--text-primary); }
+    .tab:hover { color: var(--text-secondary); }
 
     .tab.active {
       color: var(--text-primary);
       font-weight: 600;
     }
 
-    .tab.active::after {
-      opacity: 1;
-      transform: scaleX(1);
-    }
+    .tab.active::after { opacity: 1; }
 
     /* ─── CANVAS ─────────────────────────────────── */
     .canvas {
-      padding: 36px 28px 80px;
+      padding: 44px 52px 80px;
       overflow-x: auto;
-      min-height: calc(100vh - 98px);
+      min-height: calc(100vh - 160px);
     }
 
     .canvas::-webkit-scrollbar { height: 4px; }
@@ -904,25 +870,24 @@
     return (
       <>
         <header className="header">
-          <div className="logo">
-            <div className="logo-mark">PG</div>
-            <span className="logo-text">Pasticceria Giotto</span>
+          <div className="header-top">
+            <div className="logo">
+              <span className="logo-text">Pasticceria Giotto</span>
+              <span className="logo-sub">Customer Journey</span>
+            </div>
           </div>
-          <div className="logo-sep" />
-          <span className="header-label">Customer Journey</span>
+          <div className="tabs-bar">
+            {JOURNEY_KEYS.map(key => (
+              <button
+                key={key}
+                className={`tab${active === key ? ' active' : ''}`}
+                onClick={() => setActive(key)}
+              >
+                {JOURNEYS[key].label}
+              </button>
+            ))}
+          </div>
         </header>
-
-        <div className="tabs-bar">
-          {JOURNEY_KEYS.map(key => (
-            <button
-              key={key}
-              className={`tab${active === key ? ' active' : ''}`}
-              onClick={() => setActive(key)}
-            >
-              {JOURNEYS[key].label}
-            </button>
-          ))}
-        </div>
 
         <main className="canvas">
           <div className="flow">
