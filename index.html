@@ -993,16 +993,8 @@
     t.startsWith('video/') ? 'Video' :
     t === 'application/pdf' ? 'PDF' : 'File';
 
-  const readFile = f => new Promise(res => {
-    // For large videos use object URL (memory only, not persisted)
-    if (f.type.startsWith('video/') && f.size > 20 * 1024 * 1024) {
-      res({ isObjectUrl: true, url: URL.createObjectURL(f) });
-    } else {
-      const r = new FileReader();
-      r.onload = e => res({ isObjectUrl: false, url: e.target.result });
-      r.readAsDataURL(f);
-    }
-  });
+  // Always use object URLs — no base64, no localStorage for file content
+  const makeFileEntry = f => ({ name: f.name, type: f.type, url: URL.createObjectURL(f) });
 
   const lsGet = key => { try { return JSON.parse(localStorage.getItem(key)) ?? null; } catch { return null; } };
   const lsSet = (key, val) => localStorage.setItem(key, JSON.stringify(val));
@@ -1037,11 +1029,8 @@
   function UploadZone({ files, onAdd, onRemove, onPreview }) {
     const ref = useRef();
 
-    const handle = useCallback(async list => {
-      for (const f of list) {
-        const result = await readFile(f);
-        onAdd({ name: f.name, type: f.type, url: result.url, isObjectUrl: result.isObjectUrl });
-      }
+    const handle = useCallback(list => {
+      list.forEach(f => onAdd(makeFileEntry(f)));
     }, [onAdd]);
 
     return (
@@ -1074,10 +1063,9 @@
   /* ─── EXPAND PANEL ───────────────────────────── */
   function ExpandPanel({ storeKey, isSub, lightboxSet }) {
     const [notes, setNotes] = useState(() => lsGet(`n_${storeKey}`) ?? '');
-    const [files, setFiles] = useState(() => lsGet(`f_${storeKey}`) ?? []);
+    const [files, setFiles] = useState([]);
 
     useEffect(() => lsSet(`n_${storeKey}`, notes), [notes, storeKey]);
-    useEffect(() => lsSet(`f_${storeKey}`, files), [files, storeKey]);
 
     const addFile = useCallback(f => setFiles(p => [...p, f]), []);
     const removeFile = useCallback(i => setFiles(p => p.filter((_, j) => j !== i)), []);
@@ -1154,12 +1142,11 @@
   function SubModal({ sub, stageTitle, journeyLabel, sk, onClose }) {
     const [activities, setActivities] = useState(() => lsGet(`act_${sk}`) ?? []);
     const [notes, setNotes]           = useState(() => lsGet(`n_${sk}`)   ?? '');
-    const [files, setFiles]           = useState(() => lsGet(`f_${sk}`)   ?? []);
+    const [files, setFiles]           = useState([]);
     const [lightbox, setLightbox]     = useState(null);
 
     useEffect(() => lsSet(`act_${sk}`, activities), [activities, sk]);
     useEffect(() => lsSet(`n_${sk}`,   notes),      [notes, sk]);
-    useEffect(() => lsSet(`f_${sk}`,   files),      [files, sk]);
 
     // close on Escape
     useEffect(() => {
@@ -1172,9 +1159,8 @@
     const updateActivity = (i, val) => setActivities(p => p.map((a, j) => j === i ? val : a));
     const deleteActivity = i => setActivities(p => p.filter((_, j) => j !== i));
 
-    const addFile = useCallback(async f => {
-      const result = await readFile(f);
-      setFiles(p => [...p, { name: f.name, type: f.type, url: result.url, isObjectUrl: result.isObjectUrl }]);
+    const addFile = useCallback(f => {
+      setFiles(p => [...p, makeFileEntry(f)]);
     }, []);
     const removeFile = i => setFiles(p => p.filter((_, j) => j !== i));
 
@@ -1253,9 +1239,7 @@
 
   /* ─── SUB STAGE ──────────────────────────────── */
   function SubStage({ sub, sk, stageTitle, journeyLabel, onOpenModal }) {
-    const actCount  = (lsGet(`act_${sk}`) ?? []).filter(a => a.trim()).length;
-    const fileCount = (lsGet(`f_${sk}`)   ?? []).length;
-    const hasContent = actCount > 0 || fileCount > 0;
+    const actCount = (lsGet(`act_${sk}`) ?? []).filter(a => a.trim()).length;
 
     return (
       <div className={`sub-item${sub.muted ? ' is-muted' : ''}`}
@@ -1263,7 +1247,7 @@
         <div className="sub-header">
           <span className="sub-title">{sub.title}</span>
           <div className="sub-actions">
-            {hasContent && <span className="badge">{actCount + fileCount}</span>}
+            {actCount > 0 && <span className="badge">{actCount}</span>}
             <span style={{fontSize:9, color:'var(--text-muted)'}}>→</span>
           </div>
         </div>
