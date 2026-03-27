@@ -123,6 +123,14 @@
 
     .tab.active::after { opacity: 1; }
 
+    .persona-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 560px;
+      margin-bottom: 36px;
+    }
+
     /* ─── CANVAS ─────────────────────────────────── */
     .canvas {
       padding: 44px 52px 80px;
@@ -890,9 +898,12 @@
         </header>
 
         <main className="canvas">
+          {journey.stages.filter(s => s.isPersona).map(s => (
+            <p key={s.id} className="persona-text">{s.description}</p>
+          ))}
           <div className="flow">
-            {journey.stages.map((stage, i) => {
-              if (!stage.isPersona) phaseIndex++;
+            {journey.stages.filter(s => !s.isPersona).map((stage, i) => {
+              phaseIndex++;
               return (
                 <React.Fragment key={stage.id}>
                   {i > 0 && (
