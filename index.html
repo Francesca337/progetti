@@ -183,8 +183,10 @@
     /* ─── STAGE WRAP ─────────────────────────────── */
     .stage-wrap {
       flex-shrink: 0;
-      display: flex;
+      display: inline-flex;
       flex-direction: column;
+      width: max-content;
+      min-width: 200px;
     }
 
     .stage-wrap .card {
@@ -197,10 +199,10 @@
       font-weight: 600;
       color: var(--text-primary);
       letter-spacing: -0.1px;
-      line-height: 1.35;
+      line-height: 1;
       margin-bottom: 12px;
       padding-left: 1px;
-      max-width: 210px;
+      white-space: nowrap;
     }
 
     /* ─── CARD ───────────────────────────────────── */
@@ -208,7 +210,8 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      width: 210px;
+      width: 100%;
+      min-width: 180px;
       transition: border-color var(--transition);
       overflow: hidden;
     }
