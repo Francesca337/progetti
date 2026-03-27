@@ -145,7 +145,7 @@
     /* ─── FLOW ───────────────────────────────────── */
     .flow {
       display: flex;
-      align-items: flex-start;
+      align-items: stretch;
       gap: 0;
       min-width: max-content;
       padding-bottom: 8px;
@@ -155,8 +155,10 @@
     .connector {
       display: flex;
       align-items: center;
-      padding-top: 42px;
+      padding-top: 28px;
       flex-shrink: 0;
+      align-self: flex-start;
+      padding-top: 42px;
     }
 
     .connector-inner {
@@ -179,7 +181,15 @@
     }
 
     /* ─── STAGE WRAP ─────────────────────────────── */
-    .stage-wrap { flex-shrink: 0; }
+    .stage-wrap {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stage-wrap .card {
+      flex: 1;
+    }
 
     /* ─── STAGE LABEL ────────────────────────────── */
     .stage-label {
