@@ -994,10 +994,48 @@
     t === 'application/pdf' ? 'PDF' : 'File';
 
   // Always use object URLs — no base64, no localStorage for file content
-  const makeFileEntry = f => ({ name: f.name, type: f.type, url: URL.createObjectURL(f) });
-
   const lsGet = key => { try { return JSON.parse(localStorage.getItem(key)) ?? null; } catch { return null; } };
   const lsSet = (key, val) => localStorage.setItem(key, JSON.stringify(val));
+
+  /* ─── INDEXEDDB ───────────────────────────────── */
+  let _db = null;
+  const openDB = () => new Promise((res, rej) => {
+    if (_db) return res(_db);
+    const req = indexedDB.open('giotto-journey', 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore('assets');
+    req.onsuccess = e => { _db = e.target.result; res(_db); };
+    req.onerror = rej;
+  });
+
+  const dbPut = async (id, blob) => {
+    const db = await openDB();
+    return new Promise((res, rej) => {
+      const tx = db.transaction('assets', 'readwrite');
+      tx.objectStore('assets').put(blob, id);
+      tx.oncomplete = res; tx.onerror = rej;
+    });
+  };
+
+  const dbGet = async id => {
+    const db = await openDB();
+    return new Promise((res, rej) => {
+      const tx = db.transaction('assets', 'readonly');
+      const req = tx.objectStore('assets').get(id);
+      req.onsuccess = e => res(e.target.result);
+      req.onerror = rej;
+    });
+  };
+
+  const dbDel = async id => {
+    const db = await openDB();
+    return new Promise((res, rej) => {
+      const tx = db.transaction('assets', 'readwrite');
+      tx.objectStore('assets').delete(id);
+      tx.oncomplete = res; tx.onerror = rej;
+    });
+  };
+
+  const uid = () => Math.random().toString(36).slice(2) + Date.now().toString(36);
 
   /* ─── FILE CARD ──────────────────────────────── */
   function FileCard({ f, onRemove, onPreview }) {
@@ -1142,11 +1180,22 @@
   function SubModal({ sub, stageTitle, journeyLabel, sk, onClose }) {
     const [activities, setActivities] = useState(() => lsGet(`act_${sk}`) ?? []);
     const [notes, setNotes]           = useState(() => lsGet(`n_${sk}`)   ?? '');
-    const [files, setFiles]           = useState([]);
+    const [files, setFiles]           = useState([]); // { id, name, type, url }
     const [lightbox, setLightbox]     = useState(null);
 
     useEffect(() => lsSet(`act_${sk}`, activities), [activities, sk]);
     useEffect(() => lsSet(`n_${sk}`,   notes),      [notes, sk]);
+
+    // Load persisted files from IndexedDB on open
+    useEffect(() => {
+      const meta = lsGet(`fm_${sk}`) ?? [];
+      if (!meta.length) return;
+      Promise.all(meta.map(async m => {
+        const blob = await dbGet(m.id);
+        if (!blob) return null;
+        return { ...m, url: URL.createObjectURL(blob) };
+      })).then(results => setFiles(results.filter(Boolean)));
+    }, [sk]);
 
     // close on Escape
     useEffect(() => {
@@ -1159,10 +1208,27 @@
     const updateActivity = (i, val) => setActivities(p => p.map((a, j) => j === i ? val : a));
     const deleteActivity = i => setActivities(p => p.filter((_, j) => j !== i));
 
-    const addFile = useCallback(f => {
-      setFiles(p => [...p, makeFileEntry(f)]);
-    }, []);
-    const removeFile = i => setFiles(p => p.filter((_, j) => j !== i));
+    const addFile = useCallback(async f => {
+      const id = uid();
+      await dbPut(id, f);
+      const entry = { id, name: f.name, type: f.type, url: URL.createObjectURL(f) };
+      setFiles(p => {
+        const next = [...p, entry];
+        lsSet(`fm_${sk}`, next.map(({ id, name, type }) => ({ id, name, type })));
+        return next;
+      });
+    }, [sk]);
+
+    const removeFile = useCallback(async i => {
+      setFiles(p => {
+        const entry = p[i];
+        dbDel(entry.id);
+        URL.revokeObjectURL(entry.url);
+        const next = p.filter((_, j) => j !== i);
+        lsSet(`fm_${sk}`, next.map(({ id, name, type }) => ({ id, name, type })));
+        return next;
+      });
+    }, [sk]);
 
     const fileRef = useRef();
 
