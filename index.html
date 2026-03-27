@@ -458,64 +458,124 @@
 
     input[type="file"] { display: none; }
 
-    /* ─── FILES GRID ─────────────────────────────── */
-    .files-grid {
+    /* ─── ASSET FEED (Instagram-style) ──────────── */
+    .asset-feed {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      margin-top: 8px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
     }
 
     .file-card {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
       background: var(--surface-2);
       overflow: hidden;
       position: relative;
       cursor: pointer;
-      transition: border-color var(--transition);
+      aspect-ratio: 1 / 1;
     }
 
-    .file-card:hover { border-color: var(--border-strong); }
-
-    .file-card img, .file-video {
+    .file-card img {
       width: 100%;
-      aspect-ratio: 4/3;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .file-card:hover img { transform: scale(1.04); }
+
+    .file-video {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
       display: block;
       background: #000;
+      pointer-events: none;
     }
 
     .file-card-placeholder {
       width: 100%;
-      aspect-ratio: 4/3;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 6px;
       background: var(--surface-2);
+      transition: background var(--transition);
     }
 
-    .file-placeholder-icon { font-size: 24px; }
-    .file-placeholder-label { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; }
+    .file-card:hover .file-card-placeholder { background: var(--surface); }
 
-    .file-card-footer {
-      padding: 4px 6px;
+    .file-placeholder-icon { font-size: 22px; }
+    .file-placeholder-label { font-size: 9px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.6px; text-transform: uppercase; }
+
+    /* Hover overlay with filename */
+    .file-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity var(--transition);
       display: flex;
-      align-items: center;
-      gap: 4px;
-      border-top: 1px solid var(--border);
+      align-items: flex-end;
+      padding: 8px;
     }
+
+    .file-card:hover .file-card-overlay { opacity: 1; }
 
     .file-card-name {
       font-size: 10px;
-      color: var(--text-secondary);
+      font-weight: 500;
+      color: rgba(255,255,255,0.9);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      flex: 1;
+      width: 100%;
     }
+
+    /* Video play badge */
+    .video-badge {
+      position: absolute;
+      top: 7px;
+      left: 7px;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(4px);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    /* Drag-over state for the asset column */
+    .asset-col {
+      position: relative;
+      transition: background var(--transition);
+    }
+
+    .asset-col.drag-over { background: var(--gold-dim) !important; }
+    .asset-col.drag-over .drop-hint { opacity: 1; pointer-events: none; }
+
+    .drop-hint {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1.5px dashed var(--gold);
+      border-radius: 12px;
+      margin: 16px;
+      opacity: 0;
+      transition: opacity var(--transition);
+      pointer-events: none;
+    }
+
+    .drop-hint-icon { font-size: 28px; color: var(--gold); }
+    .drop-hint-text { font-size: 12px; font-weight: 600; color: var(--gold); }
 
     .file-remove {
       position: absolute;
@@ -616,7 +676,7 @@
       flex: 1;
       overflow-y: auto;
       display: grid;
-      grid-template-columns: 1fr 320px;
+      grid-template-columns: 1fr 420px;
     }
 
     .modal-col {
@@ -956,13 +1016,7 @@
       <div className="file-card" onClick={() => isImage && onPreview(f.url)}>
         {isImage && <img src={f.url} alt={f.name} />}
         {isVideo && (
-          <video
-            src={f.url}
-            className="file-video"
-            preload="metadata"
-            controls
-            onClick={e => e.stopPropagation()}
-          />
+          <video src={f.url} className="file-video" preload="metadata" muted />
         )}
         {!isImage && !isVideo && (
           <div className="file-card-placeholder">
@@ -970,8 +1024,9 @@
             <span className="file-placeholder-label">{fileLabel(f.type)}</span>
           </div>
         )}
-        <div className="file-card-footer">
-          <span className="file-card-name" title={f.name}>{f.name}</span>
+        {isVideo && <div className="video-badge">▶ Video</div>}
+        <div className="file-card-overlay">
+          <span className="file-card-name">{f.name}</span>
         </div>
         <button className="file-remove" onClick={e => { e.stopPropagation(); onRemove(); }}>✕</button>
       </div>
@@ -1034,6 +1089,63 @@
           value={notes} onChange={e => setNotes(e.target.value)} />
         <div className="panel-label" style={{marginTop:10}}>Creatività e materiali</div>
         <UploadZone files={files} onAdd={addFile} onRemove={removeFile} onPreview={lightboxSet} />
+      </div>
+    );
+  }
+
+  /* ─── ASSET COLUMN ───────────────────────────── */
+  function AssetCol({ files, onAdd, onRemove, onPreview, fileRef }) {
+    const [dragging, setDragging] = useState(false);
+
+    const handleDrop = e => {
+      e.preventDefault();
+      setDragging(false);
+      [...e.dataTransfer.files].forEach(onAdd);
+    };
+
+    return (
+      <div
+        className={`modal-col asset-col${dragging ? ' drag-over' : ''}`}
+        onDragOver={e => { e.preventDefault(); setDragging(true); }}
+        onDragLeave={() => setDragging(false)}
+        onDrop={handleDrop}
+      >
+        <div className="drop-hint">
+          <div className="drop-hint-icon">↑</div>
+          <div className="drop-hint-text">Rilascia qui</div>
+        </div>
+
+        <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:16}}>
+          <div className="modal-section-title" style={{marginBottom:0}}>Asset e materiali</div>
+          <button
+            style={{fontSize:11, color:'var(--gold)', background:'transparent', border:'none', cursor:'pointer', fontFamily:'inherit', fontWeight:600}}
+            onClick={() => fileRef.current.click()}
+          >+ Aggiungi</button>
+        </div>
+
+        {files.length === 0 ? (
+          <div
+            className="upload-zone"
+            style={{marginTop:0, minHeight:160, justifyContent:'center'}}
+            onClick={() => fileRef.current.click()}
+          >
+            <div className="upload-zone-icon">↑</div>
+            <div className="upload-zone-text">
+              <strong>Trascina o clicca</strong><br />
+              Video, JPG, PDF
+            </div>
+          </div>
+        ) : (
+          <div className="asset-feed">
+            {files.map((f, i) => (
+              <FileCard key={i} f={f} onRemove={() => onRemove(i)} onPreview={onPreview} />
+            ))}
+          </div>
+        )}
+
+        <input ref={fileRef} type="file" multiple
+          accept="image/*,video/*,.pdf,.ppt,.pptx,.doc,.docx"
+          onChange={e => [...e.target.files].forEach(onAdd)} />
       </div>
     );
   }
@@ -1123,33 +1235,7 @@
             </div>
 
             {/* Right: assets */}
-            <div className="modal-col">
-              <div className="modal-section-title">Asset e materiali</div>
-
-              {files.length > 0 && (
-                <div className="files-grid" style={{marginBottom:12}}>
-                  {files.map((f, i) => (
-                    <FileCard key={i} f={f} onRemove={() => removeFile(i)} onPreview={url => setLightbox(url)} />
-                  ))}
-                </div>
-              )}
-
-              <div
-                className="upload-zone"
-                onClick={() => fileRef.current.click()}
-                onDrop={e => { e.preventDefault(); [...e.dataTransfer.files].forEach(addFile); }}
-                onDragOver={e => e.preventDefault()}
-              >
-                <div className="upload-zone-icon">↑</div>
-                <div className="upload-zone-text">
-                  <strong>Carica asset</strong><br />
-                  Video, JPG, PDF · Trascina o clicca
-                </div>
-              </div>
-              <input ref={fileRef} type="file" multiple
-                accept="image/*,video/*,.pdf,.ppt,.pptx,.doc,.docx"
-                onChange={e => [...e.target.files].forEach(addFile)} />
-            </div>
+            <AssetCol files={files} onAdd={addFile} onRemove={removeFile} onPreview={setLightbox} fileRef={fileRef} />
           </div>
         </div>
 
