@@ -478,22 +478,27 @@
 
     .file-card:hover { border-color: var(--border-strong); }
 
-    .file-card img {
+    .file-card img, .file-video {
       width: 100%;
       aspect-ratio: 4/3;
       object-fit: cover;
       display: block;
+      background: #000;
     }
 
     .file-card-placeholder {
       width: 100%;
       aspect-ratio: 4/3;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 6px;
       background: var(--surface-2);
-      font-size: 22px;
     }
+
+    .file-placeholder-icon { font-size: 24px; }
+    .file-placeholder-label { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; }
 
     .file-card-footer {
       padding: 4px 6px;
@@ -918,25 +923,70 @@
   /* ─── UTILS ──────────────────────────────────── */
   const fileIcon = t =>
     t.startsWith('image/') ? '🖼' :
+    t.startsWith('video/') ? '▶' :
     t === 'application/pdf' ? '📄' :
     t.includes('presentation') || t.includes('powerpoint') ? '📊' :
     t.includes('word') ? '📝' : '📎';
 
+  const fileLabel = t =>
+    t.startsWith('image/') ? 'JPG / PNG' :
+    t.startsWith('video/') ? 'Video' :
+    t === 'application/pdf' ? 'PDF' : 'File';
+
   const readFile = f => new Promise(res => {
-    const r = new FileReader();
-    r.onload = e => res(e.target.result);
-    r.readAsDataURL(f);
+    // For large videos use object URL (memory only, not persisted)
+    if (f.type.startsWith('video/') && f.size > 20 * 1024 * 1024) {
+      res({ isObjectUrl: true, url: URL.createObjectURL(f) });
+    } else {
+      const r = new FileReader();
+      r.onload = e => res({ isObjectUrl: false, url: e.target.result });
+      r.readAsDataURL(f);
+    }
   });
 
   const lsGet = key => { try { return JSON.parse(localStorage.getItem(key)) ?? null; } catch { return null; } };
   const lsSet = (key, val) => localStorage.setItem(key, JSON.stringify(val));
+
+  /* ─── FILE CARD ──────────────────────────────── */
+  function FileCard({ f, onRemove, onPreview }) {
+    const isImage = f.type.startsWith('image/');
+    const isVideo = f.type.startsWith('video/');
+
+    return (
+      <div className="file-card" onClick={() => isImage && onPreview(f.url)}>
+        {isImage && <img src={f.url} alt={f.name} />}
+        {isVideo && (
+          <video
+            src={f.url}
+            className="file-video"
+            preload="metadata"
+            controls
+            onClick={e => e.stopPropagation()}
+          />
+        )}
+        {!isImage && !isVideo && (
+          <div className="file-card-placeholder">
+            <span className="file-placeholder-icon">{fileIcon(f.type)}</span>
+            <span className="file-placeholder-label">{fileLabel(f.type)}</span>
+          </div>
+        )}
+        <div className="file-card-footer">
+          <span className="file-card-name" title={f.name}>{f.name}</span>
+        </div>
+        <button className="file-remove" onClick={e => { e.stopPropagation(); onRemove(); }}>✕</button>
+      </div>
+    );
+  }
 
   /* ─── UPLOAD ZONE ────────────────────────────── */
   function UploadZone({ files, onAdd, onRemove, onPreview }) {
     const ref = useRef();
 
     const handle = useCallback(async list => {
-      for (const f of list) { const url = await readFile(f); onAdd({ name: f.name, type: f.type, url }); }
+      for (const f of list) {
+        const result = await readFile(f);
+        onAdd({ name: f.name, type: f.type, url: result.url, isObjectUrl: result.isObjectUrl });
+      }
     }, [onAdd]);
 
     return (
@@ -944,15 +994,7 @@
         {files.length > 0 && (
           <div className="files-grid">
             {files.map((f, i) => (
-              <div key={i} className="file-card" onClick={() => f.type.startsWith('image/') && onPreview(f.url)}>
-                {f.type.startsWith('image/')
-                  ? <img src={f.url} alt={f.name} />
-                  : <div className="file-card-placeholder">{fileIcon(f.type)}</div>}
-                <div className="file-card-footer">
-                  <span className="file-card-name" title={f.name}>{f.name}</span>
-                </div>
-                <button className="file-remove" onClick={e => { e.stopPropagation(); onRemove(i); }}>✕</button>
-              </div>
+              <FileCard key={i} f={f} onRemove={() => onRemove(i)} onPreview={onPreview} />
             ))}
           </div>
         )}
@@ -964,11 +1006,11 @@
         >
           <div className="upload-zone-icon">↑</div>
           <div className="upload-zone-text">
-            <strong>Carica materiali</strong><br />
-            Immagini, PDF, presentazioni
+            <strong>Carica asset</strong><br />
+            Video, JPG, PDF · Trascina o clicca
           </div>
         </div>
-        <input ref={ref} type="file" multiple accept="image/*,.pdf,.ppt,.pptx,.doc,.docx"
+        <input ref={ref} type="file" multiple accept="image/*,video/*,.pdf,.ppt,.pptx,.doc,.docx"
           onChange={e => handle([...e.target.files])} />
       </>
     );
@@ -1019,8 +1061,8 @@
     const deleteActivity = i => setActivities(p => p.filter((_, j) => j !== i));
 
     const addFile = useCallback(async f => {
-      const url = await readFile(f);
-      setFiles(p => [...p, { name: f.name, type: f.type, url }]);
+      const result = await readFile(f);
+      setFiles(p => [...p, { name: f.name, type: f.type, url: result.url, isObjectUrl: result.isObjectUrl }]);
     }, []);
     const removeFile = i => setFiles(p => p.filter((_, j) => j !== i));
 
@@ -1087,17 +1129,7 @@
               {files.length > 0 && (
                 <div className="files-grid" style={{marginBottom:12}}>
                   {files.map((f, i) => (
-                    <div key={i} className="file-card"
-                      onClick={() => f.type.startsWith('image/') && setLightbox(f.url)}>
-                      {f.type.startsWith('image/')
-                        ? <img src={f.url} alt={f.name} />
-                        : <div className="file-card-placeholder">{fileIcon(f.type)}</div>}
-                      <div className="file-card-footer">
-                        <span className="file-card-name" title={f.name}>{f.name}</span>
-                      </div>
-                      <button className="file-remove"
-                        onClick={e => { e.stopPropagation(); removeFile(i); }}>✕</button>
-                    </div>
+                    <FileCard key={i} f={f} onRemove={() => removeFile(i)} onPreview={url => setLightbox(url)} />
                   ))}
                 </div>
               )}
@@ -1110,12 +1142,12 @@
               >
                 <div className="upload-zone-icon">↑</div>
                 <div className="upload-zone-text">
-                  <strong>Carica materiali</strong><br />
-                  Immagini, PDF, presentazioni
+                  <strong>Carica asset</strong><br />
+                  Video, JPG, PDF · Trascina o clicca
                 </div>
               </div>
               <input ref={fileRef} type="file" multiple
-                accept="image/*,.pdf,.ppt,.pptx,.doc,.docx"
+                accept="image/*,video/*,.pdf,.ppt,.pptx,.doc,.docx"
                 onChange={e => [...e.target.files].forEach(addFile)} />
             </div>
           </div>
