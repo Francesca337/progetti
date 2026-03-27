@@ -195,12 +195,13 @@
 
     /* ─── STAGE LABEL ────────────────────────────── */
     .stage-label {
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--text-primary);
-      letter-spacing: -0.1px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
       line-height: 1;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       padding-left: 1px;
       white-space: nowrap;
     }
@@ -209,18 +210,22 @@
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
+      border-radius: 14px;
       width: 100%;
       min-width: 180px;
-      transition: border-color var(--transition);
+      transition: border-color var(--transition), box-shadow var(--transition);
       overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
     }
 
-    .card:hover { border-color: var(--border-strong); }
+    .card:hover {
+      border-color: var(--border-strong);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 24px rgba(0,0,0,0.3);
+    }
 
     /* ─── CARD FOOTER ────────────────────────────── */
     .card-footer {
-      padding: 9px 12px;
+      padding: 10px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -233,14 +238,15 @@
     .card-footer:hover { background: var(--surface-2); }
 
     .card-footer-label {
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--text-muted);
       font-weight: 500;
+      letter-spacing: 0.1px;
     }
 
     /* ─── CARD EMPTY (no sub-stages) ────────────── */
     .card-empty {
-      padding: 20px 14px;
+      padding: 28px 14px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -251,9 +257,10 @@
     .card-empty:hover { background: var(--surface-2); }
 
     .card-empty-text {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-muted);
       font-weight: 500;
+      letter-spacing: 0.2px;
     }
 
     .badge {
@@ -298,34 +305,48 @@
 
     /* ─── SUB-STAGES LIST ────────────────────────── */
     .sub-list {
-      padding: 0 10px 10px;
+      padding: 10px 12px 12px;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 1px;
     }
 
     /* ─── SUB-STAGE ──────────────────────────────── */
     .sub-item {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
+      border-radius: 8px;
       overflow: hidden;
-      transition: border-color var(--transition), background var(--transition);
+      transition: background var(--transition);
+      position: relative;
     }
 
-    .sub-item:hover { border-color: var(--border-strong); background: var(--surface-2); }
-    .sub-item.is-muted { opacity: 0.35; }
+    .sub-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 2px;
+      height: 0;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: height var(--transition);
+    }
+
+    .sub-item:hover { background: var(--surface-2); }
+    .sub-item:hover::before { height: 60%; }
+    .sub-item.is-muted { opacity: 0.3; }
 
     .sub-header {
-      padding: 8px 10px;
+      padding: 10px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
-      gap: 6px;
+      gap: 8px;
     }
 
     .sub-title {
-      font-size: 11.5px;
+      font-size: 12px;
       font-weight: 500;
       color: var(--text-primary);
       line-height: 1.4;
@@ -334,9 +355,13 @@
     .sub-actions {
       display: flex;
       align-items: center;
-      gap: 3px;
+      gap: 4px;
       flex-shrink: 0;
+      opacity: 0;
+      transition: opacity var(--transition);
     }
+
+    .sub-item:hover .sub-actions { opacity: 1; }
 
     /* ─── DIVIDER ────────────────────────────────── */
     .divider {
