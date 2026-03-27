@@ -246,6 +246,24 @@
       font-weight: 500;
     }
 
+    /* ─── CARD EMPTY (no sub-stages) ────────────── */
+    .card-empty {
+      padding: 18px 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--transition);
+    }
+
+    .card-empty:hover { background: #fafaf8; }
+
+    .card-empty-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
     .badge {
       height: 16px;
       min-width: 16px;
@@ -499,6 +517,191 @@
     }
 
     .file-card:hover .file-remove { opacity: 1; }
+
+    /* ─── SUB-STAGE MODAL ───────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(20,20,19,0.45);
+      z-index: 300;
+      display: flex;
+      align-items: stretch;
+      justify-content: flex-end;
+      backdrop-filter: blur(3px);
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 900px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      animation: slideInRight 0.22s cubic-bezier(0.4,0,0.2,1);
+      overflow: hidden;
+    }
+
+    @keyframes slideInRight {
+      from { transform: translateX(40px); opacity: 0; }
+      to   { transform: translateX(0);    opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 24px 36px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    .modal-breadcrumb {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .modal-breadcrumb-sep { opacity: 0.4; }
+
+    .modal-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.4px;
+      line-height: 1.2;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: transparent;
+      font-size: 16px;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background var(--transition), color var(--transition);
+      margin-top: 4px;
+    }
+
+    .modal-close:hover { background: var(--bg); color: var(--text-primary); }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+    }
+
+    .modal-col {
+      padding: 32px 36px;
+      overflow-y: auto;
+    }
+
+    .modal-col + .modal-col {
+      border-left: 1px solid var(--border);
+      background: #fafaf8;
+    }
+
+    .modal-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* Activities */
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: #fff;
+      transition: border-color var(--transition);
+    }
+
+    .activity-item:focus-within { border-color: var(--gold); }
+
+    .activity-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .activity-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--text-primary);
+      background: transparent;
+      line-height: 1.4;
+    }
+
+    .activity-input::placeholder { color: var(--text-muted); }
+
+    .activity-del {
+      width: 20px;
+      height: 20px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity var(--transition), background var(--transition);
+      flex-shrink: 0;
+    }
+
+    .activity-item:hover .activity-del { opacity: 1; }
+    .activity-del:hover { background: #fee2e2; color: #dc2626; }
+
+    .add-activity-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border: 1.5px dashed var(--border-strong);
+      border-radius: var(--radius-md);
+      background: transparent;
+      font-family: inherit;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      cursor: pointer;
+      width: 100%;
+      transition: border-color var(--transition), color var(--transition), background var(--transition);
+    }
+
+    .add-activity-btn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-light); }
+
+    .modal-divider { height: 1px; background: var(--border); margin: 28px 0; }
 
     /* ─── LIGHTBOX ───────────────────────────────── */
     .lightbox {
@@ -781,60 +984,187 @@
     );
   }
 
-  /* ─── SUB STAGE ──────────────────────────────── */
-  function SubStage({ sub, sk, lightboxSet }) {
-    const [open, setOpen] = useState(false);
-    const count = (lsGet(`f_${sk}`) ?? []).length;
+  /* ─── SUB MODAL ──────────────────────────────── */
+  function SubModal({ sub, stageTitle, journeyLabel, sk, onClose }) {
+    const [activities, setActivities] = useState(() => lsGet(`act_${sk}`) ?? []);
+    const [notes, setNotes]           = useState(() => lsGet(`n_${sk}`)   ?? '');
+    const [files, setFiles]           = useState(() => lsGet(`f_${sk}`)   ?? []);
+    const [lightbox, setLightbox]     = useState(null);
+
+    useEffect(() => lsSet(`act_${sk}`, activities), [activities, sk]);
+    useEffect(() => lsSet(`n_${sk}`,   notes),      [notes, sk]);
+    useEffect(() => lsSet(`f_${sk}`,   files),      [files, sk]);
+
+    // close on Escape
+    useEffect(() => {
+      const h = e => e.key === 'Escape' && onClose();
+      window.addEventListener('keydown', h);
+      return () => window.removeEventListener('keydown', h);
+    }, [onClose]);
+
+    const addActivity = () => setActivities(p => [...p, '']);
+    const updateActivity = (i, val) => setActivities(p => p.map((a, j) => j === i ? val : a));
+    const deleteActivity = i => setActivities(p => p.filter((_, j) => j !== i));
+
+    const addFile = useCallback(async f => {
+      const url = await readFile(f);
+      setFiles(p => [...p, { name: f.name, type: f.type, url }]);
+    }, []);
+    const removeFile = i => setFiles(p => p.filter((_, j) => j !== i));
+
+    const fileRef = useRef();
+
     return (
-      <div className={`sub-item${sub.muted ? ' is-muted' : ''}${open ? ' is-expanded' : ''}`}>
-        <div className="sub-header" onClick={() => setOpen(x => !x)}>
-          <span className="sub-title">{sub.title}</span>
-          <div className="sub-actions">
-            {count > 0 && <span className="badge">{count}</span>}
-            <span style={{fontSize:9, color:'var(--text-muted)', transition:'transform .18s', transform: open ? 'rotate(180deg)' : 'none', display:'block'}}>▼</span>
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal" onClick={e => e.stopPropagation()}>
+
+          {/* Header */}
+          <div className="modal-header">
+            <div>
+              <div className="modal-breadcrumb">
+                <span>{journeyLabel}</span>
+                <span className="modal-breadcrumb-sep">›</span>
+                <span>{stageTitle}</span>
+              </div>
+              <div className="modal-title">{sub.title}</div>
+            </div>
+            <button className="modal-close" onClick={onClose}>✕</button>
+          </div>
+
+          {/* Body */}
+          <div className="modal-body">
+
+            {/* Left: activities + notes */}
+            <div className="modal-col">
+              <div className="modal-section-title">Attività</div>
+              <div className="activity-list">
+                {activities.map((act, i) => (
+                  <div key={i} className="activity-item">
+                    <div className="activity-dot" />
+                    <input
+                      className="activity-input"
+                      placeholder="Descrivi l'attività…"
+                      value={act}
+                      onChange={e => updateActivity(i, e.target.value)}
+                      autoFocus={i === activities.length - 1 && act === ''}
+                    />
+                    <button className="activity-del" onClick={() => deleteActivity(i)}>✕</button>
+                  </div>
+                ))}
+              </div>
+              <button className="add-activity-btn" onClick={addActivity}>
+                <span style={{fontSize:16, lineHeight:1}}>+</span> Aggiungi attività
+              </button>
+
+              <div className="modal-divider" />
+
+              <div className="modal-section-title">Note</div>
+              <textarea
+                className="notes"
+                style={{minHeight:120, width:'100%'}}
+                placeholder="Obiettivi, KPI, note strategiche…"
+                value={notes}
+                onChange={e => setNotes(e.target.value)}
+              />
+            </div>
+
+            {/* Right: assets */}
+            <div className="modal-col">
+              <div className="modal-section-title">Asset e materiali</div>
+
+              {files.length > 0 && (
+                <div className="files-grid" style={{marginBottom:12}}>
+                  {files.map((f, i) => (
+                    <div key={i} className="file-card"
+                      onClick={() => f.type.startsWith('image/') && setLightbox(f.url)}>
+                      {f.type.startsWith('image/')
+                        ? <img src={f.url} alt={f.name} />
+                        : <div className="file-card-placeholder">{fileIcon(f.type)}</div>}
+                      <div className="file-card-footer">
+                        <span className="file-card-name" title={f.name}>{f.name}</span>
+                      </div>
+                      <button className="file-remove"
+                        onClick={e => { e.stopPropagation(); removeFile(i); }}>✕</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div
+                className="upload-zone"
+                onClick={() => fileRef.current.click()}
+                onDrop={e => { e.preventDefault(); [...e.dataTransfer.files].forEach(addFile); }}
+                onDragOver={e => e.preventDefault()}
+              >
+                <div className="upload-zone-icon">↑</div>
+                <div className="upload-zone-text">
+                  <strong>Carica materiali</strong><br />
+                  Immagini, PDF, presentazioni
+                </div>
+              </div>
+              <input ref={fileRef} type="file" multiple
+                accept="image/*,.pdf,.ppt,.pptx,.doc,.docx"
+                onChange={e => [...e.target.files].forEach(addFile)} />
+            </div>
           </div>
         </div>
-        {open && <ExpandPanel storeKey={sk} isSub lightboxSet={lightboxSet} />}
+
+        {lightbox && (
+          <div className="lightbox" onClick={() => setLightbox(null)}
+            style={{zIndex:400}}>
+            <button className="lightbox-close" onClick={() => setLightbox(null)}>✕</button>
+            <img className="lightbox-img" src={lightbox} alt="preview"
+              onClick={e => e.stopPropagation()} />
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  /* ─── SUB STAGE ──────────────────────────────── */
+  function SubStage({ sub, sk, stageTitle, journeyLabel, onOpenModal }) {
+    const actCount  = (lsGet(`act_${sk}`) ?? []).filter(a => a.trim()).length;
+    const fileCount = (lsGet(`f_${sk}`)   ?? []).length;
+    const hasContent = actCount > 0 || fileCount > 0;
+
+    return (
+      <div className={`sub-item${sub.muted ? ' is-muted' : ''}`}
+        onClick={() => onOpenModal({ sub, stageTitle, sk })}>
+        <div className="sub-header">
+          <span className="sub-title">{sub.title}</span>
+          <div className="sub-actions">
+            {hasContent && <span className="badge">{actCount + fileCount}</span>}
+            <span style={{fontSize:9, color:'var(--text-muted)'}}>→</span>
+          </div>
+        </div>
       </div>
     );
   }
 
   /* ─── STAGE CARD ─────────────────────────────── */
-  function StageCard({ stage, journeyKey, index, lightboxSet }) {
-    const [open, setOpen] = useState(false);
-    const count = (lsGet(`f_${journeyKey}_${stage.id}`) ?? []).length;
-
+  function StageCard({ stage, journeyKey, journeyLabel, onOpenModal }) {
     return (
       <div className="stage-wrap">
         <div className="stage-label">{stage.title}</div>
-
-        <div className={`card${open ? ' is-expanded' : ''}`}>
-          {stage.subStages.length > 0 && (
+        <div className="card">
+          {stage.subStages.length > 0 ? (
             <div className="sub-list">
               {stage.subStages.map(sub => (
                 <SubStage
                   key={sub.id}
                   sub={sub}
                   sk={`${journeyKey}_${stage.id}_${sub.id}`}
-                  lightboxSet={lightboxSet}
+                  stageTitle={stage.title}
+                  journeyLabel={journeyLabel}
+                  onOpenModal={onOpenModal}
                 />
               ))}
             </div>
-          )}
-
-          <div className="card-footer" onClick={() => setOpen(x => !x)}>
-            <span className="card-footer-label">{open ? 'Chiudi' : 'Note e materiali'}</span>
-            <div style={{display:'flex', alignItems:'center', gap:4}}>
-              {count > 0 && <span className="badge">{count}</span>}
-              <span className={`chevron-icon${open ? ' open' : ''}`} style={{fontSize:9, color:'var(--text-muted)'}}>▼</span>
+          ) : (
+            <div className="card-empty"
+              onClick={() => onOpenModal({ sub: stage, stageTitle: stage.title, sk: `${journeyKey}_${stage.id}` })}>
+              <span className="card-empty-text">Apri →</span>
             </div>
-          </div>
-
-          {open && (
-            <>
-              <div className="divider" />
-              <ExpandPanel storeKey={`${journeyKey}_${stage.id}`} lightboxSet={lightboxSet} />
-            </>
           )}
         </div>
       </div>
@@ -843,10 +1173,12 @@
 
   /* ─── APP ────────────────────────────────────── */
   function App() {
-    const [active, setActive] = useState('ecommerce');
-    const [lightbox, setLightbox] = useState(null);
+    const [active, setActive]   = useState('ecommerce');
+    const [modal, setModal]     = useState(null); // { sub, stageTitle, sk }
     const journey = JOURNEYS[active];
-    let phaseIndex = 0;
+
+    const openModal  = useCallback(info => setModal(info), []);
+    const closeModal = useCallback(() => setModal(null), []);
 
     return (
       <>
@@ -875,33 +1207,32 @@
             <p key={s.id} className="persona-text">{s.description}</p>
           ))}
           <div className="flow">
-            {journey.stages.filter(s => !s.isPersona).map((stage, i) => {
-              phaseIndex++;
-              return (
-                <React.Fragment key={stage.id}>
-                  {i > 0 && (
-                    <div className="connector">
-                      <div className="connector-inner" />
-                    </div>
-                  )}
-                  <StageCard
-                    stage={stage}
-                    journeyKey={active}
-                    index={phaseIndex}
-                    lightboxSet={setLightbox}
-                  />
-                </React.Fragment>
-              );
-            })}
+            {journey.stages.filter(s => !s.isPersona).map((stage, i) => (
+              <React.Fragment key={stage.id}>
+                {i > 0 && (
+                  <div className="connector">
+                    <div className="connector-inner" />
+                  </div>
+                )}
+                <StageCard
+                  stage={stage}
+                  journeyKey={active}
+                  journeyLabel={journey.label}
+                  onOpenModal={openModal}
+                />
+              </React.Fragment>
+            ))}
           </div>
         </main>
 
-        {lightbox && (
-          <div className="lightbox" onClick={() => setLightbox(null)}>
-            <button className="lightbox-close" onClick={() => setLightbox(null)}>✕</button>
-            <img className="lightbox-img" src={lightbox} alt="preview"
-              onClick={e => e.stopPropagation()} />
-          </div>
+        {modal && (
+          <SubModal
+            sub={modal.sub}
+            stageTitle={modal.stageTitle}
+            journeyLabel={journey.label}
+            sk={modal.sk}
+            onClose={closeModal}
+          />
         )}
       </>
     );
