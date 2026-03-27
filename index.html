@@ -623,43 +623,43 @@
       to   { transform: translateX(0);    opacity: 1; }
     }
 
+    /* ─── MODAL LAYOUT ──────────────────────────── */
     .modal-header {
-      padding: 28px 40px 24px;
+      padding: 20px 28px;
       border-bottom: 1px solid var(--border);
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
       gap: 20px;
       flex-shrink: 0;
     }
 
     .modal-breadcrumb {
-      font-size: 11.5px;
+      font-size: 11px;
       color: var(--text-muted);
-      font-weight: 400;
-      margin-bottom: 6px;
       display: flex;
       align-items: center;
       gap: 6px;
+      margin-bottom: 4px;
     }
 
-    .modal-breadcrumb-sep { opacity: 0.4; }
+    .modal-breadcrumb-sep { opacity: 0.35; }
 
     .modal-title {
-      font-size: 22px;
+      font-size: 17px;
       font-weight: 700;
       color: var(--text-primary);
-      letter-spacing: -0.4px;
+      letter-spacing: -0.3px;
       line-height: 1.2;
     }
 
     .modal-close {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       border: 1px solid var(--border);
       background: transparent;
-      font-size: 16px;
+      font-size: 14px;
       color: var(--text-muted);
       cursor: pointer;
       display: flex;
@@ -667,35 +667,35 @@
       justify-content: center;
       flex-shrink: 0;
       transition: background var(--transition), color var(--transition);
-      margin-top: 4px;
     }
 
-    .modal-close:hover { background: var(--bg); color: var(--text-primary); }
+    .modal-close:hover { background: var(--surface-2); color: var(--text-primary); }
 
+    /* Body: sidebar + feed */
     .modal-body {
       flex: 1;
-      overflow-y: auto;
+      overflow: hidden;
       display: grid;
-      grid-template-columns: 1fr 420px;
+      grid-template-columns: 300px 1fr;
     }
 
-    .modal-col {
-      padding: 36px 40px;
+    /* Left sidebar */
+    .modal-sidebar {
+      padding: 28px 24px;
       overflow-y: auto;
-    }
-
-    .modal-col + .modal-col {
-      border-left: 1px solid var(--border);
-      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0;
     }
 
     .modal-section-title {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.9px;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     /* Activities */
@@ -778,7 +778,116 @@
 
     .add-activity-btn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
 
-    .modal-divider { height: 1px; background: var(--border); margin: 28px 0; }
+    .modal-divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+    /* Right: asset feed */
+    .modal-feed-area {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      position: relative;
+    }
+
+    .modal-feed-area.drag-over { background: rgba(200,155,74,0.05); }
+    .modal-feed-area.drag-over .drop-hint { opacity: 1; }
+
+    .drop-hint {
+      position: absolute;
+      inset: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1.5px dashed var(--gold);
+      border-radius: 12px;
+      opacity: 0;
+      transition: opacity var(--transition);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .drop-hint-icon { font-size: 32px; color: var(--gold); }
+    .drop-hint-text { font-size: 13px; font-weight: 600; color: var(--gold); }
+
+    .feed-toolbar {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .feed-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .feed-upload-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--gold);
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity var(--transition);
+    }
+
+    .feed-upload-btn:hover { opacity: 0.85; }
+
+    /* Instagram feed grid */
+    .asset-feed {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      padding: 2px;
+    }
+
+    .asset-feed-empty {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 60px 40px;
+      cursor: pointer;
+    }
+
+    .asset-feed-empty-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: var(--text-muted);
+    }
+
+    .asset-feed-empty-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .asset-feed-empty-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
 
     /* ─── LIGHTBOX ───────────────────────────────── */
     .lightbox {
@@ -1119,7 +1228,7 @@
     );
   }
 
-  /* ─── ASSET COLUMN ───────────────────────────── */
+  /* ─── ASSET FEED AREA ────────────────────────── */
   function AssetCol({ files, onAdd, onRemove, onPreview, fileRef }) {
     const [dragging, setDragging] = useState(false);
 
@@ -1131,35 +1240,30 @@
 
     return (
       <div
-        className={`modal-col asset-col${dragging ? ' drag-over' : ''}`}
+        className={`modal-feed-area${dragging ? ' drag-over' : ''}`}
         onDragOver={e => { e.preventDefault(); setDragging(true); }}
         onDragLeave={() => setDragging(false)}
         onDrop={handleDrop}
       >
         <div className="drop-hint">
           <div className="drop-hint-icon">↑</div>
-          <div className="drop-hint-text">Rilascia qui</div>
+          <div className="drop-hint-text">Rilascia i file qui</div>
         </div>
 
-        <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:16}}>
-          <div className="modal-section-title" style={{marginBottom:0}}>Asset e materiali</div>
-          <button
-            style={{fontSize:11, color:'var(--gold)', background:'transparent', border:'none', cursor:'pointer', fontFamily:'inherit', fontWeight:600}}
-            onClick={() => fileRef.current.click()}
-          >+ Aggiungi</button>
+        <div className="feed-toolbar">
+          <span className="feed-count">
+            {files.length === 0 ? 'Nessun asset' : `${files.length} asset`}
+          </span>
+          <button className="feed-upload-btn" onClick={() => fileRef.current.click()}>
+            + Carica
+          </button>
         </div>
 
         {files.length === 0 ? (
-          <div
-            className="upload-zone"
-            style={{marginTop:0, minHeight:160, justifyContent:'center'}}
-            onClick={() => fileRef.current.click()}
-          >
-            <div className="upload-zone-icon">↑</div>
-            <div className="upload-zone-text">
-              <strong>Trascina o clicca</strong><br />
-              Video, JPG, PDF
-            </div>
+          <div className="asset-feed-empty" onClick={() => fileRef.current.click()}>
+            <div className="asset-feed-empty-icon">↑</div>
+            <div className="asset-feed-empty-text">Trascina qui i tuoi asset<br />o clicca per caricare</div>
+            <div className="asset-feed-empty-sub">Video · JPG · PDF</div>
           </div>
         ) : (
           <div className="asset-feed">
@@ -1249,11 +1353,11 @@
             <button className="modal-close" onClick={onClose}>✕</button>
           </div>
 
-          {/* Body */}
+          {/* Body: sidebar + feed */}
           <div className="modal-body">
 
-            {/* Left: activities + notes */}
-            <div className="modal-col">
+            {/* Sidebar: activities + notes */}
+            <div className="modal-sidebar">
               <div className="modal-section-title">Attività</div>
               <div className="activity-list">
                 {activities.map((act, i) => (
@@ -1279,14 +1383,14 @@
               <div className="modal-section-title">Note</div>
               <textarea
                 className="notes"
-                style={{minHeight:120, width:'100%'}}
+                style={{minHeight:100, width:'100%'}}
                 placeholder="Obiettivi, KPI, note strategiche…"
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
               />
             </div>
 
-            {/* Right: assets */}
+            {/* Feed: asset grid */}
             <AssetCol files={files} onAdd={addFile} onRemove={removeFile} onPreview={setLightbox} fileRef={fileRef} />
           </div>
         </div>
