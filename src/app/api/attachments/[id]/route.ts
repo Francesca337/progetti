@@ -27,7 +27,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const blob = await getAttachmentBuffer(attachment.blobKey);
   if (!blob) return new NextResponse('File not found in storage', { status: 404 });
 
-  return new NextResponse(blob.buffer, {
+  return new NextResponse(blob.data, {
     status: 200,
     headers: {
       'Content-Type': attachment.mimeType,

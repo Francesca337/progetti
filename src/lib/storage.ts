@@ -42,12 +42,12 @@ export async function uploadAttachment(
 
 export async function getAttachmentBuffer(
   key: string,
-): Promise<{ buffer: Buffer; mimeType?: string } | null> {
+): Promise<{ data: Uint8Array; mimeType?: string } | null> {
   const store = blobStore();
   const result = await store.getWithMetadata(key, { type: 'arrayBuffer' });
   if (!result) return null;
   return {
-    buffer: Buffer.from(result.data as ArrayBuffer),
+    data: new Uint8Array(result.data as ArrayBuffer),
     mimeType: typeof result.metadata?.mimeType === 'string' ? result.metadata.mimeType : undefined,
   };
 }
