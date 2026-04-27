@@ -56,7 +56,7 @@ export async function uploadAttachmentAction(
   if (file.size > MAX_FILE_SIZE) return { error: 'File troppo grande (max 15 MB)' };
 
   const key = makeBlobKey(taskId, file.name);
-  await uploadAttachment(key, Buffer.from(await file.arrayBuffer()), file.type);
+  await uploadAttachment(key, await file.arrayBuffer(), file.type);
 
   await prisma.attachment.create({
     data: {

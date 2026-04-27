@@ -30,12 +30,10 @@ export function makeBlobKey(taskId: string, filename: string): string {
 
 export async function uploadAttachment(
   key: string,
-  data: ArrayBuffer | Uint8Array | Buffer,
+  data: ArrayBuffer,
   mimeType: string,
 ): Promise<void> {
-  const store = blobStore();
-  const buf = data instanceof Buffer ? data : Buffer.from(data as ArrayBuffer);
-  await store.set(key, buf, {
+  await blobStore().set(key, data, {
     metadata: { mimeType },
   });
 }
