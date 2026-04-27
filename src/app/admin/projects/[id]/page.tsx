@@ -34,7 +34,11 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
   for (const t of tasks) tasksByStatus.get(t.status)?.push(t);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
+      <Link href="/admin/projects" className="text-xs text-ink-500 hover:text-ink-900 transition uppercase tracking-[0.18em] inline-block pt-6">
+        ← Tutti i progetti
+      </Link>
+
       <ProjectHeader project={project} />
 
       <div className="flex justify-end">
@@ -45,14 +49,21 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
         />
       </div>
 
+      {tasks.length === 0 && (
+        <div className="card-flat p-8 text-center text-sm text-ink-500">
+          Nessuna task in questo progetto. Creane una qui sopra.
+        </div>
+      )}
+
       {STATUS_ORDER.map((status) => {
         const group = tasksByStatus.get(status) ?? [];
         if (group.length === 0) return null;
         return (
-          <section key={status} className="space-y-2">
-            <h2 className="text-sm uppercase tracking-wide text-slate-500">
-              {STATUS_LABELS[status]} ({group.length})
-            </h2>
+          <section key={status} className="space-y-3">
+            <div className="flex items-baseline gap-3">
+              <p className="eyebrow">{STATUS_LABELS[status]}</p>
+              <span className="text-xs text-ink-400">{group.length}</span>
+            </div>
             <div className="space-y-2">
               {group.map((t) => (
                 <div key={t.id} id={`task-${t.id}`}>
@@ -68,18 +79,6 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
           </section>
         );
       })}
-
-      {tasks.length === 0 && (
-        <div className="card p-6 text-sm text-slate-500">
-          Nessuna task in questo progetto. Creane una qui sopra.
-        </div>
-      )}
-
-      <div className="text-sm">
-        <Link href="/admin/projects" className="text-brand-600 hover:underline">
-          ← Tutti i progetti
-        </Link>
-      </div>
     </div>
   );
 }

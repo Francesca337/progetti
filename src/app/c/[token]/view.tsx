@@ -3,9 +3,9 @@
 import { useState, useTransition } from 'react';
 import type { Attachment, Project, Task, User } from '@prisma/client';
 import {
-  PRIORITY_COLORS,
+  PRIORITY_CHIP,
   PRIORITY_LABELS,
-  STATUS_COLORS,
+  STATUS_CHIP,
   STATUS_LABELS,
   STATUS_ORDER,
   deadlineSeverity,
@@ -28,34 +28,54 @@ export function CollaboratorView({
   const tasksByProject = groupBy(tasks, (t) => t.project.id);
 
   return (
-    <div className="min-h-screen">
-      <header className="bg-white border-b">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <div className="text-xs uppercase tracking-wide text-slate-500">Le tue task</div>
-            <h1 className="text-lg font-semibold">{user.name}</h1>
+    <div className="relative min-h-screen overflow-hidden">
+      <div className="pointer-events-none absolute inset-x-0 -top-40 h-[60vh] blob-soft" aria-hidden />
+
+      <header className="relative z-10 px-4 sm:px-6 pt-8">
+        <div className="max-w-4xl mx-auto pill-nav justify-between">
+          <span className="logo text-base px-3">
+            <span className="logo-dot">.</span>
+            <span>ex</span>
+            <span className="logo-accent">d</span>
+          </span>
+          <div className="flex items-center gap-3 px-3 text-sm">
+            <div className="h-8 w-8 rounded-full bg-ink-900 text-cream flex items-center justify-center text-xs font-semibold">
+              {initials(user.name)}
+            </div>
+            <div className="hidden sm:block">
+              <div className="font-medium text-ink-900 leading-tight">{user.name}</div>
+              <div className="text-xs text-ink-500 leading-tight">{user.email}</div>
+            </div>
           </div>
-          <div className="text-sm text-slate-500">{user.email}</div>
         </div>
       </header>
-      <main className="max-w-5xl mx-auto px-4 py-8 space-y-8">
+
+      <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-12">
+        <section className="text-center pt-6">
+          <p className="eyebrow mb-3">Le tue task</p>
+          <h1 className="display text-4xl sm:text-5xl">
+            Ciao {firstWord(user.name)}, <span className="serif-italic">a che punto siamo?</span>
+          </h1>
+        </section>
+
         {tasks.length === 0 && (
-          <div className="card p-8 text-center text-slate-600">
+          <div className="card p-10 text-center text-ink-500">
             Nessuna task assegnata al momento. Riceverai una notifica via email quando ne avrai una.
           </div>
         )}
+
         {Array.from(tasksByProject.entries()).map(([projectId, group]) => {
           const project = group[0].project;
           return (
-            <section key={projectId} className="space-y-3">
-              <div className="flex items-center gap-3">
+            <section key={projectId} className="space-y-4">
+              <div className="flex items-baseline gap-3">
                 <span
-                  className="h-3 w-3 rounded-full"
+                  className="h-2.5 w-2.5 rounded-full"
                   style={{ backgroundColor: project.color }}
                   aria-hidden
                 />
-                <h2 className="text-base font-semibold">{project.name}</h2>
-                <span className="text-sm text-slate-500">{group.length} task</span>
+                <h2 className="text-lg font-semibold text-ink-900">{project.name}</h2>
+                <span className="text-xs text-ink-500">{group.length} task</span>
               </div>
               <div className="space-y-3">
                 {group.map((t) => (
@@ -76,22 +96,22 @@ function CollaboratorTaskCard({ task, token }: { task: TaskWithRelations; token:
   const severity = deadlineSeverity(task.deadline, task.status);
 
   return (
-    <article className="card p-4">
-      <div className="flex items-start justify-between gap-3">
+    <article className="card p-5">
+      <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className={`badge ${STATUS_COLORS[task.status]}`}>{STATUS_LABELS[task.status]}</span>
-            <span className={`badge ${PRIORITY_COLORS[task.priority]}`}>
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <span className={`badge ${STATUS_CHIP[task.status]}`}>{STATUS_LABELS[task.status]}</span>
+            <span className={`badge ${PRIORITY_CHIP[task.priority]}`}>
               {PRIORITY_LABELS[task.priority]}
             </span>
             {task.deadline && (
               <span
                 className={`text-xs ${
                   severity === 'overdue'
-                    ? 'text-rose-700 font-medium'
+                    ? 'text-brand font-medium'
                     : severity === 'due-soon'
                       ? 'text-amber-700'
-                      : 'text-slate-500'
+                      : 'text-ink-500'
                 }`}
               >
                 {severity === 'overdue' ? 'In ritardo: ' : 'Deadline: '}
@@ -99,26 +119,22 @@ function CollaboratorTaskCard({ task, token }: { task: TaskWithRelations; token:
               </span>
             )}
           </div>
-          <h3 className="font-medium mt-2">{task.title}</h3>
+          <h3 className="font-semibold text-ink-900 text-base">{task.title}</h3>
           {task.description && open && (
-            <p className="mt-2 text-sm text-slate-600 whitespace-pre-wrap">{task.description}</p>
+            <p className="mt-2 text-sm text-ink-600 whitespace-pre-wrap">{task.description}</p>
           )}
           {task.description && (
             <button
               type="button"
-              className="mt-2 text-xs text-brand-600 hover:underline"
+              className="mt-2 text-xs text-brand hover:underline"
               onClick={() => setOpen((v) => !v)}
             >
               {open ? 'Nascondi dettagli' : 'Mostra dettagli'}
             </button>
           )}
         </div>
-        <div>
-          <label className="sr-only" htmlFor={`status-${task.id}`}>
-            Stato
-          </label>
+        <div className="shrink-0">
           <select
-            id={`status-${task.id}`}
             className="select w-44"
             defaultValue={task.status}
             disabled={pending}
@@ -128,6 +144,7 @@ function CollaboratorTaskCard({ task, token }: { task: TaskWithRelations; token:
                 await updateTaskStatus(token, task.id, next);
               });
             }}
+            aria-label="Stato"
           >
             {STATUS_ORDER.map((s) => (
               <option key={s} value={s}>
@@ -148,26 +165,26 @@ function Attachments({ task, token }: { task: TaskWithRelations; token: string }
   const [error, setError] = useState<string | null>(null);
 
   return (
-    <div className="mt-4 border-t pt-3">
-      <div className="text-xs font-medium text-slate-600 mb-2">
+    <div className="mt-4 pt-4 border-t border-ink-100">
+      <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400 mb-2">
         Allegati ({task.attachments.length})
       </div>
-      <ul className="space-y-1 mb-3">
+      <ul className="space-y-1.5 mb-3">
         {task.attachments.map((a) => (
           <li key={a.id} className="flex items-center justify-between text-sm">
             <a
               href={`/api/attachments/${a.id}?t=${encodeURIComponent(token)}`}
-              className="text-brand-600 hover:underline truncate mr-2"
+              className="text-brand hover:underline truncate mr-2"
               target="_blank"
               rel="noopener noreferrer"
             >
               {a.filename}
             </a>
-            <span className="text-xs text-slate-500 shrink-0">{formatBytes(a.sizeBytes)}</span>
+            <span className="text-xs text-ink-500 shrink-0">{formatBytes(a.sizeBytes)}</span>
           </li>
         ))}
         {task.attachments.length === 0 && (
-          <li className="text-xs text-slate-500">Nessun allegato.</li>
+          <li className="text-xs text-ink-500">Nessun allegato.</li>
         )}
       </ul>
       <form
@@ -191,14 +208,14 @@ function Attachments({ task, token }: { task: TaskWithRelations; token: string }
           name="file"
           accept="image/jpeg,application/pdf"
           required
-          className="text-sm"
+          className="text-sm file:mr-3 file:rounded-pill file:border-0 file:bg-ink-900 file:text-white file:px-4 file:py-2 file:text-xs file:font-medium hover:file:bg-ink-800"
         />
-        <button type="submit" className="btn-secondary" disabled={pending}>
+        <button type="submit" className="btn-primary btn-xs" disabled={pending}>
           {pending ? 'Caricamento…' : 'Allega file'}
         </button>
       </form>
-      {error && <div className="mt-2 text-xs text-rose-700">{error}</div>}
-      <p className="mt-1 text-xs text-slate-500">JPEG o PDF, max 15 MB.</p>
+      {error && <div className="mt-2 text-xs text-brand">{error}</div>}
+      <p className="mt-1.5 text-xs text-ink-500">JPEG o PDF, max 15 MB.</p>
     </div>
   );
 }
@@ -212,4 +229,17 @@ function groupBy<T, K>(items: T[], key: (x: T) => K): Map<K, T[]> {
     else m.set(k, [it]);
   }
   return m;
+}
+
+function firstWord(s: string): string {
+  return s.split(/\s+/)[0] ?? s;
+}
+
+function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((s) => s[0]?.toUpperCase() ?? '')
+    .join('');
 }

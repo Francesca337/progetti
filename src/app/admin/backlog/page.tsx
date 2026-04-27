@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { prisma } from '@/lib/db';
 import { requireAdmin } from '@/lib/auth';
 import { TaskRow } from '../_components/TaskRow';
@@ -16,11 +15,10 @@ export default async function BacklogPage() {
   });
 
   if (projects.length === 0) {
-    // Auto-seed a default backlog bucket so the admin sees something.
     await prisma.project.create({
       data: {
         name: 'Backlog',
-        color: '#6b7280',
+        color: '#6B6B7A',
         ownerId: admin.id,
         isPersonalBacklog: true,
       },
@@ -65,12 +63,24 @@ export default async function BacklogPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <header>
-        <h1 className="text-2xl font-semibold">Backlog personale</h1>
-        <p className="text-slate-600 text-sm">
-          Le tue cose da fare, suddivise per progetto. Le task qui non sono visibili ai collaboratori.
-        </p>
+    <div className="space-y-10">
+      <header className="pt-6 flex items-end justify-between gap-4 flex-wrap">
+        <div>
+          <p className="eyebrow mb-3">Solo per te</p>
+          <h1 className="display text-4xl sm:text-5xl">
+            Le tue cose <span className="serif-italic">da fare.</span>
+          </h1>
+          <p className="mt-3 text-ink-500 max-w-xl">
+            Il backlog personale: task private, suddivise per sezione. Non sono visibili ai
+            collaboratori.
+          </p>
+        </div>
+        <NewTaskButton
+          projects={allProjectsForForm}
+          collaborators={collaborators}
+          defaultProjectId={projects[0]?.id}
+          label="Nuova task"
+        />
       </header>
 
       <BacklogProjectsClient
@@ -82,37 +92,28 @@ export default async function BacklogPage() {
         }))}
       />
 
-      <div className="flex justify-end">
-        <NewTaskButton
-          projects={allProjectsForForm}
-          collaborators={collaborators}
-          defaultProjectId={projects[0]?.id}
-          label="Nuova task nel backlog"
-        />
-      </div>
-
       {projects.map((project) => {
         const group = tasksByProject.get(project.id) ?? [];
         return (
-          <section key={project.id} className="space-y-3">
-            <div className="flex items-center gap-2">
+          <section key={project.id} className="space-y-4">
+            <div className="flex items-baseline gap-3">
               <span
-                className="h-3 w-3 rounded-full"
+                className="h-2.5 w-2.5 rounded-full"
                 style={{ backgroundColor: project.color }}
                 aria-hidden
               />
-              <h2 className="text-base font-semibold">{project.name}</h2>
-              <span className="text-sm text-slate-500">{group.length} task</span>
+              <h2 className="text-lg font-semibold text-ink-900">{project.name}</h2>
+              <span className="text-xs text-ink-500">{group.length} task</span>
             </div>
             {group.length === 0 ? (
-              <div className="card p-4 text-sm text-slate-500">Nessuna task.</div>
+              <div className="card-flat p-6 text-sm text-ink-500">Nessuna task in questa sezione.</div>
             ) : (
               STATUS_ORDER.map((status) => {
                 const subset = group.filter((t) => t.status === status);
                 if (subset.length === 0) return null;
                 return (
                   <div key={status} className="space-y-2">
-                    <div className="text-xs uppercase tracking-wide text-slate-400">
+                    <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">
                       {STATUS_LABELS[status]} ({subset.length})
                     </div>
                     {subset.map((t) => (
@@ -132,12 +133,6 @@ export default async function BacklogPage() {
           </section>
         );
       })}
-
-      <div className="text-sm">
-        <Link href="/admin" className="text-brand-600 hover:underline">
-          ← Torna alla dashboard
-        </Link>
-      </div>
     </div>
   );
 }

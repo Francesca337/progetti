@@ -10,17 +10,20 @@ export function BacklogProjectsClient({ projects }: { projects: Item[] }) {
   const [error, setError] = useState<string | null>(null);
 
   return (
-    <div className="card p-4 space-y-3">
-      <div className="text-sm font-medium">Sezioni del backlog</div>
+    <div className="card p-6 space-y-4">
+      <p className="eyebrow">Sezioni</p>
       <div className="flex flex-wrap gap-2">
         {projects.map((p) => (
-          <div key={p.id} className="flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1 text-sm bg-slate-50">
+          <div
+            key={p.id}
+            className="flex items-center gap-2 rounded-pill border border-ink-200 bg-cream-50 pl-3 pr-1 py-1 text-sm"
+          >
             <span className="h-2 w-2 rounded-full" style={{ backgroundColor: p.color }} aria-hidden />
-            <span>{p.name}</span>
-            <span className="text-xs text-slate-500">({p.taskCount})</span>
+            <span className="text-ink-700">{p.name}</span>
+            <span className="text-xs text-ink-400">({p.taskCount})</span>
             <button
               type="button"
-              className="text-xs text-rose-600 hover:underline"
+              className="text-ink-400 hover:text-brand transition w-6 h-6 rounded-full flex items-center justify-center"
               disabled={pending}
               onClick={() => {
                 if (p.taskCount > 0) {
@@ -30,6 +33,7 @@ export function BacklogProjectsClient({ projects }: { projects: Item[] }) {
                   await deleteBacklogProject(p.id);
                 });
               }}
+              aria-label={`Elimina ${p.name}`}
             >
               ×
             </button>
@@ -51,20 +55,26 @@ export function BacklogProjectsClient({ projects }: { projects: Item[] }) {
             }
           });
         }}
-        className="flex flex-wrap items-end gap-2"
+        className="flex flex-wrap items-end gap-3 pt-2 border-t border-ink-100"
       >
-        <div>
+        <div className="flex-1 min-w-[180px]">
           <label className="label" htmlFor="name">Nuova sezione</label>
           <input id="name" name="name" required className="input" placeholder="es. Operativo" />
         </div>
         <div>
           <label className="label" htmlFor="color">Colore</label>
-          <input id="color" name="color" type="color" defaultValue="#6b7280" className="h-10 w-14 rounded border border-slate-300" />
+          <input
+            id="color"
+            name="color"
+            type="color"
+            defaultValue="#6B6B7A"
+            className="h-11 w-14 rounded-2xl border border-ink-200 bg-white cursor-pointer"
+          />
         </div>
         <button type="submit" className="btn-secondary" disabled={pending}>
           {pending ? '…' : 'Aggiungi'}
         </button>
-        {error && <div className="w-full text-sm text-rose-700">{error}</div>}
+        {error && <div className="w-full text-sm text-brand">{error}</div>}
       </form>
     </div>
   );

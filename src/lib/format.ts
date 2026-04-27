@@ -15,17 +15,17 @@ export const PRIORITY_LABELS: Record<Priority, string> = {
   HIGH: 'Alta',
 };
 
-export const STATUS_COLORS: Record<TaskStatus, string> = {
-  TODO: 'bg-slate-100 text-slate-700 border-slate-200',
-  IN_PROGRESS: 'bg-blue-100 text-blue-700 border-blue-200',
-  IN_REVIEW: 'bg-amber-100 text-amber-800 border-amber-200',
-  DONE: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+export const STATUS_CHIP: Record<TaskStatus, string> = {
+  TODO: 'chip-status-todo',
+  IN_PROGRESS: 'chip-status-in_progress',
+  IN_REVIEW: 'chip-status-in_review',
+  DONE: 'chip-status-done',
 };
 
-export const PRIORITY_COLORS: Record<Priority, string> = {
-  LOW: 'bg-slate-50 text-slate-600 border-slate-200',
-  MEDIUM: 'bg-blue-50 text-blue-700 border-blue-200',
-  HIGH: 'bg-rose-50 text-rose-700 border-rose-200',
+export const PRIORITY_CHIP: Record<Priority, string> = {
+  LOW: 'chip-priority-low',
+  MEDIUM: 'chip-priority-medium',
+  HIGH: 'chip-priority-high',
 };
 
 export function formatDate(d: Date | string | null | undefined): string {

@@ -7,34 +7,132 @@
     height: 100%;
   }
   body {
-    @apply bg-slate-50 text-slate-900 antialiased;
-    font-feature-settings: 'cv11', 'ss01';
+    @apply bg-cream text-ink-900 antialiased;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+  /* Editorial italic serif for emphasized headline words. */
+  .serif-italic {
+    font-family: var(--font-serif), Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  /* Big display headings. */
+  h1.display, .display {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+  }
+  /* The thin pink uppercase section labels (.exd signature). */
+  .eyebrow {
+    @apply text-xs uppercase tracking-[0.18em] text-brand font-medium;
   }
 }
 
 @layer components {
+  /* ---------- Buttons (pill-shaped) ---------- */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-pill px-5 py-2.5 text-sm font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 whitespace-nowrap;
   }
   .btn-primary {
-    @apply btn border-transparent bg-brand-600 text-white hover:bg-brand-700;
+    @apply btn bg-brand text-white hover:bg-brand-600 active:bg-brand-700 shadow-pill;
+  }
+  .btn-dark {
+    @apply btn bg-ink-900 text-white hover:bg-ink-800 active:bg-ink-700 shadow-pill;
   }
   .btn-secondary {
-    @apply btn border-slate-200 bg-white text-slate-700 hover:bg-slate-50;
+    @apply btn bg-white text-ink-800 border border-ink-200 hover:border-ink-300 hover:bg-cream-50;
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-ink-700 hover:bg-ink-100;
   }
   .btn-danger {
-    @apply btn border-transparent bg-rose-600 text-white hover:bg-rose-700;
+    @apply btn bg-white text-brand border border-brand-100 hover:bg-brand-50;
   }
+  .btn-xs {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  /* ---------- Form controls ---------- */
   .input, .select, .textarea {
-    @apply w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-200;
+    @apply w-full rounded-2xl border border-ink-200 bg-white/80 px-4 py-2.5 text-sm text-ink-900 placeholder-ink-400 transition focus:border-brand-300 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-50;
+  }
+  .textarea {
+    @apply leading-relaxed;
   }
   .label {
-    @apply block text-sm font-medium text-slate-700 mb-1;
+    @apply block text-xs font-medium uppercase tracking-wider text-ink-500 mb-1.5;
   }
+
+  /* ---------- Surfaces ---------- */
   .card {
-    @apply rounded-lg border border-slate-200 bg-white shadow-sm;
+    @apply rounded-3xl bg-white/70 backdrop-blur border border-ink-100 shadow-soft;
   }
+  .card-flat {
+    @apply rounded-3xl bg-white border border-ink-100;
+  }
+  .card-bare {
+    @apply rounded-3xl;
+  }
+
+  /* ---------- Badges ---------- */
   .badge {
-    @apply inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium;
+    @apply inline-flex items-center gap-1 rounded-pill px-2.5 py-1 text-[11px] font-medium leading-none;
+  }
+  .badge-dot::before {
+    content: '';
+    @apply inline-block h-1.5 w-1.5 rounded-full bg-current;
+  }
+
+  /* ---------- Floating pill nav ---------- */
+  .pill-nav {
+    @apply flex items-center gap-1 rounded-pill bg-white/80 backdrop-blur-md border border-ink-100 shadow-pill px-2 py-2;
+  }
+  .pill-link {
+    @apply rounded-pill px-4 py-2 text-sm text-ink-600 hover:text-ink-900 hover:bg-cream-100 transition;
+  }
+  .pill-link-active {
+    @apply bg-ink-900 text-white hover:bg-ink-800 hover:text-white;
+  }
+
+  /* ---------- Decorative blob ---------- */
+  .blob {
+    background: radial-gradient(
+      ellipse 60% 55% at 50% 45%,
+      rgba(228, 0, 102, 0.55) 0%,
+      rgba(142, 91, 200, 0.45) 35%,
+      rgba(245, 242, 238, 0) 70%
+    );
+    filter: blur(8px);
+  }
+  .blob-soft {
+    background: radial-gradient(
+      ellipse 70% 60% at 50% 50%,
+      rgba(228, 0, 102, 0.18) 0%,
+      rgba(142, 91, 200, 0.14) 35%,
+      rgba(245, 242, 238, 0) 75%
+    );
+  }
+
+  /* ---------- Logo ---------- */
+  .logo {
+    @apply font-sans font-bold tracking-tightest text-ink-900;
+  }
+  .logo-dot {
+    @apply text-teal-400;
+  }
+  .logo-accent {
+    @apply text-brand;
   }
 }
+
+/* Status / priority chip palettes (kept low-contrast against cream). */
+.chip-status-todo        { @apply bg-ink-100 text-ink-700; }
+.chip-status-in_progress { @apply bg-brand-50 text-brand-700; }
+.chip-status-in_review   { @apply bg-amber-100 text-amber-800; }
+.chip-status-done        { @apply bg-teal-50 text-teal-500; }
+
+.chip-priority-low    { @apply bg-ink-50 text-ink-600 border border-ink-100; }
+.chip-priority-medium { @apply bg-cream-50 text-ink-700 border border-ink-200; }
+.chip-priority-high   { @apply bg-brand-50 text-brand-700 border border-brand-100; }

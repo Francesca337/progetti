@@ -29,8 +29,13 @@ export function NewTaskButton({
   }
 
   return (
-    <div className="card p-4">
-      <h3 className="font-medium mb-3">{label}</h3>
+    <div className="card p-6">
+      <div className="flex items-center justify-between mb-5">
+        <p className="eyebrow">Nuova task</p>
+        <button type="button" className="btn-ghost btn-xs" onClick={() => setOpen(false)}>
+          Chiudi
+        </button>
+      </div>
       <TaskForm
         projects={projects}
         collaborators={collaborators}

@@ -39,41 +39,44 @@ export default async function CollaboratorDetail({
   }
 
   return (
-    <div className="space-y-6">
-      <header className="flex items-end justify-between gap-4 flex-wrap">
+    <div className="space-y-10">
+      <header className="pt-6 flex items-end justify-between gap-4 flex-wrap">
         <div>
-          <Link href="/admin/collaborators" className="text-sm text-brand-600 hover:underline">
+          <Link href="/admin/collaborators" className="text-xs text-ink-500 hover:text-ink-900 transition uppercase tracking-[0.18em]">
             ← Collaboratori
           </Link>
-          <h1 className="text-2xl font-semibold mt-1">{user.name}</h1>
-          <p className="text-slate-600 text-sm">{user.email}</p>
+          <h1 className="display text-4xl sm:text-5xl mt-3">
+            {firstWord(user.name)}{' '}
+            <span className="serif-italic">{restWords(user.name) || 'tasks.'}</span>
+          </h1>
+          <p className="text-ink-500 text-sm mt-2">{user.email}</p>
         </div>
         <NewTaskButton
           projects={projects}
           collaborators={collaborators}
           defaultAssigneeId={user.id}
-          label="Assegna nuova task"
+          label="Assegna task"
         />
       </header>
 
       {tasks.length === 0 && (
-        <div className="card p-6 text-sm text-slate-500">
-          Nessuna task assegnata. Usa il bottone qui sopra per crearne una.
+        <div className="card-flat p-8 text-center text-ink-500 text-sm">
+          Nessuna task assegnata. Usa il bottone sopra per crearne una.
         </div>
       )}
 
       {Array.from(tasksByProject.entries()).map(([projectId, group]) => {
         const project = group[0].project;
         return (
-          <section key={projectId} className="space-y-3">
-            <div className="flex items-center gap-2">
+          <section key={projectId} className="space-y-4">
+            <div className="flex items-center gap-3">
               <span
-                className="h-3 w-3 rounded-full"
+                className="h-2.5 w-2.5 rounded-full"
                 style={{ backgroundColor: project.color }}
                 aria-hidden
               />
-              <h2 className="text-base font-semibold">{project.name}</h2>
-              <span className="text-sm text-slate-500">{group.length} task</span>
+              <h2 className="text-lg font-semibold text-ink-900">{project.name}</h2>
+              <span className="text-xs text-ink-500">{group.length} task</span>
             </div>
             <div className="space-y-2">
               {group.map((t) => (
@@ -91,4 +94,12 @@ export default async function CollaboratorDetail({
       })}
     </div>
   );
+}
+
+function firstWord(s: string): string {
+  return s.split(/\s+/)[0] ?? s;
+}
+function restWords(s: string): string {
+  const parts = s.split(/\s+/);
+  return parts.slice(1).join(' ');
 }

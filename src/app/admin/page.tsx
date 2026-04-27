@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
 import {
-  PRIORITY_COLORS,
+  PRIORITY_CHIP,
   PRIORITY_LABELS,
-  STATUS_COLORS,
+  STATUS_CHIP,
   STATUS_LABELS,
   formatDate,
 } from '@/lib/format';
@@ -52,43 +52,54 @@ export default async function AdminDashboard() {
   >;
 
   return (
-    <div className="space-y-8">
-      <header>
-        <h1 className="text-2xl font-semibold">Dashboard</h1>
-        <p className="text-slate-600 text-sm">Panoramica delle task in ritardo, in scadenza e in corso.</p>
+    <div className="space-y-16">
+      <header className="pt-6">
+        <p className="eyebrow mb-4">Dashboard</p>
+        <h1 className="display text-4xl sm:text-5xl">
+          Cosa serve <span className="serif-italic">attenzione,</span>
+          <br />
+          oggi.
+        </h1>
+        <p className="mt-4 text-ink-500 max-w-xl">
+          Una panoramica delle task in ritardo, in scadenza nei prossimi 7 giorni, e di quelle
+          attualmente in corso.
+        </p>
       </header>
 
       <section className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Stat label="Da fare" value={statusCount.TODO ?? 0} />
-        <Stat label="In corso" value={statusCount.IN_PROGRESS ?? 0} accent="blue" />
-        <Stat label="In revisione" value={statusCount.IN_REVIEW ?? 0} accent="amber" />
-        <Stat label="Completate" value={statusCount.DONE ?? 0} accent="emerald" />
+        <Stat label="In corso" value={statusCount.IN_PROGRESS ?? 0} accent />
+        <Stat label="In revisione" value={statusCount.IN_REVIEW ?? 0} />
+        <Stat label="Completate" value={statusCount.DONE ?? 0} />
       </section>
 
       <Section
-        title={`In ritardo (${overdue.length})`}
-        empty="Nessuna task in ritardo. 🎉"
-        accent="rose"
+        eyebrow="Urgente"
+        title="In ritardo"
+        italic="adesso."
+        empty="Nessuna task in ritardo. Bel lavoro."
       >
         {overdue.map((t) => (
-          <TaskLine key={t.id} task={t} />
+          <TaskLine key={t.id} task={t} severity="overdue" />
         ))}
       </Section>
 
       <Section
-        title={`In scadenza nei prossimi 7 giorni (${dueSoon.length})`}
+        eyebrow="Prossimi 7 giorni"
+        title="In scadenza"
+        italic="presto."
         empty="Nessuna scadenza imminente."
-        accent="amber"
       >
         {dueSoon.map((t) => (
-          <TaskLine key={t.id} task={t} />
+          <TaskLine key={t.id} task={t} severity="due-soon" />
         ))}
       </Section>
 
       <Section
-        title={`In corso (${inProgress.length})`}
+        eyebrow="Attive"
+        title="In corso"
+        italic="ora."
         empty="Nessuna task in corso."
-        accent="blue"
       >
         {inProgress.map((t) => (
           <TaskLine key={t.id} task={t} />
@@ -98,56 +109,42 @@ export default async function AdminDashboard() {
   );
 }
 
-function Stat({
-  label,
-  value,
-  accent = 'slate',
-}: {
-  label: string;
-  value: number;
-  accent?: 'slate' | 'blue' | 'amber' | 'emerald' | 'rose';
-}) {
-  const ringClass: Record<string, string> = {
-    slate: 'border-slate-200',
-    blue: 'border-blue-200',
-    amber: 'border-amber-200',
-    emerald: 'border-emerald-200',
-    rose: 'border-rose-200',
-  };
+function Stat({ label, value, accent = false }: { label: string; value: number; accent?: boolean }) {
   return (
-    <div className={`card p-4 ${ringClass[accent]}`}>
-      <div className="text-xs uppercase tracking-wide text-slate-500">{label}</div>
-      <div className="text-2xl font-semibold mt-1">{value}</div>
+    <div className={`card p-5 ${accent ? 'bg-ink-900 text-cream border-ink-900' : ''}`}>
+      <div className={`text-[11px] uppercase tracking-[0.18em] ${accent ? 'text-cream-200' : 'text-ink-500'}`}>
+        {label}
+      </div>
+      <div className="display text-4xl mt-2">{value}</div>
     </div>
   );
 }
 
 function Section({
+  eyebrow,
   title,
+  italic,
   empty,
-  accent,
   children,
 }: {
+  eyebrow: string;
   title: string;
+  italic: string;
   empty: string;
-  accent: 'rose' | 'amber' | 'blue';
   children: React.ReactNode;
 }) {
-  const dot: Record<typeof accent, string> = {
-    rose: 'bg-rose-500',
-    amber: 'bg-amber-500',
-    blue: 'bg-blue-500',
-  };
   const arr = Array.isArray(children) ? children : [children];
   const isEmpty = arr.filter(Boolean).length === 0;
   return (
-    <section>
-      <h2 className="flex items-center gap-2 text-base font-semibold mb-3">
-        <span className={`h-2 w-2 rounded-full ${dot[accent]}`} aria-hidden />
-        {title}
-      </h2>
+    <section className="space-y-5">
+      <div>
+        <p className="eyebrow mb-2">{eyebrow}</p>
+        <h2 className="display text-2xl sm:text-3xl">
+          {title} <span className="serif-italic">{italic}</span>
+        </h2>
+      </div>
       {isEmpty ? (
-        <div className="card p-4 text-sm text-slate-500">{empty}</div>
+        <div className="card-flat p-6 text-sm text-ink-500">{empty}</div>
       ) : (
         <div className="space-y-2">{children}</div>
       )}
@@ -157,6 +154,7 @@ function Section({
 
 function TaskLine({
   task,
+  severity,
 }: {
   task: {
     id: string;
@@ -167,25 +165,38 @@ function TaskLine({
     project: { id: string; name: string; color: string };
     assignee: { id: string; name: string } | null;
   };
+  severity?: 'overdue' | 'due-soon';
 }) {
   return (
     <Link
       href={`/admin/projects/${task.project.id}#task-${task.id}`}
-      className="card p-3 flex flex-wrap items-center gap-2 hover:bg-slate-50"
+      className="card-flat block px-4 py-3 hover:border-ink-200 hover:shadow-soft transition group"
     >
-      <span className={`badge ${STATUS_COLORS[task.status]}`}>{STATUS_LABELS[task.status]}</span>
-      <span className={`badge ${PRIORITY_COLORS[task.priority]}`}>
-        {PRIORITY_LABELS[task.priority]}
-      </span>
-      <span className="font-medium truncate">{task.title}</span>
-      <span className="text-xs text-slate-500 flex items-center gap-1">
-        <span className="h-2 w-2 rounded-full" style={{ backgroundColor: task.project.color }} />
-        {task.project.name}
-      </span>
-      {task.assignee && <span className="text-xs text-slate-500">→ {task.assignee.name}</span>}
-      {task.deadline && (
-        <span className="ml-auto text-xs text-slate-500">{formatDate(task.deadline)}</span>
-      )}
+      <div className="flex items-center gap-3 flex-wrap">
+        <span className={`badge ${STATUS_CHIP[task.status]}`}>{STATUS_LABELS[task.status]}</span>
+        <span className={`badge ${PRIORITY_CHIP[task.priority]}`}>{PRIORITY_LABELS[task.priority]}</span>
+        <span className="font-medium text-ink-900 truncate">{task.title}</span>
+        <span className="text-xs text-ink-500 flex items-center gap-1.5">
+          <span className="h-2 w-2 rounded-full" style={{ backgroundColor: task.project.color }} />
+          {task.project.name}
+        </span>
+        {task.assignee && (
+          <span className="text-xs text-ink-500">→ {task.assignee.name}</span>
+        )}
+        {task.deadline && (
+          <span
+            className={`ml-auto text-xs ${
+              severity === 'overdue'
+                ? 'text-brand font-medium'
+                : severity === 'due-soon'
+                  ? 'text-amber-700'
+                  : 'text-ink-500'
+            }`}
+          >
+            {formatDate(task.deadline)}
+          </span>
+        )}
+      </div>
     </Link>
   );
 }

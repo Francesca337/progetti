@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { prisma } from '@/lib/db';
 import { CollaboratorsClient } from './client';
 
@@ -12,12 +11,16 @@ export default async function CollaboratorsPage() {
   });
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? '';
   return (
-    <div className="space-y-6">
-      <header className="flex items-end justify-between gap-4 flex-wrap">
-        <div>
-          <h1 className="text-2xl font-semibold">Collaboratori</h1>
-          <p className="text-slate-600 text-sm">Aggiungi o rimuovi collaboratori e copia il loro link personale.</p>
-        </div>
+    <div className="space-y-10">
+      <header className="pt-6">
+        <p className="eyebrow mb-3">Persone</p>
+        <h1 className="display text-4xl sm:text-5xl">
+          I tuoi <span className="serif-italic">collaboratori.</span>
+        </h1>
+        <p className="mt-3 text-ink-500 max-w-xl">
+          Aggiungi le persone, copia il loro link personale, assegna le task. Niente password —
+          basta il link.
+        </p>
       </header>
       <CollaboratorsClient
         appUrl={appUrl}
@@ -29,11 +32,6 @@ export default async function CollaboratorsPage() {
           taskCount: c._count.tasksAssigned,
         }))}
       />
-      <div className="text-sm">
-        <Link href="/admin" className="text-brand-600 hover:underline">
-          ← Torna alla dashboard
-        </Link>
-      </div>
     </div>
   );
 }

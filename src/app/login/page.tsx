@@ -1,10 +1,12 @@
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import {
   createAdminSession,
   ensureAdminUser,
   getAdminUser,
   verifyAdminCredentials,
 } from '@/lib/auth';
+import { Logo } from '../_components/Logo';
 
 async function login(formData: FormData): Promise<void> {
   'use server';
@@ -30,40 +32,56 @@ export default async function LoginPage({
   const error = params.error === '1';
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4">
-      <form action={login} className="card max-w-sm w-full p-8 space-y-4">
-        <div>
-          <h1 className="text-xl font-semibold">Accesso admin</h1>
-          <p className="text-sm text-slate-600">Inserisci le tue credenziali.</p>
+    <main className="relative min-h-screen overflow-hidden">
+      <div className="pointer-events-none absolute inset-x-0 -top-40 h-[80vh] blob-soft" aria-hidden />
+
+      <header className="relative z-10 px-6 pt-8">
+        <div className="max-w-6xl mx-auto">
+          <Link href="/">
+            <Logo />
+          </Link>
         </div>
-        {error && (
-          <div className="rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
-            Credenziali non valide.
+      </header>
+
+      <div className="relative z-10 flex items-center justify-center px-6 py-20">
+        <form action={login} className="card w-full max-w-md p-10 space-y-6">
+          <div>
+            <p className="eyebrow mb-3">Accesso</p>
+            <h1 className="display text-3xl">
+              Welcome <span className="serif-italic">back.</span>
+            </h1>
+            <p className="text-sm text-ink-500 mt-2">Inserisci le credenziali admin.</p>
           </div>
-        )}
-        <div>
-          <label className="label" htmlFor="email">
-            Email
-          </label>
-          <input id="email" name="email" type="email" required className="input" autoComplete="email" />
-        </div>
-        <div>
-          <label className="label" htmlFor="password">
-            Password
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            className="input"
-            autoComplete="current-password"
-          />
-        </div>
-        <button type="submit" className="btn-primary w-full">
-          Accedi
-        </button>
-      </form>
+
+          {error && (
+            <div className="rounded-2xl border border-brand-100 bg-brand-50 px-4 py-3 text-sm text-brand-700">
+              Credenziali non valide.
+            </div>
+          )}
+
+          <div className="space-y-4">
+            <div>
+              <label className="label" htmlFor="email">Email</label>
+              <input id="email" name="email" type="email" required className="input" autoComplete="email" />
+            </div>
+            <div>
+              <label className="label" htmlFor="password">Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                className="input"
+                autoComplete="current-password"
+              />
+            </div>
+          </div>
+
+          <button type="submit" className="btn-primary w-full">
+            Accedi
+          </button>
+        </form>
+      </div>
     </main>
   );
 }

@@ -4,9 +4,9 @@ import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import type { Attachment, Project, Task, User } from '@prisma/client';
 import {
-  PRIORITY_COLORS,
+  PRIORITY_CHIP,
   PRIORITY_LABELS,
-  STATUS_COLORS,
+  STATUS_CHIP,
   STATUS_LABELS,
   STATUS_ORDER,
   deadlineSeverity,
@@ -48,7 +48,7 @@ export function TaskRow({
 
   if (editing) {
     return (
-      <article className="card p-4 border-brand-300">
+      <article className="card p-6 ring-2 ring-brand-100">
         <TaskForm
           projects={projects}
           collaborators={collaborators}
@@ -74,20 +74,16 @@ export function TaskRow({
   }
 
   return (
-    <article className="card p-4">
-      <div className="flex items-start justify-between gap-3">
+    <article className="card-flat p-5 hover:shadow-soft transition">
+      <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className={`badge ${STATUS_COLORS[task.status]}`}>
-              {STATUS_LABELS[task.status]}
-            </span>
-            <span className={`badge ${PRIORITY_COLORS[task.priority]}`}>
-              {PRIORITY_LABELS[task.priority]}
-            </span>
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <span className={`badge ${STATUS_CHIP[task.status]}`}>{STATUS_LABELS[task.status]}</span>
+            <span className={`badge ${PRIORITY_CHIP[task.priority]}`}>{PRIORITY_LABELS[task.priority]}</span>
             {showProject && (
               <Link
                 href={`/admin/projects/${task.project.id}`}
-                className="badge bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                className="badge bg-cream-100 text-ink-700 hover:bg-cream-200 transition"
               >
                 <span
                   className="h-2 w-2 rounded-full mr-1"
@@ -100,7 +96,7 @@ export function TaskRow({
             {showAssignee && task.assignee && (
               <Link
                 href={`/admin/collaborators/${task.assignee.id}`}
-                className="badge bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                className="badge bg-cream-100 text-ink-700 hover:bg-cream-200 transition"
               >
                 {task.assignee.name}
               </Link>
@@ -109,10 +105,10 @@ export function TaskRow({
               <span
                 className={`text-xs ${
                   severity === 'overdue'
-                    ? 'text-rose-700 font-medium'
+                    ? 'text-brand font-medium'
                     : severity === 'due-soon'
                       ? 'text-amber-700'
-                      : 'text-slate-500'
+                      : 'text-ink-500'
                 }`}
               >
                 {severity === 'overdue' ? 'In ritardo: ' : 'Deadline: '}
@@ -120,12 +116,12 @@ export function TaskRow({
               </span>
             )}
           </div>
-          <h3 className="font-medium mt-2">{task.title}</h3>
+          <h3 className="font-semibold text-ink-900 text-base">{task.title}</h3>
           {task.description && (
-            <p className="mt-1 text-sm text-slate-600 whitespace-pre-wrap">{task.description}</p>
+            <p className="mt-1.5 text-sm text-ink-600 whitespace-pre-wrap">{task.description}</p>
           )}
         </div>
-        <div className="flex flex-col gap-2 items-end">
+        <div className="flex flex-col gap-2 items-end shrink-0">
           <select
             className="select w-44"
             defaultValue={task.status}
@@ -142,24 +138,20 @@ export function TaskRow({
               <option key={s} value={s}>{STATUS_LABELS[s]}</option>
             ))}
           </select>
-          <div className="flex gap-1">
-            <button
-              type="button"
-              className="btn-secondary text-xs"
-              onClick={() => setEditing(true)}
-            >
+          <div className="flex gap-1.5">
+            <button type="button" className="btn-ghost btn-xs" onClick={() => setEditing(true)}>
               Modifica
             </button>
             <button
               type="button"
-              className="btn-secondary text-xs"
+              className="btn-ghost btn-xs"
               onClick={() => setShowAttachments((v) => !v)}
             >
-              Allegati ({task.attachments.length})
+              File ({task.attachments.length})
             </button>
             <button
               type="button"
-              className="btn-danger text-xs"
+              className="btn-danger btn-xs"
               onClick={() => {
                 if (!confirm('Eliminare la task?')) return;
                 startTransition(async () => {
@@ -182,23 +174,23 @@ function AttachmentSection({ task }: { task: FullTask }) {
   const [error, setError] = useState<string | null>(null);
 
   return (
-    <div className="mt-4 border-t pt-3">
-      <ul className="space-y-1 mb-3">
+    <div className="mt-4 pt-4 border-t border-ink-100">
+      <ul className="space-y-1.5 mb-3">
         {task.attachments.map((a) => (
           <li key={a.id} className="flex items-center justify-between text-sm">
             <a
               href={`/api/attachments/${a.id}`}
-              className="text-brand-600 hover:underline truncate mr-2"
+              className="text-brand hover:underline truncate mr-2"
               target="_blank"
               rel="noopener noreferrer"
             >
               {a.filename}
             </a>
-            <div className="flex items-center gap-2 shrink-0">
-              <span className="text-xs text-slate-500">{formatBytes(a.sizeBytes)}</span>
+            <div className="flex items-center gap-3 shrink-0">
+              <span className="text-xs text-ink-500">{formatBytes(a.sizeBytes)}</span>
               <button
                 type="button"
-                className="text-xs text-rose-600 hover:underline"
+                className="text-xs text-brand hover:underline"
                 disabled={pending}
                 onClick={() => {
                   if (!confirm('Eliminare l’allegato?')) return;
@@ -213,7 +205,7 @@ function AttachmentSection({ task }: { task: FullTask }) {
           </li>
         ))}
         {task.attachments.length === 0 && (
-          <li className="text-xs text-slate-500">Nessun allegato.</li>
+          <li className="text-xs text-ink-500">Nessun allegato.</li>
         )}
       </ul>
       <form
@@ -236,14 +228,14 @@ function AttachmentSection({ task }: { task: FullTask }) {
           name="file"
           accept="image/jpeg,application/pdf"
           required
-          className="text-sm"
+          className="text-sm file:mr-3 file:rounded-pill file:border-0 file:bg-ink-900 file:text-white file:px-4 file:py-2 file:text-xs file:font-medium hover:file:bg-ink-800"
         />
-        <button type="submit" className="btn-secondary text-xs" disabled={pending}>
+        <button type="submit" className="btn-secondary btn-xs" disabled={pending}>
           {pending ? 'Caricamento…' : 'Allega'}
         </button>
       </form>
-      {error && <div className="mt-2 text-xs text-rose-700">{error}</div>}
-      <p className="mt-1 text-xs text-slate-500">JPEG o PDF, max 15 MB.</p>
+      {error && <div className="mt-2 text-xs text-brand">{error}</div>}
+      <p className="mt-1.5 text-xs text-ink-500">JPEG o PDF, max 15 MB.</p>
     </div>
   );
 }

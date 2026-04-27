@@ -12,7 +12,7 @@ type Initial = {
   assigneeId?: string | null;
   priority?: Priority;
   status?: TaskStatus;
-  deadline?: string | null; // ISO yyyy-mm-dd
+  deadline?: string | null;
 };
 
 export function TaskForm({
@@ -55,7 +55,7 @@ export function TaskForm({
           }
         });
       }}
-      className="space-y-4"
+      className="space-y-5"
     >
       <div>
         <label className="label" htmlFor="title">Titolo</label>
@@ -144,14 +144,14 @@ export function TaskForm({
         </div>
       </div>
 
-      {error && <div className="text-sm text-rose-700">{error}</div>}
+      {error && <div className="text-sm text-brand">{error}</div>}
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 pt-2">
         <button type="submit" className="btn-primary" disabled={pending}>
           {pending ? 'Salvataggio…' : submitLabel}
         </button>
         {onCancel && (
-          <button type="button" className="btn-secondary" onClick={onCancel}>
+          <button type="button" className="btn-ghost" onClick={onCancel}>
             Annulla
           </button>
         )}

@@ -21,7 +21,7 @@ export function ProjectsClient({ projects }: { projects: Item[] }) {
   const archived = projects.filter((p) => p.archived);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -37,29 +37,38 @@ export function ProjectsClient({ projects }: { projects: Item[] }) {
             }
           });
         }}
-        className="card p-4 grid grid-cols-1 sm:grid-cols-[1fr_2fr_auto_auto] gap-3 items-end"
+        className="card p-6"
       >
-        <div>
-          <label className="label" htmlFor="name">Nome progetto</label>
-          <input id="name" name="name" required className="input" />
+        <p className="eyebrow mb-4">Nuovo progetto</p>
+        <div className="grid grid-cols-1 sm:grid-cols-[1fr_2fr_auto_auto] gap-3 items-end">
+          <div>
+            <label className="label" htmlFor="name">Nome</label>
+            <input id="name" name="name" required className="input" />
+          </div>
+          <div>
+            <label className="label" htmlFor="description">Descrizione</label>
+            <input id="description" name="description" className="input" />
+          </div>
+          <div>
+            <label className="label" htmlFor="color">Colore</label>
+            <input
+              id="color"
+              name="color"
+              type="color"
+              defaultValue="#E40066"
+              className="h-11 w-14 rounded-2xl border border-ink-200 bg-white cursor-pointer"
+            />
+          </div>
+          <button type="submit" className="btn-dark" disabled={pending}>
+            {pending ? 'Creazione…' : 'Crea'}
+          </button>
         </div>
-        <div>
-          <label className="label" htmlFor="description">Descrizione</label>
-          <input id="description" name="description" className="input" />
-        </div>
-        <div>
-          <label className="label" htmlFor="color">Colore</label>
-          <input id="color" name="color" type="color" defaultValue="#3566f5" className="h-10 w-14 rounded border border-slate-300" />
-        </div>
-        <button type="submit" className="btn-primary" disabled={pending}>
-          {pending ? 'Creazione…' : 'Crea progetto'}
-        </button>
-        {error && <div className="sm:col-span-4 text-sm text-rose-700">{error}</div>}
+        {error && <div className="mt-3 text-sm text-brand">{error}</div>}
       </form>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {active.length === 0 && (
-          <div className="card p-4 text-sm text-slate-500 md:col-span-2">
+          <div className="card-flat p-8 text-center text-sm text-ink-500 md:col-span-2">
             Nessun progetto attivo. Creane uno qui sopra.
           </div>
         )}
@@ -69,9 +78,11 @@ export function ProjectsClient({ projects }: { projects: Item[] }) {
       </div>
 
       {archived.length > 0 && (
-        <details className="card p-4">
-          <summary className="cursor-pointer font-medium text-sm">Archiviati ({archived.length})</summary>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+        <details className="card-flat p-5">
+          <summary className="cursor-pointer text-sm font-medium text-ink-700">
+            Archiviati ({archived.length})
+          </summary>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
             {archived.map((p) => (
               <ProjectCard key={p.id} project={p} pending={pending} startTransition={startTransition} />
             ))}
@@ -92,34 +103,41 @@ function ProjectCard({
   startTransition: (cb: () => void) => void;
 }) {
   return (
-    <div className="card p-4">
+    <div className="card-flat p-5 hover:shadow-soft transition">
       <div className="flex items-start gap-3">
         <span
-          className="mt-1 h-3 w-3 rounded-full shrink-0"
+          className="mt-1.5 h-3 w-3 rounded-full shrink-0"
           style={{ backgroundColor: project.color }}
           aria-hidden
         />
         <div className="min-w-0 flex-1">
-          <Link href={`/admin/projects/${project.id}`} className="font-medium hover:underline">
+          <Link
+            href={`/admin/projects/${project.id}`}
+            className="font-semibold text-ink-900 hover:text-brand transition"
+          >
             {project.name}
           </Link>
           {project.description && (
-            <p className="text-sm text-slate-600 mt-1 line-clamp-2">{project.description}</p>
+            <p className="text-sm text-ink-600 mt-1 line-clamp-2">{project.description}</p>
           )}
-          <p className="text-xs text-slate-500 mt-1">{project.taskCount} task</p>
+          <p className="text-xs text-ink-500 mt-2">
+            {project.taskCount} {project.taskCount === 1 ? 'task' : 'task'}
+          </p>
         </div>
       </div>
-      <div className="flex justify-end gap-2 mt-3">
-        <Link href={`/admin/projects/${project.id}`} className="btn-secondary text-xs">
+      <div className="flex justify-end gap-2 mt-4">
+        <Link href={`/admin/projects/${project.id}`} className="btn-secondary btn-xs">
           Apri
         </Link>
         <button
           type="button"
-          className="btn-secondary text-xs"
+          className="btn-ghost btn-xs"
           disabled={pending}
-          onClick={() => startTransition(async () => {
-            await archiveProject(project.id, !project.archived);
-          })}
+          onClick={() =>
+            startTransition(async () => {
+              await archiveProject(project.id, !project.archived);
+            })
+          }
         >
           {project.archived ? 'Ripristina' : 'Archivia'}
         </button>

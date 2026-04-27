@@ -1,14 +1,26 @@
 import Link from 'next/link';
+import { Logo } from './_components/Logo';
 
 export default function NotFound() {
   return (
-    <main className="min-h-screen flex items-center justify-center px-4">
-      <div className="card max-w-md w-full p-8 text-center">
-        <h1 className="text-xl font-semibold">Pagina non trovata</h1>
-        <p className="text-slate-600 mt-2">
+    <main className="relative min-h-screen overflow-hidden">
+      <div className="pointer-events-none absolute inset-x-0 -top-40 h-[60vh] blob-soft" aria-hidden />
+      <header className="relative z-10 px-6 pt-8">
+        <div className="max-w-6xl mx-auto">
+          <Link href="/">
+            <Logo />
+          </Link>
+        </div>
+      </header>
+      <div className="relative z-10 flex flex-col items-center justify-center px-6 pt-32 text-center">
+        <p className="eyebrow mb-4">404</p>
+        <h1 className="display text-5xl">
+          Page <span className="serif-italic">not found.</span>
+        </h1>
+        <p className="text-ink-500 mt-4 max-w-md">
           Il link che stai usando non è valido o è stato rigenerato.
         </p>
-        <Link href="/" className="btn-secondary mt-6 inline-flex">
+        <Link href="/" className="btn-secondary mt-8">
           Torna alla home
         </Link>
       </div>
