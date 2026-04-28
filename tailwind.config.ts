@@ -25,6 +25,7 @@ const config: Config = {
           300: '#C4C4CB',
           200: '#E0E0E5',
           100: '#EFEFF2',
+          50: '#F7F7F9',
         },
         // .exd brand pink (CTA, dot accents, highlights).
         brand: {
