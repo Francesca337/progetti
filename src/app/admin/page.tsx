@@ -164,7 +164,7 @@ function SplitSection({
           {split.mine.length > 0 && (
             <SubGroup label={`Tue (${split.mine.length})`}>
               {split.mine.map((t) => (
-                <TaskLine key={t.id} task={t} severity={severity} hideAssignee />
+                <TaskLine key={t.id} task={t} severity={severity} hideAssignee mine />
               ))}
             </SubGroup>
           )}
@@ -194,20 +194,40 @@ function TaskLine({
   task,
   severity,
   hideAssignee = false,
+  mine = false,
 }: {
   task: DashboardTask;
   severity?: 'overdue' | 'due-soon';
   hideAssignee?: boolean;
+  mine?: boolean;
 }) {
+  const cardClass = mine
+    ? 'block px-4 py-3 rounded-2xl bg-brand text-white border border-brand hover:bg-brand-600 hover:border-brand-600 transition'
+    : 'card-flat block px-4 py-3 hover:border-ink-200 hover:shadow-soft transition';
+  const titleClass = mine ? 'font-medium text-white truncate' : 'font-medium text-ink-900 truncate';
+  const projectClass = mine
+    ? 'text-xs text-white/80 flex items-center gap-1.5'
+    : 'text-xs text-ink-500 flex items-center gap-1.5';
+  const deadlineClass = mine
+    ? 'ml-auto text-xs text-white/90 font-medium'
+    : `ml-auto text-xs ${
+        severity === 'overdue'
+          ? 'text-brand'
+          : severity === 'due-soon'
+            ? 'text-amber-700'
+            : 'text-ink-500'
+      }`;
   return (
     <Link
       href={`/admin/projects/${task.project.id}#task-${task.id}`}
-      className="card-flat block px-4 py-3 hover:border-ink-200 hover:shadow-soft transition group"
+      className={cardClass}
     >
       <div className="flex items-center gap-3 flex-wrap">
-        <span className={`badge ${STATUS_CHIP[task.status]}`}>{STATUS_LABELS[task.status]}</span>
-        <span className="font-medium text-ink-900 truncate">{task.title}</span>
-        <span className="text-xs text-ink-500 flex items-center gap-1.5">
+        <span className={`badge ${mine ? 'bg-white/20 text-white' : STATUS_CHIP[task.status]}`}>
+          {STATUS_LABELS[task.status]}
+        </span>
+        <span className={titleClass}>{task.title}</span>
+        <span className={projectClass}>
           <span className="h-2 w-2 rounded-full" style={{ backgroundColor: task.project.color }} />
           {task.project.name}
         </span>
@@ -217,19 +237,7 @@ function TaskLine({
         {!hideAssignee && !task.assignee && (
           <span className="text-xs text-ink-400 italic">senza assegnatario</span>
         )}
-        {task.deadline && (
-          <span
-            className={`ml-auto text-xs ${
-              severity === 'overdue'
-                ? 'text-brand'
-                : severity === 'due-soon'
-                  ? 'text-amber-700'
-                  : 'text-ink-500'
-            }`}
-          >
-            {formatDate(task.deadline)}
-          </span>
-        )}
+        {task.deadline && <span className={deadlineClass}>{formatDate(task.deadline)}</span>}
       </div>
     </Link>
   );
