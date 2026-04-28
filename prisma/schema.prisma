@@ -29,6 +29,17 @@ enum TaskStatus {
   DONE          // Completata
 }
 
+enum InboxSource {
+  GMAIL
+  SLACK
+}
+
+enum InboxStatus {
+  PENDING
+  ARCHIVED
+  CONVERTED
+}
+
 // The PM (admin) and the collaborators all live in this table.
 // The admin row exists once (seeded from ADMIN_EMAIL env var on first login).
 // Collaborators authenticate via a personal magic-link token (no password).
@@ -43,8 +54,10 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  tasksAssigned Task[]    @relation("AssigneeTasks")
-  projects      Project[] @relation("ProjectOwner")
+  tasksAssigned    Task[]            @relation("AssigneeTasks")
+  projects         Project[]         @relation("ProjectOwner")
+  gmailIntegration GmailIntegration?
+  inboxItems       InboxItem[]       @relation("UserInbox")
 
   @@index([role])
 }
@@ -113,4 +126,40 @@ model Attachment {
   createdAt   DateTime @default(now())
 
   @@index([taskId])
+}
+
+// One row per admin who has connected Gmail. The refresh token is
+// AES-encrypted with SESSION_SECRET (see lib/secret-box.ts).
+model GmailIntegration {
+  id           String    @id @default(cuid())
+  userId       String    @unique
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  email        String    // Gmail address that authorized
+  refreshToken String    // encrypted blob
+  labelName    String    @default("PM-todo")
+  labelId      String?   // resolved Gmail label ID, looked up on first sync
+  lastSyncAt   DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+// Triage queue: rows pulled from Gmail (and later Slack) waiting to be
+// reviewed and either converted into a real Task or archived.
+model InboxItem {
+  id              String      @id @default(cuid())
+  userId          String
+  user            User        @relation("UserInbox", fields: [userId], references: [id], onDelete: Cascade)
+  source          InboxSource
+  sourceId        String      // Gmail message ID (or future Slack ts)
+  title           String
+  description     String?
+  sender          String?
+  link            String?
+  status          InboxStatus @default(PENDING)
+  convertedTaskId String?     @unique
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@unique([userId, source, sourceId])
+  @@index([userId, status])
 }
