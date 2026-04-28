@@ -6,7 +6,7 @@ import { z } from 'zod';
 import type { Priority, TaskStatus } from '@prisma/client';
 import { generateAccessToken, requireAdmin } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { sendTaskAssignedEmail } from '@/lib/email';
+import { notifyTaskAssigned } from '@/lib/notifications';
 import {
   ALLOWED_MIME_TYPES,
   MAX_FILE_SIZE,
@@ -21,6 +21,12 @@ import {
 const collaboratorSchema = z.object({
   name: z.string().min(1, 'Nome obbligatorio').max(120),
   email: z.string().email('Email non valida').max(200),
+  slackUserId: z
+    .string()
+    .max(50)
+    .regex(/^[A-Z0-9]+$/, 'Slack ID non valido (es. U01ABCDEF)')
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
 });
 
 export async function createCollaborator(formData: FormData): Promise<void> {
@@ -28,6 +34,7 @@ export async function createCollaborator(formData: FormData): Promise<void> {
   const parsed = collaboratorSchema.safeParse({
     name: formData.get('name'),
     email: String(formData.get('email') ?? '').toLowerCase(),
+    slackUserId: String(formData.get('slackUserId') ?? '').trim() || undefined,
   });
   if (!parsed.success) {
     throw new Error(parsed.error.issues[0]?.message ?? 'Dati non validi');
@@ -38,10 +45,27 @@ export async function createCollaborator(formData: FormData): Promise<void> {
       email: parsed.data.email,
       role: 'COLLABORATOR',
       accessToken: generateAccessToken(),
+      slackUserId: parsed.data.slackUserId ?? null,
     },
   });
   revalidatePath('/admin/collaborators');
   revalidatePath('/admin');
+}
+
+export async function updateCollaboratorSlackId(
+  userId: string,
+  slackUserId: string,
+): Promise<void> {
+  await requireAdmin();
+  const value = slackUserId.trim();
+  if (value && !/^[A-Z0-9]+$/.test(value)) {
+    throw new Error('Slack ID non valido (es. U01ABCDEF)');
+  }
+  await prisma.user.update({
+    where: { id: userId },
+    data: { slackUserId: value || null },
+  });
+  revalidatePath('/admin/collaborators');
 }
 
 export async function deleteCollaborator(userId: string): Promise<void> {
@@ -172,7 +196,7 @@ export async function createTask(formData: FormData): Promise<{ taskId: string }
   });
 
   if (task.assignee && task.assignee.role === 'COLLABORATOR') {
-    await sendTaskAssignedEmail({
+    await notifyTaskAssigned({
       task,
       project: task.project,
       assignee: task.assignee,
@@ -218,7 +242,7 @@ export async function updateTask(taskId: string, formData: FormData): Promise<vo
   // (don't email the admin when she assigns herself).
   const assigneeChanged = previous.assigneeId !== task.assigneeId;
   if (assigneeChanged && task.assignee && task.assignee.role === 'COLLABORATOR') {
-    await sendTaskAssignedEmail({
+    await notifyTaskAssigned({
       task,
       project: task.project,
       assignee: task.assignee,

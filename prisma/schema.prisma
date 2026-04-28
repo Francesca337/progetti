@@ -39,6 +39,7 @@ model User {
   role         Role     @default(COLLABORATOR)
   accessToken  String?  @unique // personal link token for collaborators
   passwordHash String?  // scrypt hash; only set for DB-managed admins
+  slackUserId  String?  // Slack member ID for DM notifications (e.g. U01ABCDEF)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 

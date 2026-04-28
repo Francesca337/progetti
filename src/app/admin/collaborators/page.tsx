@@ -28,6 +28,7 @@ export default async function CollaboratorsPage() {
           name: c.name,
           email: c.email,
           accessToken: c.accessToken ?? '',
+          slackUserId: c.slackUserId ?? '',
           taskCount: c._count.tasksAssigned,
         }))}
       />
