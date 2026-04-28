@@ -22,96 +22,115 @@ export async function syncGmailInbox(): Promise<{
   skipped: number;
   error?: string;
 }> {
-  const admin = await requireAdmin();
-  const integ = await prisma.gmailIntegration.findUnique({
-    where: { userId: admin.id },
-  });
-  if (!integ) return { imported: 0, skipped: 0, error: 'Gmail non collegato' };
-
-  let accessToken: string;
   try {
-    accessToken = await refreshAccessToken(unseal(integ.refreshToken));
-  } catch (err) {
-    return {
-      imported: 0,
-      skipped: 0,
-      error: 'Impossibile rinfrescare il token. Riprova a collegare Gmail.',
-    };
-  }
+    const admin = await requireAdmin();
+    const integ = await prisma.gmailIntegration.findUnique({
+      where: { userId: admin.id },
+    });
+    if (!integ) return { imported: 0, skipped: 0, error: 'Gmail non collegato' };
 
-  // Resolve and cache the label ID. The label has to exist in Gmail; if
-  // it doesn't, surface a friendly error so the user can create it.
-  let labelId = integ.labelId;
-  if (!labelId) {
-    const label = await findLabelByName(accessToken, integ.labelName);
-    if (!label) {
+    let accessToken: string;
+    try {
+      accessToken = await refreshAccessToken(unseal(integ.refreshToken));
+    } catch (err) {
+      console.error('[gmail/sync] refresh failed', err);
       return {
         imported: 0,
         skipped: 0,
-        error: `Label "${integ.labelName}" non trovata in Gmail. Creala e riprova.`,
+        error: 'Token Gmail scaduto. Disconnetti e ricollega Gmail.',
       };
     }
-    labelId = label.id;
+
+    // Always re-resolve the label ID. Cached IDs go stale if the user
+    // recreates the label, and the lookup is cheap.
+    let labelId: string;
+    try {
+      const label = await findLabelByName(accessToken, integ.labelName);
+      if (!label) {
+        return {
+          imported: 0,
+          skipped: 0,
+          error: `Label "${integ.labelName}" non trovata in Gmail. Creala e riprova.`,
+        };
+      }
+      labelId = label.id;
+      if (labelId !== integ.labelId) {
+        await prisma.gmailIntegration.update({
+          where: { id: integ.id },
+          data: { labelId },
+        });
+      }
+    } catch (err) {
+      console.error('[gmail/sync] label lookup failed', err);
+      return {
+        imported: 0,
+        skipped: 0,
+        error: err instanceof Error ? `Errore Gmail: ${err.message}` : 'Errore lettura label',
+      };
+    }
+
+    let messageIds: string[];
+    try {
+      messageIds = await listMessageIdsWithLabel(accessToken, labelId);
+    } catch (err) {
+      console.error('[gmail/sync] list failed', err);
+      return {
+        imported: 0,
+        skipped: 0,
+        error: err instanceof Error ? `Errore Gmail: ${err.message}` : 'Errore lettura Gmail',
+      };
+    }
+
+    let imported = 0;
+    let skipped = 0;
+    for (const id of messageIds) {
+      const existing = await prisma.inboxItem.findUnique({
+        where: {
+          userId_source_sourceId: {
+            userId: admin.id,
+            source: 'GMAIL',
+            sourceId: id,
+          },
+        },
+      });
+      if (existing) {
+        skipped++;
+        continue;
+      }
+      try {
+        const detail = await getMessageDetail(accessToken, id);
+        await prisma.inboxItem.create({
+          data: {
+            userId: admin.id,
+            source: 'GMAIL',
+            sourceId: detail.id,
+            title: detail.subject,
+            description: detail.snippet || null,
+            sender: detail.from || null,
+            link: gmailThreadLink(detail.threadId),
+          },
+        });
+        imported++;
+      } catch (err) {
+        console.error('[gmail/sync] failed to import', id, err);
+      }
+    }
+
     await prisma.gmailIntegration.update({
       where: { id: integ.id },
-      data: { labelId },
+      data: { lastSyncAt: new Date() },
     });
-  }
 
-  let messageIds: string[];
-  try {
-    messageIds = await listMessageIdsWithLabel(accessToken, labelId);
+    revalidatePath('/admin/inbox');
+    return { imported, skipped };
   } catch (err) {
+    console.error('[gmail/sync] unexpected error', err);
     return {
       imported: 0,
       skipped: 0,
-      error: err instanceof Error ? err.message : 'Errore lettura Gmail',
+      error: err instanceof Error ? `Errore: ${err.message}` : 'Errore sconosciuto',
     };
   }
-
-  let imported = 0;
-  let skipped = 0;
-  for (const id of messageIds) {
-    // Skip if we already have this message in the inbox.
-    const existing = await prisma.inboxItem.findUnique({
-      where: {
-        userId_source_sourceId: {
-          userId: admin.id,
-          source: 'GMAIL',
-          sourceId: id,
-        },
-      },
-    });
-    if (existing) {
-      skipped++;
-      continue;
-    }
-    try {
-      const detail = await getMessageDetail(accessToken, id);
-      await prisma.inboxItem.create({
-        data: {
-          userId: admin.id,
-          source: 'GMAIL',
-          sourceId: detail.id,
-          title: detail.subject,
-          description: detail.snippet || null,
-          sender: detail.from || null,
-          link: gmailThreadLink(detail.threadId),
-        },
-      });
-      imported++;
-    } catch (err) {
-      console.error('[gmail/sync] failed to import', id, err);
-    }
-  }
-
-  await prisma.gmailIntegration.update({
-    where: { id: integ.id },
-    data: { lastSyncAt: new Date() },
-  });
-
-  revalidatePath('/admin/inbox');
-  return { imported, skipped };
 }
 
 // ---------- Item actions ----------
