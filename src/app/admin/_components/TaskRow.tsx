@@ -32,12 +32,14 @@ export function TaskRow({
   task,
   projects,
   collaborators,
+  me,
   showProject = true,
   showAssignee = true,
 }: {
   task: FullTask;
   projects: Pick<Project, 'id' | 'name' | 'isPersonalBacklog'>[];
   collaborators: Pick<User, 'id' | 'name'>[];
+  me?: Pick<User, 'id' | 'name'>;
   showProject?: boolean;
   showAssignee?: boolean;
 }) {
@@ -52,6 +54,7 @@ export function TaskRow({
         <TaskForm
           projects={projects}
           collaborators={collaborators}
+          me={me}
           initial={{
             id: task.id,
             title: task.title,
@@ -94,12 +97,18 @@ export function TaskRow({
               </Link>
             )}
             {showAssignee && task.assignee && (
-              <Link
-                href={`/admin/collaborators/${task.assignee.id}`}
-                className="badge bg-cream-100 text-ink-700 hover:bg-cream-200 transition"
-              >
-                {task.assignee.name}
-              </Link>
+              task.assignee.role === 'ADMIN' ? (
+                <span className="badge bg-brand-50 text-brand-700">
+                  {task.assignee.name} (tu)
+                </span>
+              ) : (
+                <Link
+                  href={`/admin/collaborators/${task.assignee.id}`}
+                  className="badge bg-cream-100 text-ink-700 hover:bg-cream-200 transition"
+                >
+                  {task.assignee.name}
+                </Link>
+              )
             )}
             {task.deadline && (
               <span

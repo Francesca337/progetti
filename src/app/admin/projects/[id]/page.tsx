@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db';
+import { requireAdmin } from '@/lib/auth';
 import { TaskRow } from '../../_components/TaskRow';
 import { NewTaskButton } from '../../_components/NewTaskButton';
 import { STATUS_LABELS, STATUS_ORDER } from '@/lib/format';
@@ -8,8 +9,11 @@ import { ProjectHeader } from './header';
 
 export default async function ProjectDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const admin = await requireAdmin();
   const project = await prisma.project.findUnique({ where: { id } });
   if (!project) notFound();
+
+  const me = { id: admin.id, name: admin.name };
 
   const [tasks, allProjects, collaborators] = await Promise.all([
     prisma.task.findMany({
@@ -45,6 +49,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
         <NewTaskButton
           projects={allProjects}
           collaborators={collaborators}
+          me={me}
           defaultProjectId={project.id}
         />
       </div>
@@ -71,6 +76,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
                     task={t}
                     projects={allProjects}
                     collaborators={collaborators}
+                    me={me}
                     showProject={false}
                   />
                 </div>

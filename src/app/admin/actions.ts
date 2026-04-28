@@ -171,7 +171,7 @@ export async function createTask(formData: FormData): Promise<{ taskId: string }
     include: { project: true, assignee: true },
   });
 
-  if (task.assignee) {
+  if (task.assignee && task.assignee.role === 'COLLABORATOR') {
     await sendTaskAssignedEmail({
       task,
       project: task.project,
@@ -181,8 +181,11 @@ export async function createTask(formData: FormData): Promise<{ taskId: string }
 
   revalidatePath('/admin');
   revalidatePath('/admin/projects');
+  revalidatePath('/admin/backlog');
   revalidatePath(`/admin/projects/${data.projectId}`);
-  if (assigneeId) revalidatePath(`/admin/collaborators/${assigneeId}`);
+  if (assigneeId && task.assignee?.role === 'COLLABORATOR') {
+    revalidatePath(`/admin/collaborators/${assigneeId}`);
+  }
   return { taskId: task.id };
 }
 
@@ -211,9 +214,10 @@ export async function updateTask(taskId: string, formData: FormData): Promise<vo
     include: { project: true, assignee: true },
   });
 
-  // Send email when assignee changes to a non-null user.
+  // Notify only when assignee changed AND new assignee is a collaborator
+  // (don't email the admin when she assigns herself).
   const assigneeChanged = previous.assigneeId !== task.assigneeId;
-  if (assigneeChanged && task.assignee) {
+  if (assigneeChanged && task.assignee && task.assignee.role === 'COLLABORATOR') {
     await sendTaskAssignedEmail({
       task,
       project: task.project,
@@ -223,11 +227,14 @@ export async function updateTask(taskId: string, formData: FormData): Promise<vo
 
   revalidatePath('/admin');
   revalidatePath('/admin/projects');
+  revalidatePath('/admin/backlog');
   revalidatePath(`/admin/projects/${data.projectId}`);
   if (previous.projectId !== data.projectId) {
     revalidatePath(`/admin/projects/${previous.projectId}`);
   }
-  if (assigneeId) revalidatePath(`/admin/collaborators/${assigneeId}`);
+  if (assigneeId && task.assignee?.role === 'COLLABORATOR') {
+    revalidatePath(`/admin/collaborators/${assigneeId}`);
+  }
   if (previous.assigneeId && previous.assigneeId !== assigneeId) {
     revalidatePath(`/admin/collaborators/${previous.assigneeId}`);
   }
@@ -246,6 +253,7 @@ export async function deleteTask(taskId: string): Promise<void> {
   await prisma.task.delete({ where: { id: taskId } });
   revalidatePath('/admin');
   revalidatePath('/admin/projects');
+  revalidatePath('/admin/backlog');
   revalidatePath(`/admin/projects/${task.projectId}`);
   if (task.assigneeId) revalidatePath(`/admin/collaborators/${task.assigneeId}`);
 }

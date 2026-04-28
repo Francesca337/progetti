@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db';
+import { requireAdmin } from '@/lib/auth';
 import { TaskRow } from '../../_components/TaskRow';
 import { NewTaskButton } from '../../_components/NewTaskButton';
 
@@ -10,8 +11,11 @@ export default async function CollaboratorDetail({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const admin = await requireAdmin();
   const user = await prisma.user.findUnique({ where: { id } });
   if (!user || user.role !== 'COLLABORATOR') notFound();
+
+  const me = { id: admin.id, name: admin.name };
 
   const [tasks, projects, collaborators] = await Promise.all([
     prisma.task.findMany({
@@ -54,6 +58,7 @@ export default async function CollaboratorDetail({
         <NewTaskButton
           projects={projects}
           collaborators={collaborators}
+          me={me}
           defaultAssigneeId={user.id}
           label="Assegna task"
         />
@@ -85,6 +90,7 @@ export default async function CollaboratorDetail({
                   task={t}
                   projects={projects}
                   collaborators={collaborators}
+                  me={me}
                   showAssignee={false}
                 />
               ))}

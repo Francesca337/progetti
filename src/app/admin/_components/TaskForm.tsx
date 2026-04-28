@@ -18,6 +18,7 @@ type Initial = {
 export function TaskForm({
   projects,
   collaborators,
+  me,
   initial,
   defaultProjectId,
   onSubmit,
@@ -26,6 +27,7 @@ export function TaskForm({
 }: {
   projects: Pick<Project, 'id' | 'name' | 'isPersonalBacklog'>[];
   collaborators: Pick<User, 'id' | 'name'>[];
+  me?: Pick<User, 'id' | 'name'>;
   initial?: Initial;
   defaultProjectId?: string;
   onSubmit: (formData: FormData) => Promise<unknown>;
@@ -107,6 +109,11 @@ export function TaskForm({
             disabled={isBacklog}
           >
             <option value="">{isBacklog ? '— Backlog personale —' : '— Nessuno —'}</option>
+            {me && !isBacklog && (
+              <option value={me.id}>
+                {me.name} (tu)
+              </option>
+            )}
             {collaborators.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}

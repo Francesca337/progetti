@@ -8,12 +8,14 @@ import { createTask } from '../actions';
 export function NewTaskButton({
   projects,
   collaborators,
+  me,
   defaultProjectId,
   defaultAssigneeId,
   label = 'Nuova task',
 }: {
   projects: Pick<Project, 'id' | 'name' | 'isPersonalBacklog'>[];
   collaborators: Pick<User, 'id' | 'name'>[];
+  me?: Pick<User, 'id' | 'name'>;
   defaultProjectId?: string;
   defaultAssigneeId?: string;
   label?: string;
@@ -39,6 +41,7 @@ export function NewTaskButton({
       <TaskForm
         projects={projects}
         collaborators={collaborators}
+        me={me}
         defaultProjectId={defaultProjectId}
         initial={defaultAssigneeId ? { assigneeId: defaultAssigneeId } : undefined}
         submitLabel="Crea task"
