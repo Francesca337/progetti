@@ -1,8 +1,8 @@
 // Gmail API helpers — OAuth code exchange, access-token refresh, and the
-// minimal set of message endpoints we need (list, get, modify labels).
+// minimal set of message endpoints we need (list, get).
 //
 // Scopes used:
-//   https://www.googleapis.com/auth/gmail.modify    (read + label changes)
+//   https://www.googleapis.com/auth/gmail.readonly  (read-only; no send/write)
 //   https://www.googleapis.com/auth/userinfo.email  (which mailbox is this)
 
 const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
@@ -11,7 +11,7 @@ const GMAIL_API_BASE = 'https://gmail.googleapis.com/gmail/v1/users/me';
 const USERINFO_URL = 'https://www.googleapis.com/oauth2/v3/userinfo';
 
 export const GMAIL_SCOPES = [
-  'https://www.googleapis.com/auth/gmail.modify',
+  'https://www.googleapis.com/auth/gmail.readonly',
   'https://www.googleapis.com/auth/userinfo.email',
 ];
 
@@ -111,26 +111,6 @@ async function gmailGet<T>(accessToken: string, path: string): Promise<T> {
   return (await res.json()) as T;
 }
 
-async function gmailPost<T>(
-  accessToken: string,
-  path: string,
-  body: unknown,
-): Promise<T> {
-  const res = await fetch(`${GMAIL_API_BASE}${path}`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Gmail POST ${path} failed: ${res.status} ${text}`);
-  }
-  return (await res.json()) as T;
-}
-
 export type GmailLabel = { id: string; name: string };
 
 export async function findLabelByName(
@@ -187,16 +167,6 @@ export async function getMessageDetail(
     from: get('From'),
     snippet: raw.snippet ?? '',
   };
-}
-
-export async function removeLabelFromMessage(
-  accessToken: string,
-  messageId: string,
-  labelId: string,
-): Promise<void> {
-  await gmailPost(accessToken, `/messages/${messageId}/modify`, {
-    removeLabelIds: [labelId],
-  });
 }
 
 // Public link to a Gmail thread the user can click.

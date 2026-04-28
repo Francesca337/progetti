@@ -11,7 +11,6 @@ import {
   gmailThreadLink,
   listMessageIdsWithLabel,
   refreshAccessToken,
-  removeLabelFromMessage,
 } from '@/lib/gmail';
 import { unseal } from '@/lib/secret-box';
 import { notifyTaskAssigned } from '@/lib/notifications';
@@ -99,11 +98,6 @@ export async function syncGmailInbox(): Promise<{
           sender: detail.from || null,
           link: gmailThreadLink(detail.threadId),
         },
-      });
-      // Best-effort: remove the label so the message isn't picked up again.
-      // If this fails we log but don't reverse the inbox creation.
-      await removeLabelFromMessage(accessToken, id, labelId).catch((err) => {
-        console.warn('[gmail/sync] failed to remove label', err);
       });
       imported++;
     } catch (err) {
