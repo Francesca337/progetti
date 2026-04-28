@@ -14,6 +14,32 @@ function formatDeadline(d: Date | null): string {
   });
 }
 
+// Builds a Google Calendar "Add to calendar" URL that opens a pre-filled
+// event template. Click in Slack → Google Calendar opens in the user's
+// own account with everything ready to confirm.
+function googleCalendarUrl(args: {
+  taskTitle: string;
+  projectName: string;
+  deadline: Date;
+  taskLink: string;
+}): string {
+  const yyyymmdd = (d: Date) =>
+    `${d.getUTCFullYear()}${String(d.getUTCMonth() + 1).padStart(2, '0')}${String(
+      d.getUTCDate(),
+    ).padStart(2, '0')}`;
+  const start = new Date(args.deadline);
+  const end = new Date(args.deadline);
+  end.setUTCDate(end.getUTCDate() + 1); // Google all-day events use exclusive end.
+
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: `Deadline | ${args.projectName}`,
+    dates: `${yyyymmdd(start)}/${yyyymmdd(end)}`,
+    details: `${args.taskTitle}\n\nApri la task: ${args.taskLink}`,
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
 export async function sendTaskAssignedSlack(args: {
   task: Task;
   project: Project;
@@ -27,6 +53,27 @@ export async function sendTaskAssignedSlack(args: {
 
   const link = appUrl(`/c/${assignee.accessToken}`);
   const deadline = formatDeadline(task.deadline);
+
+  const actions: Array<Record<string, unknown>> = [
+    {
+      type: 'button',
+      text: { type: 'plain_text', text: 'Apri la task' },
+      url: link,
+      style: 'primary',
+    },
+  ];
+  if (task.deadline) {
+    actions.push({
+      type: 'button',
+      text: { type: 'plain_text', text: '📅 Aggiungi al calendario' },
+      url: googleCalendarUrl({
+        taskTitle: task.title,
+        projectName: project.name,
+        deadline: task.deadline,
+        taskLink: link,
+      }),
+    });
+  }
 
   const payload = {
     channel: assignee.slackUserId,
@@ -53,14 +100,7 @@ export async function sendTaskAssignedSlack(args: {
       },
       {
         type: 'actions',
-        elements: [
-          {
-            type: 'button',
-            text: { type: 'plain_text', text: 'Apri la task' },
-            url: link,
-            style: 'primary',
-          },
-        ],
+        elements: actions,
       },
     ],
   };
