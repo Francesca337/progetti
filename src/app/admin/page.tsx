@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
 import {
-  PRIORITY_CHIP,
-  PRIORITY_LABELS,
   STATUS_CHIP,
   STATUS_LABELS,
   formatDate,
@@ -37,7 +35,7 @@ export default async function AdminDashboard() {
     prisma.task.findMany({
       where: { status: 'IN_PROGRESS' },
       include: { project: true, assignee: true },
-      orderBy: [{ priority: 'desc' }, { deadline: 'asc' }],
+      orderBy: [{ deadline: 'asc' }, { createdAt: 'desc' }],
       take: 50,
     }),
     prisma.task.groupBy({
@@ -158,7 +156,6 @@ function TaskLine({
     id: string;
     title: string;
     status: keyof typeof STATUS_LABELS;
-    priority: keyof typeof PRIORITY_LABELS;
     deadline: Date | null;
     project: { id: string; name: string; color: string };
     assignee: { id: string; name: string } | null;
@@ -172,7 +169,6 @@ function TaskLine({
     >
       <div className="flex items-center gap-3 flex-wrap">
         <span className={`badge ${STATUS_CHIP[task.status]}`}>{STATUS_LABELS[task.status]}</span>
-        <span className={`badge ${PRIORITY_CHIP[task.priority]}`}>{PRIORITY_LABELS[task.priority]}</span>
         <span className="font-medium text-ink-900 truncate">{task.title}</span>
         <span className="text-xs text-ink-500 flex items-center gap-1.5">
           <span className="h-2 w-2 rounded-full" style={{ backgroundColor: task.project.color }} />

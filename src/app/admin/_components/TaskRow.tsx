@@ -4,8 +4,6 @@ import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import type { Attachment, Project, Task, User } from '@prisma/client';
 import {
-  PRIORITY_CHIP,
-  PRIORITY_LABELS,
   STATUS_CHIP,
   STATUS_LABELS,
   STATUS_ORDER,
@@ -82,7 +80,6 @@ export function TaskRow({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2 mb-2">
             <span className={`badge ${STATUS_CHIP[task.status]}`}>{STATUS_LABELS[task.status]}</span>
-            <span className={`badge ${PRIORITY_CHIP[task.priority]}`}>{PRIORITY_LABELS[task.priority]}</span>
             {showProject && (
               <Link
                 href={`/admin/projects/${task.project.id}`}

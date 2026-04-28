@@ -18,7 +18,7 @@ export default async function CollaboratorPage({
       project: true,
       attachments: true,
     },
-    orderBy: [{ deadline: 'asc' }, { priority: 'desc' }, { createdAt: 'desc' }],
+    orderBy: [{ deadline: 'asc' }, { createdAt: 'desc' }],
   });
 
   return <CollaboratorView token={token} user={user} tasks={tasks} />;

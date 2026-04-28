@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import type { Priority, Project, TaskStatus, User } from '@prisma/client';
-import { PRIORITY_LABELS, STATUS_LABELS, STATUS_ORDER } from '@/lib/format';
+import { STATUS_LABELS, STATUS_ORDER } from '@/lib/format';
 
 type Initial = {
   id?: string;
@@ -122,15 +122,7 @@ export function TaskForm({
           </select>
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div>
-          <label className="label" htmlFor="priority">Priorità</label>
-          <select id="priority" name="priority" className="select" defaultValue={initial?.priority ?? 'MEDIUM'}>
-            {(['HIGH', 'MEDIUM', 'LOW'] as Priority[]).map((p) => (
-              <option key={p} value={p}>{PRIORITY_LABELS[p]}</option>
-            ))}
-          </select>
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="label" htmlFor="status">Stato</label>
           <select id="status" name="status" className="select" defaultValue={initial?.status ?? 'TODO'}>

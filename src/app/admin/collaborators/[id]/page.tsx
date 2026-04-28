@@ -21,7 +21,7 @@ export default async function CollaboratorDetail({
     prisma.task.findMany({
       where: { assigneeId: id },
       include: { project: true, assignee: true, attachments: true },
-      orderBy: [{ deadline: 'asc' }, { priority: 'desc' }, { createdAt: 'desc' }],
+      orderBy: [{ deadline: 'asc' }, { createdAt: 'desc' }],
     }),
     prisma.project.findMany({
       where: { archived: false, isPersonalBacklog: false },

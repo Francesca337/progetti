@@ -38,7 +38,7 @@ export default async function BacklogPage() {
       prisma.task.findMany({
         where: { projectId: { in: backlogProjectIds } },
         include: { project: true, assignee: true, attachments: true },
-        orderBy: [{ priority: 'desc' }, { deadline: 'asc' }, { createdAt: 'desc' }],
+        orderBy: [{ deadline: 'asc' }, { createdAt: 'desc' }],
       }),
       prisma.task.findMany({
         where: {
@@ -46,7 +46,7 @@ export default async function BacklogPage() {
           project: { isPersonalBacklog: false },
         },
         include: { project: true, assignee: true, attachments: true },
-        orderBy: [{ deadline: 'asc' }, { priority: 'desc' }, { createdAt: 'desc' }],
+        orderBy: [{ deadline: 'asc' }, { createdAt: 'desc' }],
       }),
       prisma.project.findMany({
         where: {

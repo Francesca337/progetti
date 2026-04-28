@@ -12,10 +12,6 @@ function appUrl(path = ''): string {
   return `${base.replace(/\/$/, '')}${path}`;
 }
 
-function priorityLabel(p: Task['priority']): string {
-  return { LOW: 'Bassa', MEDIUM: 'Media', HIGH: 'Alta' }[p];
-}
-
 function formatDeadline(d: Date | null): string {
   if (!d) return 'Nessuna deadline';
   return new Date(d).toLocaleDateString('it-IT', {
@@ -46,7 +42,6 @@ export async function sendTaskAssignedEmail(args: {
     taskTitle: task.title,
     taskDescription: task.description ?? '',
     projectName: project.name,
-    priority: priorityLabel(task.priority),
     deadline: formatDeadline(task.deadline),
     link,
   });
@@ -70,7 +65,6 @@ function renderAssignmentEmail(args: {
   taskTitle: string;
   taskDescription: string;
   projectName: string;
-  priority: string;
   deadline: string;
   link: string;
 }): string {
@@ -83,9 +77,8 @@ function renderAssignmentEmail(args: {
       <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;">${escapeHtml(args.projectName)}</div>
       <div style="font-size:18px;font-weight:600;margin-top:4px;">${escapeHtml(args.taskTitle)}</div>
       ${args.taskDescription ? `<p style="margin:12px 0 0;color:#334155;white-space:pre-wrap;">${escapeHtml(args.taskDescription)}</p>` : ''}
-      <div style="margin-top:16px;display:flex;gap:16px;font-size:14px;color:#475569;">
-        <div><strong>Priorità:</strong> ${escapeHtml(args.priority)}</div>
-        <div><strong>Deadline:</strong> ${escapeHtml(args.deadline)}</div>
+      <div style="margin-top:16px;font-size:14px;color:#475569;">
+        <strong>Deadline:</strong> ${escapeHtml(args.deadline)}
       </div>
     </div>
     <a href="${args.link}" style="display:inline-block;background:#3566f5;color:#fff;text-decoration:none;padding:12px 20px;border-radius:8px;font-weight:600;">Apri la task</a>
