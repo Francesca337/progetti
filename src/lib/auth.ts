@@ -1,6 +1,11 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
+import {
+  createHmac,
+  randomBytes,
+  scryptSync,
+  timingSafeEqual,
+} from 'node:crypto';
 import { prisma } from './db';
 import type { Role, User } from '@prisma/client';
 
@@ -38,17 +43,49 @@ export function generateAccessToken(): string {
   return randomBytes(24).toString('base64url');
 }
 
-// ---------- Admin session (cookie-based) ----------
+// ---------- Password hashing (scrypt, no external deps) ----------
 
-export async function verifyAdminCredentials(email: string, password: string): Promise<boolean> {
-  const expectedEmail = process.env.ADMIN_EMAIL;
-  const expectedPassword = process.env.ADMIN_PASSWORD;
-  if (!expectedEmail || !expectedPassword) return false;
-  if (email.trim().toLowerCase() !== expectedEmail.trim().toLowerCase()) return false;
-  const a = Buffer.from(password);
-  const b = Buffer.from(expectedPassword);
-  if (a.length !== b.length) return false;
-  return timingSafeEqual(a, b);
+export function hashPassword(password: string): string {
+  const salt = randomBytes(16).toString('hex');
+  const derived = scryptSync(password, salt, 64).toString('hex');
+  return `scrypt$1$${salt}$${derived}`;
+}
+
+export function verifyPassword(password: string, hash: string): boolean {
+  if (!hash) return false;
+  const parts = hash.split('$');
+  if (parts.length !== 4 || parts[0] !== 'scrypt' || parts[1] !== '1') return false;
+  const [, , salt, expectedHex] = parts;
+  if (!salt || !expectedHex) return false;
+  const actual = scryptSync(password, salt, 64);
+  const expected = Buffer.from(expectedHex, 'hex');
+  if (actual.length !== expected.length) return false;
+  return timingSafeEqual(actual, expected);
+}
+
+// ---------- Admin authentication ----------
+
+// Try env-bootstrap admin first (the "principal" admin defined in env vars),
+// then fall back to DB-stored admins (created via the Admins UI).
+export async function authenticateAdmin(email: string, password: string): Promise<User | null> {
+  const normalized = email.trim().toLowerCase();
+  const envEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const envPassword = process.env.ADMIN_PASSWORD;
+
+  if (envEmail && envPassword && normalized === envEmail) {
+    const a = Buffer.from(password);
+    const b = Buffer.from(envPassword);
+    if (a.length === b.length && timingSafeEqual(a, b)) {
+      return ensureAdminUser();
+    }
+    // Right email, wrong password — don't fall through to DB.
+    return null;
+  }
+
+  const user = await prisma.user.findUnique({ where: { email: normalized } });
+  if (!user || user.role !== 'ADMIN' || !user.passwordHash) return null;
+  if (!verifyPassword(password, user.passwordHash)) return null;
+  return user;
 }
 
 export async function ensureAdminUser(): Promise<User> {
@@ -65,6 +102,14 @@ export async function ensureAdminUser(): Promise<User> {
     data: { email: email.toLowerCase(), name: 'Admin', role: 'ADMIN' },
   });
 }
+
+// True if this user row is the principal env-bootstrap admin.
+export function isPrincipalAdmin(user: Pick<User, 'email'>): boolean {
+  const envEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  return !!envEmail && user.email.trim().toLowerCase() === envEmail;
+}
+
+// ---------- Admin session (cookie-based) ----------
 
 export async function createAdminSession(userId: string): Promise<void> {
   const token = makeToken(`${userId}:${Date.now()}`);
@@ -103,10 +148,7 @@ export async function requireAdmin(): Promise<User> {
 }
 
 // ---------- Collaborator auth (token-in-URL, no cookies) ----------
-//
-// Collaborators authenticate by possession of their personal accessToken.
-// The token lives in the URL (/c/<token>) and is also sent with every
-// server action call. We validate it against the DB on each request.
+
 export async function getCollaboratorByToken(accessToken: string): Promise<User | null> {
   if (!accessToken) return null;
   const user = await prisma.user.findUnique({ where: { accessToken } });

@@ -33,10 +33,11 @@ export function CollaboratorView({
 
       <header className="relative z-10 px-4 sm:px-6 pt-8">
         <div className="max-w-4xl mx-auto pill-nav justify-between">
-          <span className="logo text-base px-3">
-            <span className="logo-dot">.</span>
-            <span>ex</span>
-            <span className="logo-accent">d</span>
+          <span className="logo text-base px-3 inline-flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-teal-400 inline-block shrink-0" aria-hidden />
+            <span className="leading-none">
+              ex<span className="text-brand">d</span>
+            </span>
           </span>
           <div className="flex items-center gap-3 px-3 text-sm">
             <div className="h-8 w-8 rounded-full bg-ink-900 text-cream flex items-center justify-center text-xs font-semibold">

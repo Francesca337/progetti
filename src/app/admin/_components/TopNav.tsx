@@ -9,6 +9,7 @@ const LINKS: { href: string; label: string }[] = [
   { href: '/admin/projects', label: 'Progetti' },
   { href: '/admin/collaborators', label: 'Collaboratori' },
   { href: '/admin/backlog', label: 'Backlog' },
+  { href: '/admin/admins', label: 'Admins' },
 ];
 
 export function TopNav({ adminName }: { adminName: string }) {
@@ -21,12 +22,13 @@ export function TopNav({ adminName }: { adminName: string }) {
         <nav className="pill-nav">
           <Link
             href="/admin"
-            className="logo text-base px-3 hidden sm:inline-flex items-baseline"
+            className="logo text-base px-3 hidden sm:inline-flex items-center gap-1.5"
             aria-label="exd PM"
           >
-            <span className="logo-dot">.</span>
-            <span>ex</span>
-            <span className="logo-accent">d</span>
+            <span className="h-2 w-2 rounded-full bg-teal-400 inline-block shrink-0" aria-hidden />
+            <span className="leading-none">
+              ex<span className="text-brand">d</span>
+            </span>
           </Link>
           <span className="hidden sm:block w-px h-5 bg-ink-100 mx-1" aria-hidden />
           <div className="hidden md:flex items-center gap-1">

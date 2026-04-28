@@ -1,10 +1,9 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import {
+  authenticateAdmin,
   createAdminSession,
-  ensureAdminUser,
   getAdminUser,
-  verifyAdminCredentials,
 } from '@/lib/auth';
 import { Logo } from '../_components/Logo';
 
@@ -12,11 +11,10 @@ async function login(formData: FormData): Promise<void> {
   'use server';
   const email = String(formData.get('email') ?? '');
   const password = String(formData.get('password') ?? '');
-  const ok = await verifyAdminCredentials(email, password);
-  if (!ok) {
+  const admin = await authenticateAdmin(email, password);
+  if (!admin) {
     redirect('/login?error=1');
   }
-  const admin = await ensureAdminUser();
   await createAdminSession(admin.id);
   redirect('/admin');
 }
