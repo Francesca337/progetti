@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { requireAdmin } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import {
   STATUS_CHIP,
@@ -7,6 +8,7 @@ import {
 } from '@/lib/format';
 
 export default async function AdminDashboard() {
+  const admin = await requireAdmin();
   const now = new Date();
   const startOfToday = new Date(now);
   startOfToday.setHours(0, 0, 0, 0);
@@ -52,6 +54,16 @@ export default async function AdminDashboard() {
     number
   >;
 
+  type Task = (typeof overdue)[number];
+  const splitByOwner = (tasks: Task[]) => ({
+    mine: tasks.filter((t) => t.assigneeId === admin.id),
+    team: tasks.filter((t) => t.assigneeId !== admin.id),
+  });
+
+  const overdueSplit = splitByOwner(overdue);
+  const dueSoonSplit = splitByOwner(dueSoon);
+  const inProgressSplit = splitByOwner(inProgress);
+
   return (
     <div className="space-y-16">
       <header className="pt-6">
@@ -72,38 +84,31 @@ export default async function AdminDashboard() {
         <Stat label="Completate" value={statusCount.DONE ?? 0} />
       </section>
 
-      <Section
+      <SplitSection
         eyebrow="Oltre la deadline"
         title="Da"
         italic="riprendere in mano."
         empty="Nessuna in ritardo. Tutto sotto controllo."
-      >
-        {overdue.map((t) => (
-          <TaskLine key={t.id} task={t} severity="overdue" />
-        ))}
-      </Section>
+        split={overdueSplit}
+        severity="overdue"
+      />
 
-      <Section
+      <SplitSection
         eyebrow="Prossimi 7 giorni"
         title="Quasi alla"
         italic="deadline."
         empty="Niente in scadenza questa settimana."
-      >
-        {dueSoon.map((t) => (
-          <TaskLine key={t.id} task={t} severity="due-soon" />
-        ))}
-      </Section>
+        split={dueSoonSplit}
+        severity="due-soon"
+      />
 
-      <Section
+      <SplitSection
         eyebrow="In corso"
         title="Già"
         italic="partite."
         empty="Niente in corso, per ora."
-      >
-        {inProgress.map((t) => (
-          <TaskLine key={t.id} task={t} />
-        ))}
-      </Section>
+        split={inProgressSplit}
+      />
     </div>
   );
 }
@@ -119,21 +124,31 @@ function Stat({ label, value, accent = false }: { label: string; value: number; 
   );
 }
 
-function Section({
+type DashboardTask = {
+  id: string;
+  title: string;
+  status: keyof typeof STATUS_LABELS;
+  deadline: Date | null;
+  project: { id: string; name: string; color: string };
+  assignee: { id: string; name: string } | null;
+};
+
+function SplitSection({
   eyebrow,
   title,
   italic,
   empty,
-  children,
+  split,
+  severity,
 }: {
   eyebrow: string;
   title: string;
   italic: string;
   empty: string;
-  children: React.ReactNode;
+  split: { mine: DashboardTask[]; team: DashboardTask[] };
+  severity?: 'overdue' | 'due-soon';
 }) {
-  const arr = Array.isArray(children) ? children : [children];
-  const isEmpty = arr.filter(Boolean).length === 0;
+  const isEmpty = split.mine.length === 0 && split.team.length === 0;
   return (
     <section className="space-y-5">
       <div>
@@ -145,25 +160,44 @@ function Section({
       {isEmpty ? (
         <div className="card-flat p-6 text-sm text-ink-500">{empty}</div>
       ) : (
-        <div className="space-y-2">{children}</div>
+        <div className="space-y-6">
+          {split.mine.length > 0 && (
+            <SubGroup label={`Tue (${split.mine.length})`}>
+              {split.mine.map((t) => (
+                <TaskLine key={t.id} task={t} severity={severity} hideAssignee />
+              ))}
+            </SubGroup>
+          )}
+          {split.team.length > 0 && (
+            <SubGroup label={`Del team (${split.team.length})`}>
+              {split.team.map((t) => (
+                <TaskLine key={t.id} task={t} severity={severity} />
+              ))}
+            </SubGroup>
+          )}
+        </div>
       )}
     </section>
+  );
+}
+
+function SubGroup({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="space-y-2">
+      <p className="text-[11px] uppercase tracking-[0.18em] text-ink-500">{label}</p>
+      <div className="space-y-2">{children}</div>
+    </div>
   );
 }
 
 function TaskLine({
   task,
   severity,
+  hideAssignee = false,
 }: {
-  task: {
-    id: string;
-    title: string;
-    status: keyof typeof STATUS_LABELS;
-    deadline: Date | null;
-    project: { id: string; name: string; color: string };
-    assignee: { id: string; name: string } | null;
-  };
+  task: DashboardTask;
   severity?: 'overdue' | 'due-soon';
+  hideAssignee?: boolean;
 }) {
   return (
     <Link
@@ -177,8 +211,11 @@ function TaskLine({
           <span className="h-2 w-2 rounded-full" style={{ backgroundColor: task.project.color }} />
           {task.project.name}
         </span>
-        {task.assignee && (
+        {!hideAssignee && task.assignee && (
           <span className="text-xs text-ink-500">→ {task.assignee.name}</span>
+        )}
+        {!hideAssignee && !task.assignee && (
+          <span className="text-xs text-ink-400 italic">senza assegnatario</span>
         )}
         {task.deadline && (
           <span
