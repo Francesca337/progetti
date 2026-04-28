@@ -120,7 +120,7 @@ export function TaskRow({
                       : 'text-ink-500'
                 }`}
               >
-                {severity === 'overdue' ? 'In ritardo: ' : 'Deadline: '}
+                {severity === 'overdue' ? 'Era per il ' : 'Deadline: '}
                 {formatDate(task.deadline)}
               </span>
             )}

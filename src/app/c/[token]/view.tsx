@@ -62,7 +62,7 @@ export function CollaboratorView({
 
         {tasks.length === 0 && (
           <div className="card p-10 text-center text-ink-500">
-            Per ora non hai task assegnate. Quando ne avrai una ti arriverà una mail.
+            Per ora niente da fare. Quando avrai una task ti arriva una mail.
           </div>
         )}
 
@@ -116,7 +116,7 @@ function CollaboratorTaskCard({ task, token }: { task: TaskWithRelations; token:
                       : 'text-ink-500'
                 }`}
               >
-                {severity === 'overdue' ? 'In ritardo: ' : 'Deadline: '}
+                {severity === 'overdue' ? 'Era per il ' : 'Deadline: '}
                 {formatDate(task.deadline)}
               </span>
             )}

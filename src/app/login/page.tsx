@@ -48,7 +48,7 @@ export default async function LoginPage({
             <h1 className="display text-3xl">
               Bentornata.
             </h1>
-            <p className="text-sm text-ink-500 mt-2">Entra con le tue credenziali admin.</p>
+            <p className="text-sm text-ink-500 mt-2">Entra con le tue credenziali.</p>
           </div>
 
           {error && (

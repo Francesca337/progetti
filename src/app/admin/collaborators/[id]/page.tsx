@@ -47,9 +47,9 @@ export default async function CollaboratorDetail({
       <header className="pt-6 flex items-end justify-between gap-4 flex-wrap">
         <div>
           <Link href="/admin/collaborators" className="text-xs text-ink-500 hover:text-ink-900 transition uppercase tracking-[0.18em]">
-            ← Collaboratori
+            ← Le persone
           </Link>
-          <p className="eyebrow mt-4 mb-2">Le task di</p>
+          <p className="eyebrow mt-4 mb-2">Cosa ha in mano</p>
           <h1 className="display text-4xl sm:text-5xl">{user.name}</h1>
           <p className="text-ink-500 text-sm mt-2">{user.email}</p>
         </div>
@@ -58,13 +58,13 @@ export default async function CollaboratorDetail({
           collaborators={collaborators}
           me={me}
           defaultAssigneeId={user.id}
-          label="Assegna task"
+          label="Aggiungi una task"
         />
       </header>
 
       {tasks.length === 0 && (
         <div className="card-flat p-8 text-center text-ink-500 text-sm">
-          Nessuna task assegnata. Usa il pulsante qui sopra per crearne una.
+          Per ora niente. Aggiungile la prima task quando vuoi.
         </div>
       )}
 

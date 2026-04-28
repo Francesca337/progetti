@@ -13,13 +13,12 @@ export default async function CollaboratorsPage() {
   return (
     <div className="space-y-10">
       <header className="pt-6">
-        <p className="eyebrow mb-3">Persone</p>
+        <p className="eyebrow mb-3">Le persone</p>
         <h1 className="display text-4xl sm:text-5xl">
-          I tuoi <span className="serif-italic">collaboratori.</span>
+          Chi <span className="serif-italic">lavora con te.</span>
         </h1>
         <p className="mt-3 text-ink-500 max-w-xl">
-          Aggiungi una persona, copia il suo link personale, assegna le task. Niente password:
-          basta il link.
+          Aggiungi una persona e copiale il suo link personale. Niente password: basta il link.
         </p>
       </header>
       <CollaboratorsClient

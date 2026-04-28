@@ -11,7 +11,7 @@ export function NewTaskButton({
   me,
   defaultProjectId,
   defaultAssigneeId,
-  label = 'Nuova task',
+  label = 'Aggiungi una task',
 }: {
   projects: Pick<Project, 'id' | 'name' | 'isPersonalBacklog'>[];
   collaborators: Pick<User, 'id' | 'name'>[];
@@ -33,7 +33,7 @@ export function NewTaskButton({
   return (
     <div className="card p-6">
       <div className="flex items-center justify-between mb-5">
-        <p className="eyebrow">Nuova task</p>
+        <p className="eyebrow">Aggiungi una task</p>
         <button type="button" className="btn-ghost btn-xs" onClick={() => setOpen(false)}>
           Chiudi
         </button>
@@ -44,7 +44,7 @@ export function NewTaskButton({
         me={me}
         defaultProjectId={defaultProjectId}
         initial={defaultAssigneeId ? { assigneeId: defaultAssigneeId } : undefined}
-        submitLabel="Crea task"
+        submitLabel="Aggiungi"
         onSubmit={async (fd) => {
           await createTask(fd);
           setOpen(false);

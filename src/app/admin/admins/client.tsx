@@ -71,11 +71,11 @@ export function AdminsClient({
         </div>
         <div className="mt-4 flex items-center justify-between gap-3 flex-wrap">
           <p className="text-xs text-ink-500 max-w-md">
-            Passa le credenziali alla persona via un canale sicuro (di persona o un messaggio
-            cifrato). La password si può cambiare in qualsiasi momento da questa stessa pagina.
+            Passa le credenziali a voce, o tramite un messaggio cifrato. La password si può
+            cambiare quando vuoi, da qui.
           </p>
           <button type="submit" className="btn-dark" disabled={pending}>
-            {pending ? 'Aggiunta…' : 'Aggiungi admin'}
+            {pending ? 'Aggiunta…' : 'Aggiungi'}
           </button>
         </div>
         {error && <div className="mt-3 text-sm text-brand">{error}</div>}

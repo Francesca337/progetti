@@ -56,12 +56,11 @@ export default async function AdminDashboard() {
       <header className="pt-6">
         <p className="eyebrow mb-4">Dashboard</p>
         <h1 className="display text-4xl sm:text-5xl">
-          A cosa <span className="serif-italic">stare attenti,</span>
-          <br />
-          oggi.
+          Le cose da fare,{' '}
+          <span className="serif-italic">oggi.</span>
         </h1>
         <p className="mt-4 text-ink-500 max-w-xl">
-          Le task in ritardo, quelle in scadenza nella prossima settimana e quelle già in corso.
+          Cosa è scivolato un po', cosa si sta avvicinando, cosa è già in mano a qualcuno.
         </p>
       </header>
 
@@ -73,10 +72,10 @@ export default async function AdminDashboard() {
       </section>
 
       <Section
-        eyebrow="Da gestire subito"
-        title="Già in"
-        italic="ritardo."
-        empty="Nessuna task in ritardo. Bel lavoro."
+        eyebrow="Oltre la deadline"
+        title="Da"
+        italic="riprendere in mano."
+        empty="Nessuna in ritardo. Tutto sotto controllo."
       >
         {overdue.map((t) => (
           <TaskLine key={t.id} task={t} severity="overdue" />
@@ -85,9 +84,9 @@ export default async function AdminDashboard() {
 
       <Section
         eyebrow="Prossimi 7 giorni"
-        title="In scadenza"
-        italic="a breve."
-        empty="Niente in scadenza nei prossimi giorni."
+        title="Quasi alla"
+        italic="deadline."
+        empty="Niente in scadenza questa settimana."
       >
         {dueSoon.map((t) => (
           <TaskLine key={t.id} task={t} severity="due-soon" />
@@ -95,10 +94,10 @@ export default async function AdminDashboard() {
       </Section>
 
       <Section
-        eyebrow="Attive"
-        title="In"
-        italic="lavorazione."
-        empty="Nessuna task in corso al momento."
+        eyebrow="In corso"
+        title="Già"
+        italic="partite."
+        empty="Niente in corso, per ora."
       >
         {inProgress.map((t) => (
           <TaskLine key={t.id} task={t} />
@@ -186,7 +185,7 @@ function TaskLine({
           <span
             className={`ml-auto text-xs ${
               severity === 'overdue'
-                ? 'text-brand font-medium'
+                ? 'text-brand'
                 : severity === 'due-soon'
                   ? 'text-amber-700'
                   : 'text-ink-500'

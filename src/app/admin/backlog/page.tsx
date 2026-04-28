@@ -85,11 +85,11 @@ export default async function BacklogPage() {
         <div>
           <p className="eyebrow mb-3">Solo per te</p>
           <h1 className="display text-4xl sm:text-5xl">
-            Le tue <span className="serif-italic">task.</span>
+            Le cose che hai <span className="serif-italic">in mano tu.</span>
           </h1>
           <p className="mt-3 text-ink-500 max-w-xl">
-            Le task assegnate a te nei vari progetti, più il backlog privato. I collaboratori non
-            lo vedono.
+            Quello che ti sei presa nei progetti, più gli appunti privati. Solo per te: i
+            collaboratori non li vedono.
           </p>
         </div>
         <NewTaskButton
@@ -97,7 +97,7 @@ export default async function BacklogPage() {
           collaborators={collaborators}
           me={me}
           defaultProjectId={backlogProjects[0]?.id}
-          label="Nuova task"
+          label="Aggiungi una task"
         />
       </header>
 
@@ -105,9 +105,9 @@ export default async function BacklogPage() {
       {myTasksInOtherProjects.length > 0 && (
         <section className="space-y-6">
           <div>
-            <p className="eyebrow mb-2">Assegnate a te</p>
+            <p className="eyebrow mb-2">Nei progetti</p>
             <h2 className="display text-2xl sm:text-3xl">
-              Nei <span className="serif-italic">progetti.</span>
+              Quello che ti sei <span className="serif-italic">presa.</span>
             </h2>
           </div>
           {Array.from(myTasksByProject.entries()).map(([projectId, group]) => {
@@ -144,9 +144,9 @@ export default async function BacklogPage() {
       {/* Section 2: private backlog buckets */}
       <section className="space-y-6">
         <div>
-          <p className="eyebrow mb-2">Privato</p>
+          <p className="eyebrow mb-2">Solo tuo</p>
           <h2 className="display text-2xl sm:text-3xl">
-            Il tuo <span className="serif-italic">backlog.</span>
+            Appunti <span className="serif-italic">privati.</span>
           </h2>
         </div>
 
@@ -173,7 +173,7 @@ export default async function BacklogPage() {
                 <span className="text-xs text-ink-500">{group.length} task</span>
               </div>
               {group.length === 0 ? (
-                <div className="card-flat p-6 text-sm text-ink-500">Nessuna task in questa sezione.</div>
+                <div className="card-flat p-6 text-sm text-ink-500">Ancora niente qui.</div>
               ) : (
                 STATUS_ORDER.map((status) => {
                   const subset = group.filter((t) => t.status === status);
