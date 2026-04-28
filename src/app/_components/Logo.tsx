@@ -1,3 +1,8 @@
+import Image from 'next/image';
+
+// Approximate aspect ratio of the .exd logo asset (8244 × 3411 ≈ 2.42:1).
+const LOGO_ASPECT = 2.418;
+
 export function Logo({
   size = 'md',
   showSubmark = true,
@@ -5,17 +10,26 @@ export function Logo({
   size?: 'sm' | 'md' | 'lg';
   showSubmark?: boolean;
 }) {
-  const text = size === 'lg' ? 'text-2xl' : size === 'sm' ? 'text-base' : 'text-lg';
-  const dotPx = size === 'lg' ? 14 : size === 'sm' ? 8 : 11;
+  const height = size === 'lg' ? 36 : size === 'sm' ? 18 : 24;
+  const width = Math.round(height * LOGO_ASPECT);
+  const submarkSize =
+    size === 'lg' ? 'text-xs' : size === 'sm' ? 'text-[10px]' : 'text-xs';
 
   return (
-    <span className={`logo ${text} inline-flex items-baseline gap-1.5`}>
-      <BrandDot px={dotPx} className="self-center" />
-      <span className="leading-none">
-        ex<span className="text-brand">d</span>
-      </span>
+    <span className="inline-flex items-center gap-3">
+      <Image
+        src="/logo.png"
+        alt="exd"
+        width={width}
+        height={height}
+        priority
+        className="h-auto w-auto"
+        style={{ height, width }}
+      />
       {showSubmark && (
-        <span className="ml-2 text-ink-400 font-normal text-[0.7em] uppercase tracking-[0.2em] self-center">
+        <span
+          className={`text-ink-400 font-normal uppercase tracking-[0.2em] ${submarkSize}`}
+        >
           PM
         </span>
       )}
@@ -23,7 +37,8 @@ export function Logo({
   );
 }
 
-// The .exd brand dot — a solid teal circle.
+// Solid teal dot — used for small UI accents (status indicators, etc.)
+// when you want the brand color without the full logo.
 export function BrandDot({
   px = 11,
   color = '#19A398',

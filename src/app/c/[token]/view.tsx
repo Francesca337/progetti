@@ -17,7 +17,7 @@ import {
   updateTaskStatus,
   uploadAttachmentAction,
 } from './actions';
-import { BrandDot } from '@/app/_components/Logo';
+import { Logo } from '@/app/_components/Logo';
 
 type TaskWithRelations = Task & { project: Project; attachments: Attachment[] };
 
@@ -38,11 +38,8 @@ export function CollaboratorView({
 
       <header className="relative z-10 px-4 sm:px-6 pt-8">
         <div className="max-w-4xl mx-auto pill-nav justify-between">
-          <span className="logo text-base px-3 inline-flex items-baseline gap-1.5">
-            <BrandDot px={11} />
-            <span className="leading-none">
-              ex<span className="text-brand">d</span>
-            </span>
+          <span className="px-3 inline-flex items-center">
+            <Logo size="sm" showSubmark={false} />
           </span>
           <div className="flex items-center gap-3 px-3 text-sm">
             <div className="h-8 w-8 rounded-full bg-ink-900 text-cream flex items-center justify-center text-xs font-semibold">
