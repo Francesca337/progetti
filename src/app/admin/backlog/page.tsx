@@ -36,13 +36,14 @@ export default async function BacklogPage() {
   const [backlogTasks, myTasksInOtherProjects, allProjectsForForm, collaborators] =
     await Promise.all([
       prisma.task.findMany({
-        where: { projectId: { in: backlogProjectIds } },
+        where: { projectId: { in: backlogProjectIds }, isPrivate: false },
         include: { project: true, assignee: true, attachments: true },
         orderBy: [{ deadline: 'asc' }, { createdAt: 'desc' }],
       }),
       prisma.task.findMany({
         where: {
           assigneeId: admin.id,
+          isPrivate: false,
           project: { isPersonalBacklog: false },
         },
         include: { project: true, assignee: true, attachments: true },

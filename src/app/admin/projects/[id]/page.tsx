@@ -17,7 +17,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
 
   const [tasks, allProjects, collaborators] = await Promise.all([
     prisma.task.findMany({
-      where: { projectId: id },
+      where: { projectId: id, isPrivate: false },
       include: { project: true, assignee: true, attachments: true },
       orderBy: [{ deadline: 'asc' }, { createdAt: 'desc' }],
     }),

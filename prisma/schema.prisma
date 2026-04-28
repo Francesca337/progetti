@@ -78,6 +78,10 @@ model Task {
   priority          Priority   @default(MEDIUM)
   status            TaskStatus @default(TODO)
 
+  // True when a collaborator self-created the task as part of their
+  // personal backlog. Hidden from every admin view.
+  isPrivate         Boolean    @default(false)
+
   projectId  String
   project    Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
@@ -94,6 +98,7 @@ model Task {
   @@index([assigneeId])
   @@index([status])
   @@index([deadline])
+  @@index([isPrivate])
 }
 
 model Attachment {

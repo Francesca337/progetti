@@ -12,14 +12,31 @@ export default async function CollaboratorPage({
   const user = await getCollaboratorByToken(token);
   if (!user) notFound();
 
-  const tasks = await prisma.task.findMany({
-    where: { assigneeId: user.id },
-    include: {
-      project: true,
-      attachments: true,
-    },
-    orderBy: [{ deadline: 'asc' }, { createdAt: 'desc' }],
-  });
+  const [assignedTasks, privateTasks, availableProjects] = await Promise.all([
+    prisma.task.findMany({
+      where: { assigneeId: user.id, isPrivate: false },
+      include: { project: true, attachments: true },
+      orderBy: [{ deadline: 'asc' }, { createdAt: 'desc' }],
+    }),
+    prisma.task.findMany({
+      where: { assigneeId: user.id, isPrivate: true },
+      include: { project: true, attachments: true },
+      orderBy: [{ deadline: 'asc' }, { createdAt: 'desc' }],
+    }),
+    prisma.project.findMany({
+      where: { archived: false, isPersonalBacklog: false },
+      orderBy: { name: 'asc' },
+      select: { id: true, name: true, color: true },
+    }),
+  ]);
 
-  return <CollaboratorView token={token} user={user} tasks={tasks} />;
+  return (
+    <CollaboratorView
+      token={token}
+      user={user}
+      assignedTasks={assignedTasks}
+      privateTasks={privateTasks}
+      availableProjects={availableProjects}
+    />
+  );
 }

@@ -16,6 +16,7 @@ export default async function AdminDashboard() {
   const [overdue, dueSoon, inProgress, totals] = await Promise.all([
     prisma.task.findMany({
       where: {
+        isPrivate: false,
         status: { in: ['TODO', 'IN_PROGRESS', 'IN_REVIEW'] },
         deadline: { lt: startOfToday },
       },
@@ -25,6 +26,7 @@ export default async function AdminDashboard() {
     }),
     prisma.task.findMany({
       where: {
+        isPrivate: false,
         status: { in: ['TODO', 'IN_PROGRESS', 'IN_REVIEW'] },
         deadline: { gte: startOfToday, lte: in7Days },
       },
@@ -33,13 +35,14 @@ export default async function AdminDashboard() {
       take: 50,
     }),
     prisma.task.findMany({
-      where: { status: 'IN_PROGRESS' },
+      where: { isPrivate: false, status: 'IN_PROGRESS' },
       include: { project: true, assignee: true },
       orderBy: [{ deadline: 'asc' }, { createdAt: 'desc' }],
       take: 50,
     }),
     prisma.task.groupBy({
       by: ['status'],
+      where: { isPrivate: false },
       _count: { _all: true },
     }),
   ]);
