@@ -28,6 +28,26 @@ export async function updateTaskStatus(
   revalidatePath(`/c/${token}`);
 }
 
+export async function updateTaskDeadline(
+  token: string,
+  taskId: string,
+  deadline: string | null,
+): Promise<void> {
+  const user = await requireCollaboratorByToken(token);
+  const task = await prisma.task.findFirst({
+    where: { id: taskId, assigneeId: user.id },
+    select: { id: true },
+  });
+  if (!task) throw new Error('Task non trovata');
+  const next = deadline ? new Date(deadline) : null;
+  if (next && Number.isNaN(next.getTime())) throw new Error('Data non valida');
+  await prisma.task.update({
+    where: { id: taskId },
+    data: { deadline: next },
+  });
+  revalidatePath(`/c/${token}`);
+}
+
 export async function uploadAttachmentAction(
   formData: FormData,
 ): Promise<{ error?: string } | void> {

@@ -12,7 +12,11 @@ import {
   formatBytes,
   formatDate,
 } from '@/lib/format';
-import { updateTaskStatus, uploadAttachmentAction } from './actions';
+import {
+  updateTaskDeadline,
+  updateTaskStatus,
+  uploadAttachmentAction,
+} from './actions';
 import { BrandDot } from '@/app/_components/Logo';
 
 type TaskWithRelations = Task & { project: Project; attachments: Attachment[] };
@@ -135,25 +139,48 @@ function CollaboratorTaskCard({ task, token }: { task: TaskWithRelations; token:
             </button>
           )}
         </div>
-        <div className="shrink-0">
-          <select
-            className="select w-44"
-            defaultValue={task.status}
-            disabled={pending}
-            onChange={(e) => {
-              const next = e.target.value as (typeof STATUS_ORDER)[number];
-              startTransition(async () => {
-                await updateTaskStatus(token, task.id, next);
-              });
-            }}
-            aria-label="Stato"
-          >
-            {STATUS_ORDER.map((s) => (
-              <option key={s} value={s}>
-                {STATUS_LABELS[s]}
-              </option>
-            ))}
-          </select>
+        <div className="shrink-0 flex flex-col items-stretch gap-2 w-44">
+          <div>
+            <label className="block text-[11px] uppercase tracking-[0.18em] text-ink-400 mb-1" htmlFor={`status-${task.id}`}>
+              Stato
+            </label>
+            <select
+              id={`status-${task.id}`}
+              className="select"
+              defaultValue={task.status}
+              disabled={pending}
+              onChange={(e) => {
+                const next = e.target.value as (typeof STATUS_ORDER)[number];
+                startTransition(async () => {
+                  await updateTaskStatus(token, task.id, next);
+                });
+              }}
+            >
+              {STATUS_ORDER.map((s) => (
+                <option key={s} value={s}>
+                  {STATUS_LABELS[s]}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-[11px] uppercase tracking-[0.18em] text-ink-400 mb-1" htmlFor={`deadline-${task.id}`}>
+              Deadline
+            </label>
+            <input
+              id={`deadline-${task.id}`}
+              type="date"
+              className="input"
+              defaultValue={task.deadline ? new Date(task.deadline).toISOString().slice(0, 10) : ''}
+              disabled={pending}
+              onChange={(e) => {
+                const value = e.target.value || null;
+                startTransition(async () => {
+                  await updateTaskDeadline(token, task.id, value);
+                });
+              }}
+            />
+          </div>
         </div>
       </div>
 
