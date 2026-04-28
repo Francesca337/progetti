@@ -69,7 +69,7 @@ export function ProjectsClient({ projects }: { projects: Item[] }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {active.length === 0 && (
           <div className="card-flat p-8 text-center text-sm text-ink-500 md:col-span-2">
-            Nessun progetto attivo. Creane uno qui sopra.
+            Nessun progetto attivo. Aggiungilo con il modulo qui sopra.
           </div>
         )}
         {active.map((p) => (

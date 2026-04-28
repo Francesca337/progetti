@@ -56,13 +56,12 @@ export default async function AdminDashboard() {
       <header className="pt-6">
         <p className="eyebrow mb-4">Dashboard</p>
         <h1 className="display text-4xl sm:text-5xl">
-          Cosa serve <span className="serif-italic">attenzione,</span>
+          A cosa <span className="serif-italic">stare attenti,</span>
           <br />
           oggi.
         </h1>
         <p className="mt-4 text-ink-500 max-w-xl">
-          Una panoramica delle task in ritardo, in scadenza nei prossimi 7 giorni, e di quelle
-          attualmente in corso.
+          Le task in ritardo, quelle in scadenza nella prossima settimana e quelle già in corso.
         </p>
       </header>
 
@@ -74,9 +73,9 @@ export default async function AdminDashboard() {
       </section>
 
       <Section
-        eyebrow="Urgente"
-        title="In ritardo"
-        italic="adesso."
+        eyebrow="Da gestire subito"
+        title="Già in"
+        italic="ritardo."
         empty="Nessuna task in ritardo. Bel lavoro."
       >
         {overdue.map((t) => (
@@ -87,8 +86,8 @@ export default async function AdminDashboard() {
       <Section
         eyebrow="Prossimi 7 giorni"
         title="In scadenza"
-        italic="presto."
-        empty="Nessuna scadenza imminente."
+        italic="a breve."
+        empty="Niente in scadenza nei prossimi giorni."
       >
         {dueSoon.map((t) => (
           <TaskLine key={t.id} task={t} severity="due-soon" />
@@ -97,9 +96,9 @@ export default async function AdminDashboard() {
 
       <Section
         eyebrow="Attive"
-        title="In corso"
-        italic="ora."
-        empty="Nessuna task in corso."
+        title="In"
+        italic="lavorazione."
+        empty="Nessuna task in corso al momento."
       >
         {inProgress.map((t) => (
           <TaskLine key={t.id} task={t} />

@@ -46,9 +46,9 @@ export default async function LoginPage({
           <div>
             <p className="eyebrow mb-3">Accesso</p>
             <h1 className="display text-3xl">
-              Welcome <span className="serif-italic">back.</span>
+              Bentornata.
             </h1>
-            <p className="text-sm text-ink-500 mt-2">Inserisci le credenziali admin.</p>
+            <p className="text-sm text-ink-500 mt-2">Entra con le tue credenziali admin.</p>
           </div>
 
           {error && (

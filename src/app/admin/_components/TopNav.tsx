@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { BrandDot } from '@/app/_components/Logo';
 
 const LINKS: { href: string; label: string }[] = [
   { href: '/admin', label: 'Dashboard' },
@@ -22,10 +23,10 @@ export function TopNav({ adminName }: { adminName: string }) {
         <nav className="pill-nav">
           <Link
             href="/admin"
-            className="logo text-base px-3 hidden sm:inline-flex items-center gap-1.5"
+            className="logo text-base px-3 hidden sm:inline-flex items-baseline gap-1.5"
             aria-label="exd PM"
           >
-            <span className="h-2 w-2 rounded-full bg-teal-400 inline-block shrink-0" aria-hidden />
+            <BrandDot px={11} />
             <span className="leading-none">
               ex<span className="text-brand">d</span>
             </span>

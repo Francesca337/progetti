@@ -24,12 +24,12 @@ export default async function HomePage() {
       <section className="relative z-10 max-w-3xl mx-auto px-6 pt-32 pb-24 text-center">
         <p className="eyebrow mb-6">Project management</p>
         <h1 className="display text-5xl sm:text-6xl md:text-7xl text-ink-900 leading-[0.95]">
-          Marketing with{' '}
-          <span className="serif-italic text-ink-900">a direction.</span>
+          Progetti con{' '}
+          <span className="serif-italic text-ink-900">direzione.</span>
         </h1>
         <p className="mt-8 text-ink-600 text-lg max-w-xl mx-auto">
-          Una piattaforma per progetti, task e collaboratori. Niente caos, niente decks che
-          prendono polvere — solo le cose da fare, ordinate.
+          Lo spazio dove progetti, task e collaboratori stanno insieme. Niente caos, niente
+          riunioni inutili: solo le cose da fare, in ordine.
         </p>
         <div className="mt-10 flex items-center justify-center gap-3">
           <Link href="/login" className="btn-dark">
@@ -37,7 +37,7 @@ export default async function HomePage() {
           </Link>
         </div>
         <p className="mt-12 text-xs text-ink-500">
-          Sei un collaboratore? Apri il link personale che hai ricevuto via email.
+          Sei un collaboratore? Usa il link personale che hai ricevuto via email.
         </p>
       </section>
     </main>

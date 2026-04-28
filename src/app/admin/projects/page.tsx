@@ -12,10 +12,10 @@ export default async function ProjectsPage() {
       <header className="pt-6">
         <p className="eyebrow mb-3">Progetti</p>
         <h1 className="display text-4xl sm:text-5xl">
-          Tutto ciò su cui <span className="serif-italic">stai lavorando.</span>
+          Tutti i tuoi <span className="serif-italic">progetti.</span>
         </h1>
         <p className="mt-3 text-ink-500 max-w-xl">
-          Crea progetti per organizzare le task. Ogni task vive dentro un progetto.
+          Usa i progetti per organizzare le task. Ogni task appartiene a un progetto.
         </p>
       </header>
       <ProjectsClient

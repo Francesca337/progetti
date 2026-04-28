@@ -56,7 +56,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
 
       {tasks.length === 0 && (
         <div className="card-flat p-8 text-center text-sm text-ink-500">
-          Nessuna task in questo progetto. Creane una qui sopra.
+          Nessuna task in questo progetto. Aggiungila con il pulsante qui sopra.
         </div>
       )}
 

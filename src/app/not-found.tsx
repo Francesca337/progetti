@@ -15,10 +15,10 @@ export default function NotFound() {
       <div className="relative z-10 flex flex-col items-center justify-center px-6 pt-32 text-center">
         <p className="eyebrow mb-4">404</p>
         <h1 className="display text-5xl">
-          Page <span className="serif-italic">not found.</span>
+          Pagina <span className="serif-italic">non trovata.</span>
         </h1>
         <p className="text-ink-500 mt-4 max-w-md">
-          Il link che stai usando non è valido o è stato rigenerato.
+          Il link non è valido o è stato rigenerato.
         </p>
         <Link href="/" className="btn-secondary mt-8">
           Torna alla home

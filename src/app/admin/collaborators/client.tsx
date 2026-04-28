@@ -70,7 +70,7 @@ export function CollaboratorsClient({
       <div className="space-y-3">
         {collaborators.length === 0 && (
           <div className="card-flat p-8 text-center text-ink-500 text-sm">
-            Nessun collaboratore ancora.
+            Ancora nessun collaboratore. Aggiungine uno qui sopra.
           </div>
         )}
         {collaborators.map((c) => {

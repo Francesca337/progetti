@@ -85,11 +85,11 @@ export default async function BacklogPage() {
         <div>
           <p className="eyebrow mb-3">Solo per te</p>
           <h1 className="display text-4xl sm:text-5xl">
-            Le tue cose <span className="serif-italic">da fare.</span>
+            Le tue <span className="serif-italic">task.</span>
           </h1>
           <p className="mt-3 text-ink-500 max-w-xl">
-            Le task assegnate a te negli altri progetti, più il tuo backlog privato — non visibile
-            ai collaboratori.
+            Le task assegnate a te nei vari progetti, più il backlog privato. I collaboratori non
+            lo vedono.
           </p>
         </div>
         <NewTaskButton
@@ -107,7 +107,7 @@ export default async function BacklogPage() {
           <div>
             <p className="eyebrow mb-2">Assegnate a te</p>
             <h2 className="display text-2xl sm:text-3xl">
-              Negli <span className="serif-italic">altri progetti.</span>
+              Nei <span className="serif-italic">progetti.</span>
             </h2>
           </div>
           {Array.from(myTasksByProject.entries()).map(([projectId, group]) => {
@@ -146,7 +146,7 @@ export default async function BacklogPage() {
         <div>
           <p className="eyebrow mb-2">Privato</p>
           <h2 className="display text-2xl sm:text-3xl">
-            Backlog <span className="serif-italic">personale.</span>
+            Il tuo <span className="serif-italic">backlog.</span>
           </h2>
         </div>
 

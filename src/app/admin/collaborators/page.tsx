@@ -18,7 +18,7 @@ export default async function CollaboratorsPage() {
           I tuoi <span className="serif-italic">collaboratori.</span>
         </h1>
         <p className="mt-3 text-ink-500 max-w-xl">
-          Aggiungi le persone, copia il loro link personale, assegna le task. Niente password —
+          Aggiungi una persona, copia il suo link personale, assegna le task. Niente password:
           basta il link.
         </p>
       </header>

@@ -49,10 +49,8 @@ export default async function CollaboratorDetail({
           <Link href="/admin/collaborators" className="text-xs text-ink-500 hover:text-ink-900 transition uppercase tracking-[0.18em]">
             ← Collaboratori
           </Link>
-          <h1 className="display text-4xl sm:text-5xl mt-3">
-            {firstWord(user.name)}{' '}
-            <span className="serif-italic">{restWords(user.name) || 'tasks.'}</span>
-          </h1>
+          <p className="eyebrow mt-4 mb-2">Le task di</p>
+          <h1 className="display text-4xl sm:text-5xl">{user.name}</h1>
           <p className="text-ink-500 text-sm mt-2">{user.email}</p>
         </div>
         <NewTaskButton
@@ -66,7 +64,7 @@ export default async function CollaboratorDetail({
 
       {tasks.length === 0 && (
         <div className="card-flat p-8 text-center text-ink-500 text-sm">
-          Nessuna task assegnata. Usa il bottone sopra per crearne una.
+          Nessuna task assegnata. Usa il pulsante qui sopra per crearne una.
         </div>
       )}
 
@@ -102,10 +100,3 @@ export default async function CollaboratorDetail({
   );
 }
 
-function firstWord(s: string): string {
-  return s.split(/\s+/)[0] ?? s;
-}
-function restWords(s: string): string {
-  const parts = s.split(/\s+/);
-  return parts.slice(1).join(' ');
-}

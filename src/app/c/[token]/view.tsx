@@ -13,6 +13,7 @@ import {
   formatDate,
 } from '@/lib/format';
 import { updateTaskStatus, uploadAttachmentAction } from './actions';
+import { BrandDot } from '@/app/_components/Logo';
 
 type TaskWithRelations = Task & { project: Project; attachments: Attachment[] };
 
@@ -33,8 +34,8 @@ export function CollaboratorView({
 
       <header className="relative z-10 px-4 sm:px-6 pt-8">
         <div className="max-w-4xl mx-auto pill-nav justify-between">
-          <span className="logo text-base px-3 inline-flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-teal-400 inline-block shrink-0" aria-hidden />
+          <span className="logo text-base px-3 inline-flex items-baseline gap-1.5">
+            <BrandDot px={11} />
             <span className="leading-none">
               ex<span className="text-brand">d</span>
             </span>
@@ -61,7 +62,7 @@ export function CollaboratorView({
 
         {tasks.length === 0 && (
           <div className="card p-10 text-center text-ink-500">
-            Nessuna task assegnata al momento. Riceverai una notifica via email quando ne avrai una.
+            Per ora non hai task assegnate. Quando ne avrai una ti arriverà una mail.
           </div>
         )}
 

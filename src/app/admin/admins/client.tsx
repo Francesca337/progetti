@@ -70,9 +70,9 @@ export function AdminsClient({
           </div>
         </div>
         <div className="mt-4 flex items-center justify-between gap-3 flex-wrap">
-          <p className="text-xs text-ink-500">
-            Comunica le credenziali alla persona via canale sicuro (es. di persona o messaggio
-            cifrato). Lei potrà cambiare la password quando vuole, da questa stessa pagina.
+          <p className="text-xs text-ink-500 max-w-md">
+            Passa le credenziali alla persona via un canale sicuro (di persona o un messaggio
+            cifrato). La password si può cambiare in qualsiasi momento da questa stessa pagina.
           </p>
           <button type="submit" className="btn-dark" disabled={pending}>
             {pending ? 'Aggiunta…' : 'Aggiungi admin'}

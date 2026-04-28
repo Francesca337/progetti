@@ -14,11 +14,11 @@ export default async function AdminsPage() {
       <header className="pt-6">
         <p className="eyebrow mb-3">Permessi</p>
         <h1 className="display text-4xl sm:text-5xl">
-          Chi può <span className="serif-italic">amministrare.</span>
+          Chi <span className="serif-italic">gestisce.</span>
         </h1>
         <p className="mt-3 text-ink-500 max-w-xl">
-          Gli admin possono gestire progetti, collaboratori e task. Aggiungi qui un altro admin con
-          email e password — si loggherà con le credenziali che gli imposti.
+          Gli admin gestiscono progetti, collaboratori e task. Per aggiungerne un altro imposta
+          nome, email e password: entrerà con quelle credenziali.
         </p>
       </header>
 

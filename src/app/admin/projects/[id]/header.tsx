@@ -73,10 +73,7 @@ export function ProjectHeader({ project }: { project: Project }) {
           <span className="h-2 w-2 rounded-full" style={{ backgroundColor: project.color }} aria-hidden />
           Progetto
         </p>
-        <h1 className="display text-4xl sm:text-5xl">
-          {firstWord(project.name)}{' '}
-          <span className="serif-italic">{restWords(project.name) || ''}</span>
-        </h1>
+        <h1 className="display text-4xl sm:text-5xl">{project.name}</h1>
         {project.description && (
           <p className="text-ink-600 text-base mt-3 max-w-2xl whitespace-pre-wrap">{project.description}</p>
         )}
@@ -118,10 +115,3 @@ export function ProjectHeader({ project }: { project: Project }) {
   );
 }
 
-function firstWord(s: string): string {
-  return s.split(/\s+/)[0] ?? s;
-}
-function restWords(s: string): string {
-  const parts = s.split(/\s+/);
-  return parts.slice(1).join(' ');
-}
