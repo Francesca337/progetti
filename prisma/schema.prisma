@@ -91,6 +91,10 @@ model Task {
   priority          Priority   @default(MEDIUM)
   status            TaskStatus @default(TODO)
 
+  // Optional reference folder (Drive, Dropbox, …). Shown on the task
+  // so the collaborator knows where to drop or fetch materials.
+  driveFolderUrl    String?
+
   // True when a collaborator self-created the task as part of their
   // personal backlog. Hidden from every admin view.
   isPrivate         Boolean    @default(false)

@@ -158,6 +158,14 @@ const taskSchema = z.object({
     .optional()
     .nullable()
     .transform((v) => (v ? new Date(v) : null)),
+  driveFolderUrl: z
+    .string()
+    .trim()
+    .url('Inserisci un URL valido')
+    .or(z.literal(''))
+    .optional()
+    .nullable()
+    .transform((v) => (v ? v : null)),
 });
 
 function parseTaskForm(formData: FormData) {
@@ -169,6 +177,7 @@ function parseTaskForm(formData: FormData) {
     priority: formData.get('priority') || 'MEDIUM',
     status: formData.get('status') || 'TODO',
     deadline: formData.get('deadline') || null,
+    driveFolderUrl: formData.get('driveFolderUrl') || null,
   });
 }
 
@@ -191,6 +200,7 @@ export async function createTask(formData: FormData): Promise<{ taskId: string }
       priority: data.priority as Priority,
       status: data.status as TaskStatus,
       deadline: data.deadline,
+      driveFolderUrl: data.driveFolderUrl,
     },
     include: { project: true, assignee: true },
   });
@@ -234,6 +244,7 @@ export async function updateTask(taskId: string, formData: FormData): Promise<vo
       priority: data.priority as Priority,
       status: data.status as TaskStatus,
       deadline: data.deadline,
+      driveFolderUrl: data.driveFolderUrl,
     },
     include: { project: true, assignee: true },
   });

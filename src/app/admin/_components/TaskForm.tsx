@@ -13,6 +13,7 @@ type Initial = {
   priority?: Priority;
   status?: TaskStatus;
   deadline?: string | null;
+  driveFolderUrl?: string | null;
 };
 
 export function TaskForm({
@@ -141,6 +142,21 @@ export function TaskForm({
             defaultValue={initial?.deadline ?? ''}
           />
         </div>
+      </div>
+      <div>
+        <label className="label" htmlFor="driveFolderUrl">Cartella Drive (opzionale)</label>
+        <input
+          id="driveFolderUrl"
+          name="driveFolderUrl"
+          type="url"
+          inputMode="url"
+          placeholder="https://drive.google.com/drive/folders/…"
+          defaultValue={initial?.driveFolderUrl ?? ''}
+          className="input"
+        />
+        <p className="mt-1 text-xs text-ink-500">
+          Link alla cartella dove caricare o trovare i materiali per la task.
+        </p>
       </div>
 
       {error && <div className="text-sm text-brand">{error}</div>}

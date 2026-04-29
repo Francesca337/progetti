@@ -63,6 +63,7 @@ export function TaskRow({
             priority: task.priority,
             status: task.status,
             deadline: task.deadline ? task.deadline.toISOString().slice(0, 10) : null,
+            driveFolderUrl: task.driveFolderUrl,
           }}
           submitLabel="Aggiorna"
           onSubmit={async (fd) => {
@@ -158,6 +159,22 @@ export function TaskRow({
             >
               {task.description}
             </p>
+          )}
+          {task.driveFolderUrl && (
+            <a
+              href={task.driveFolderUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={
+                mine
+                  ? 'mt-3 inline-flex items-center gap-1.5 rounded-pill bg-white/15 hover:bg-white/25 text-white text-xs px-3 py-1.5 transition'
+                  : 'mt-3 inline-flex items-center gap-1.5 rounded-pill bg-cream-100 hover:bg-cream-200 text-ink-700 text-xs px-3 py-1.5 transition'
+              }
+            >
+              <span aria-hidden>📂</span>
+              <span className="font-medium">Cartella Drive</span>
+              <span aria-hidden>↗</span>
+            </a>
           )}
         </div>
         <div className="flex flex-col gap-2 items-end shrink-0">
