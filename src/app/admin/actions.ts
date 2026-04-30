@@ -347,3 +347,57 @@ export async function adminDeleteAttachment(attachmentId: string): Promise<void>
   if (attachment.task.assigneeId)
     revalidatePath(`/admin/collaborators/${attachment.task.assigneeId}`);
 }
+
+// ---------- Project notes (admin-private, per-project) ----------
+
+const noteSchema = z.object({
+  projectId: z.string().min(1),
+  body: z.string().trim().min(1, 'Scrivi qualcosa').max(5000),
+});
+
+export async function createProjectNote(formData: FormData): Promise<{ error?: string } | void> {
+  const admin = await requireAdmin();
+  let data;
+  try {
+    data = noteSchema.parse({
+      projectId: formData.get('projectId'),
+      body: formData.get('body'),
+    });
+  } catch (err) {
+    if (err instanceof z.ZodError) return { error: err.issues[0]?.message ?? 'Dati non validi' };
+    throw err;
+  }
+  await prisma.projectNote.create({
+    data: { projectId: data.projectId, authorId: admin.id, body: data.body },
+  });
+  revalidatePath(`/admin/projects/${data.projectId}`);
+}
+
+export async function updateProjectNote(
+  noteId: string,
+  body: string,
+): Promise<{ error?: string } | void> {
+  const admin = await requireAdmin();
+  const trimmed = body.trim();
+  if (!trimmed) return { error: 'Scrivi qualcosa' };
+  if (trimmed.length > 5000) return { error: 'Troppo lunga (max 5000 caratteri)' };
+  const note = await prisma.projectNote.findFirst({
+    where: { id: noteId, authorId: admin.id },
+  });
+  if (!note) return { error: 'Nota non trovata' };
+  await prisma.projectNote.update({
+    where: { id: noteId },
+    data: { body: trimmed },
+  });
+  revalidatePath(`/admin/projects/${note.projectId}`);
+}
+
+export async function deleteProjectNote(noteId: string): Promise<void> {
+  const admin = await requireAdmin();
+  const note = await prisma.projectNote.findFirst({
+    where: { id: noteId, authorId: admin.id },
+  });
+  if (!note) return;
+  await prisma.projectNote.delete({ where: { id: noteId } });
+  revalidatePath(`/admin/projects/${note.projectId}`);
+}

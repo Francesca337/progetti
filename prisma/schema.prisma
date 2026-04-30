@@ -56,6 +56,7 @@ model User {
 
   tasksAssigned    Task[]            @relation("AssigneeTasks")
   projects         Project[]         @relation("ProjectOwner")
+  projectNotes     ProjectNote[]     @relation("ProjectNoteAuthor")
   gmailIntegration GmailIntegration?
   inboxItems       InboxItem[]       @relation("UserInbox")
 
@@ -78,6 +79,7 @@ model Project {
   updatedAt         DateTime @updatedAt
 
   tasks Task[]
+  notes ProjectNote[]
 
   @@index([ownerId])
   @@index([archived])
@@ -166,4 +168,19 @@ model InboxItem {
 
   @@unique([userId, source, sourceId])
   @@index([userId, status])
+}
+
+// Per-admin private notes scoped to a project. Visible only to the
+// admin who wrote them; never surfaced to collaborators.
+model ProjectNote {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation("ProjectNoteAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId, authorId])
 }

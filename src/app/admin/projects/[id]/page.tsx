@@ -7,6 +7,7 @@ import { NewTaskButton } from '../../_components/NewTaskButton';
 import { CompletedSection } from '@/app/_components/CompletedSection';
 import { STATUS_LABELS, STATUS_ORDER } from '@/lib/format';
 import { ProjectHeader } from './header';
+import { NotesSection } from './NotesSection';
 
 const ACTIVE_STATUSES = STATUS_ORDER.filter((s) => s !== 'DONE');
 
@@ -18,7 +19,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
 
   const me = { id: admin.id, name: admin.name };
 
-  const [tasks, allProjects, collaborators] = await Promise.all([
+  const [tasks, allProjects, collaborators, notes] = await Promise.all([
     prisma.task.findMany({
       where: { projectId: id, isPrivate: false },
       include: { project: true, assignee: true, attachments: true },
@@ -34,6 +35,10 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
       orderBy: { name: 'asc' },
       select: { id: true, name: true },
     }),
+    prisma.projectNote.findMany({
+      where: { projectId: id, authorId: admin.id },
+      orderBy: { createdAt: 'desc' },
+    }),
   ]);
 
   const tasksByStatus = new Map<string, typeof tasks>();
@@ -47,6 +52,16 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
       </Link>
 
       <ProjectHeader project={project} />
+
+      <NotesSection
+        projectId={project.id}
+        notes={notes.map((n) => ({
+          id: n.id,
+          body: n.body,
+          createdAt: n.createdAt.toISOString(),
+          updatedAt: n.updatedAt.toISOString(),
+        }))}
+      />
 
       <div className="flex justify-end">
         <NewTaskButton
