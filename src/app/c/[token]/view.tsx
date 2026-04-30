@@ -10,6 +10,7 @@ import {
   formatBytes,
   formatDate,
 } from '@/lib/format';
+import { CompletedSection } from '@/app/_components/CompletedSection';
 import {
   createCollaboratorTask,
   deleteCollaboratorTask,
@@ -83,12 +84,21 @@ export function CollaboratorView({
           ) : (
             Array.from(assignedByProject.entries()).map(([projectId, group]) => {
               const project = group[0].project;
+              const active = group.filter((t) => t.status !== 'DONE');
+              const done = group.filter((t) => t.status === 'DONE');
               return (
                 <div key={projectId} className="space-y-3">
                   <ProjectHeading project={project} count={group.length} />
-                  {group.map((t) => (
+                  {active.map((t) => (
                     <AssignedTaskCard key={t.id} task={t} token={token} />
                   ))}
+                  {done.length > 0 && (
+                    <CompletedSection count={done.length}>
+                      {done.map((t) => (
+                        <AssignedTaskCard key={t.id} task={t} token={token} muted />
+                      ))}
+                    </CompletedSection>
+                  )}
                 </div>
               );
             })
@@ -118,10 +128,12 @@ export function CollaboratorView({
           ) : (
             Array.from(privateByProject.entries()).map(([projectId, group]) => {
               const project = group[0].project;
+              const active = group.filter((t) => t.status !== 'DONE');
+              const done = group.filter((t) => t.status === 'DONE');
               return (
                 <div key={projectId} className="space-y-3">
                   <ProjectHeading project={project} count={group.length} />
-                  {group.map((t) => (
+                  {active.map((t) => (
                     <PrivateTaskCard
                       key={t.id}
                       task={t}
@@ -129,6 +141,19 @@ export function CollaboratorView({
                       availableProjects={availableProjects}
                     />
                   ))}
+                  {done.length > 0 && (
+                    <CompletedSection count={done.length}>
+                      {done.map((t) => (
+                        <PrivateTaskCard
+                          key={t.id}
+                          task={t}
+                          token={token}
+                          availableProjects={availableProjects}
+                          muted
+                        />
+                      ))}
+                    </CompletedSection>
+                  )}
                 </div>
               );
             })
@@ -161,13 +186,25 @@ function ProjectHeading({
   );
 }
 
-function AssignedTaskCard({ task, token }: { task: TaskWithRelations; token: string }) {
+function AssignedTaskCard({
+  task,
+  token,
+  muted = false,
+}: {
+  task: TaskWithRelations;
+  token: string;
+  muted?: boolean;
+}) {
   const [pending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
   const severity = deadlineSeverity(task.deadline, task.status);
 
   return (
-    <article className="card p-5">
+    <article
+      className={
+        muted ? 'p-5 rounded-3xl bg-ink-50 border border-ink-100 opacity-80' : 'card p-5'
+      }
+    >
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2 mb-2">
@@ -175,11 +212,13 @@ function AssignedTaskCard({ task, token }: { task: TaskWithRelations; token: str
             {task.deadline && (
               <span
                 className={`text-xs ${
-                  severity === 'overdue'
-                    ? 'text-brand'
-                    : severity === 'due-soon'
-                      ? 'text-amber-700'
-                      : 'text-ink-500'
+                  muted
+                    ? 'text-ink-400'
+                    : severity === 'overdue'
+                      ? 'text-brand'
+                      : severity === 'due-soon'
+                        ? 'text-amber-700'
+                        : 'text-ink-500'
                 }`}
               >
                 {severity === 'overdue' ? 'Era per il ' : 'Deadline: '}
@@ -187,7 +226,15 @@ function AssignedTaskCard({ task, token }: { task: TaskWithRelations; token: str
               </span>
             )}
           </div>
-          <h3 className="font-semibold text-ink-900 text-base">{task.title}</h3>
+          <h3
+            className={
+              muted
+                ? 'font-medium text-ink-500 text-base line-through decoration-ink-300'
+                : 'font-semibold text-ink-900 text-base'
+            }
+          >
+            {task.title}
+          </h3>
           {task.description && open && (
             <p className="mt-2 text-sm text-ink-600 whitespace-pre-wrap">{task.description}</p>
           )}
@@ -231,10 +278,12 @@ function PrivateTaskCard({
   task,
   token,
   availableProjects,
+  muted = false,
 }: {
   task: TaskWithRelations;
   token: string;
   availableProjects: ProjectOption[];
+  muted?: boolean;
 }) {
   const [pending, startTransition] = useTransition();
   const [editing, setEditing] = useState(false);
@@ -264,7 +313,11 @@ function PrivateTaskCard({
   }
 
   return (
-    <article className="card p-5">
+    <article
+      className={
+        muted ? 'p-5 rounded-3xl bg-ink-50 border border-ink-100 opacity-80' : 'card p-5'
+      }
+    >
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2 mb-2">
@@ -273,11 +326,13 @@ function PrivateTaskCard({
             {task.deadline && (
               <span
                 className={`text-xs ${
-                  severity === 'overdue'
-                    ? 'text-brand'
-                    : severity === 'due-soon'
-                      ? 'text-amber-700'
-                      : 'text-ink-500'
+                  muted
+                    ? 'text-ink-400'
+                    : severity === 'overdue'
+                      ? 'text-brand'
+                      : severity === 'due-soon'
+                        ? 'text-amber-700'
+                        : 'text-ink-500'
                 }`}
               >
                 {severity === 'overdue' ? 'Era per il ' : 'Deadline: '}
@@ -285,9 +340,25 @@ function PrivateTaskCard({
               </span>
             )}
           </div>
-          <h3 className="font-semibold text-ink-900 text-base">{task.title}</h3>
+          <h3
+            className={
+              muted
+                ? 'font-medium text-ink-500 text-base line-through decoration-ink-300'
+                : 'font-semibold text-ink-900 text-base'
+            }
+          >
+            {task.title}
+          </h3>
           {task.description && (
-            <p className="mt-2 text-sm text-ink-600 whitespace-pre-wrap">{task.description}</p>
+            <p
+              className={
+                muted
+                  ? 'mt-2 text-sm text-ink-400 whitespace-pre-wrap'
+                  : 'mt-2 text-sm text-ink-600 whitespace-pre-wrap'
+              }
+            >
+              {task.description}
+            </p>
           )}
         </div>
         <div className="flex flex-col gap-2 items-end shrink-0">

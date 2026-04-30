@@ -33,6 +33,7 @@ export function TaskRow({
   me,
   showProject = true,
   showAssignee = true,
+  muted = false,
 }: {
   task: FullTask;
   projects: Pick<Project, 'id' | 'name' | 'isPersonalBacklog'>[];
@@ -40,12 +41,13 @@ export function TaskRow({
   me?: Pick<User, 'id' | 'name'>;
   showProject?: boolean;
   showAssignee?: boolean;
+  muted?: boolean;
 }) {
   const [editing, setEditing] = useState(false);
   const [showAttachments, setShowAttachments] = useState(false);
   const [pending, startTransition] = useTransition();
   const severity = deadlineSeverity(task.deadline, task.status);
-  const mine = !!me && task.assigneeId === me.id;
+  const mine = !muted && !!me && task.assigneeId === me.id;
 
   if (editing) {
     return (
@@ -79,9 +81,11 @@ export function TaskRow({
   return (
     <article
       className={
-        mine
-          ? 'p-5 rounded-2xl bg-brand text-white border border-brand shadow-soft transition'
-          : 'card-flat p-5 hover:shadow-soft transition'
+        muted
+          ? 'p-5 rounded-3xl bg-ink-50 border border-ink-100 transition opacity-80'
+          : mine
+            ? 'p-5 rounded-2xl bg-brand text-white border border-brand shadow-soft transition'
+            : 'card-flat p-5 hover:shadow-soft transition'
       }
     >
       <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -144,7 +148,11 @@ export function TaskRow({
           </div>
           <h3
             className={
-              mine ? 'font-semibold text-white text-base' : 'font-semibold text-ink-900 text-base'
+              muted
+                ? 'font-medium text-ink-500 text-base line-through decoration-ink-300'
+                : mine
+                  ? 'font-semibold text-white text-base'
+                  : 'font-semibold text-ink-900 text-base'
             }
           >
             {task.title}
@@ -152,9 +160,11 @@ export function TaskRow({
           {task.description && (
             <p
               className={
-                mine
-                  ? 'mt-1.5 text-sm text-white/85 whitespace-pre-wrap'
-                  : 'mt-1.5 text-sm text-ink-600 whitespace-pre-wrap'
+                muted
+                  ? 'mt-1.5 text-sm text-ink-400 whitespace-pre-wrap'
+                  : mine
+                    ? 'mt-1.5 text-sm text-white/85 whitespace-pre-wrap'
+                    : 'mt-1.5 text-sm text-ink-600 whitespace-pre-wrap'
               }
             >
               {task.description}

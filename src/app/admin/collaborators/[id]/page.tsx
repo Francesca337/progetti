@@ -4,6 +4,7 @@ import { prisma } from '@/lib/db';
 import { requireAdmin } from '@/lib/auth';
 import { TaskRow } from '../../_components/TaskRow';
 import { NewTaskButton } from '../../_components/NewTaskButton';
+import { CompletedSection } from '@/app/_components/CompletedSection';
 
 export default async function CollaboratorDetail({
   params,
@@ -70,6 +71,8 @@ export default async function CollaboratorDetail({
 
       {Array.from(tasksByProject.entries()).map(([projectId, group]) => {
         const project = group[0].project;
+        const active = group.filter((t) => t.status !== 'DONE');
+        const done = group.filter((t) => t.status === 'DONE');
         return (
           <section key={projectId} className="space-y-4">
             <div className="flex items-center gap-3">
@@ -82,7 +85,7 @@ export default async function CollaboratorDetail({
               <span className="text-xs text-ink-500">{group.length} task</span>
             </div>
             <div className="space-y-2">
-              {group.map((t) => (
+              {active.map((t) => (
                 <TaskRow
                   key={t.id}
                   task={t}
@@ -93,6 +96,19 @@ export default async function CollaboratorDetail({
                 />
               ))}
             </div>
+            <CompletedSection count={done.length}>
+              {done.map((t) => (
+                <TaskRow
+                  key={t.id}
+                  task={t}
+                  projects={projects}
+                  collaborators={collaborators}
+                  me={me}
+                  showAssignee={false}
+                  muted
+                />
+              ))}
+            </CompletedSection>
           </section>
         );
       })}

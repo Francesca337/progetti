@@ -4,8 +4,11 @@ import { prisma } from '@/lib/db';
 import { requireAdmin } from '@/lib/auth';
 import { TaskRow } from '../../_components/TaskRow';
 import { NewTaskButton } from '../../_components/NewTaskButton';
+import { CompletedSection } from '@/app/_components/CompletedSection';
 import { STATUS_LABELS, STATUS_ORDER } from '@/lib/format';
 import { ProjectHeader } from './header';
+
+const ACTIVE_STATUSES = STATUS_ORDER.filter((s) => s !== 'DONE');
 
 export default async function ProjectDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -60,7 +63,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
         </div>
       )}
 
-      {STATUS_ORDER.map((status) => {
+      {ACTIVE_STATUSES.map((status) => {
         const group = tasksByStatus.get(status) ?? [];
         if (group.length === 0) return null;
         return (
@@ -85,6 +88,21 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
           </section>
         );
       })}
+
+      <CompletedSection count={tasksByStatus.get('DONE')?.length ?? 0}>
+        {(tasksByStatus.get('DONE') ?? []).map((t) => (
+          <div key={t.id} id={`task-${t.id}`}>
+            <TaskRow
+              task={t}
+              projects={allProjects}
+              collaborators={collaborators}
+              me={me}
+              showProject={false}
+              muted
+            />
+          </div>
+        ))}
+      </CompletedSection>
     </div>
   );
 }

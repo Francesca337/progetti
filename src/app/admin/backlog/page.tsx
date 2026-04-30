@@ -2,8 +2,11 @@ import { prisma } from '@/lib/db';
 import { requireAdmin } from '@/lib/auth';
 import { TaskRow } from '../_components/TaskRow';
 import { NewTaskButton } from '../_components/NewTaskButton';
+import { CompletedSection } from '@/app/_components/CompletedSection';
 import { BacklogProjectsClient } from './client';
 import { STATUS_LABELS, STATUS_ORDER } from '@/lib/format';
+
+const ACTIVE_STATUSES = STATUS_ORDER.filter((s) => s !== 'DONE');
 
 export default async function BacklogPage() {
   const admin = await requireAdmin();
@@ -176,15 +179,35 @@ export default async function BacklogPage() {
               {group.length === 0 ? (
                 <div className="card-flat p-6 text-sm text-ink-500">Ancora niente qui.</div>
               ) : (
-                STATUS_ORDER.map((status) => {
-                  const subset = group.filter((t) => t.status === status);
-                  if (subset.length === 0) return null;
-                  return (
-                    <div key={status} className="space-y-2">
-                      <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">
-                        {STATUS_LABELS[status]} ({subset.length})
+                <>
+                  {ACTIVE_STATUSES.map((status) => {
+                    const subset = group.filter((t) => t.status === status);
+                    if (subset.length === 0) return null;
+                    return (
+                      <div key={status} className="space-y-2">
+                        <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">
+                          {STATUS_LABELS[status]} ({subset.length})
+                        </div>
+                        {subset.map((t) => (
+                          <TaskRow
+                            key={t.id}
+                            task={t}
+                            projects={allProjectsForForm}
+                            collaborators={collaborators}
+                            me={me}
+                            showProject={false}
+                            showAssignee={false}
+                          />
+                        ))}
                       </div>
-                      {subset.map((t) => (
+                    );
+                  })}
+                  <CompletedSection
+                    count={group.filter((t) => t.status === 'DONE').length}
+                  >
+                    {group
+                      .filter((t) => t.status === 'DONE')
+                      .map((t) => (
                         <TaskRow
                           key={t.id}
                           task={t}
@@ -193,11 +216,11 @@ export default async function BacklogPage() {
                           me={me}
                           showProject={false}
                           showAssignee={false}
+                          muted
                         />
                       ))}
-                    </div>
-                  );
-                })
+                  </CompletedSection>
+                </>
               )}
             </div>
           );
