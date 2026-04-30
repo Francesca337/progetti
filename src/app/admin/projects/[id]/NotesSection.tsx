@@ -5,7 +5,7 @@ import {
   createProjectNote,
   deleteProjectNote,
   updateProjectNote,
-} from '../actions';
+} from '../../actions';
 
 type Note = {
   id: string;
