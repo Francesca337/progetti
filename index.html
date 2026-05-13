@@ -654,9 +654,9 @@
      ============================================================ */
   .phase-outcome {
     position: absolute;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -100%);
     background: var(--bg);
-    padding: 6px 12px;
+    padding: 6px 12px 8px;
     max-width: 240px;
     text-align: center;
     font-family: var(--serif);
@@ -1609,7 +1609,10 @@
       const b = colEls[i + 1];
       const ax = a.offsetLeft + a.offsetWidth;
       const bx = b.offsetLeft;
-      const y = a.offsetTop + 24;
+      // y sits 30px below the column top — chip is anchored by its bottom
+      // so it grows upward into the empty header padding without overlapping
+      // the big phase number "01" / "02"
+      const y = a.offsetTop + 30;
       const midX = (ax + bx) / 2;
 
       const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
