@@ -177,11 +177,167 @@
     overscroll-behavior: contain;
   }
   .track {
-    display: flex; align-items: flex-start;
-    gap: var(--gap);
+    display: flex;
+    flex-direction: column;
+    gap: 38px;
     min-width: max-content;
     position: relative;
     padding-bottom: 32px;
+  }
+  .phases-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gap);
+  }
+
+  /* ============================================================
+     SWIM LANES (always-on layers below the phase columns)
+     ============================================================ */
+  .lane {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .lane-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 4px;
+    align-self: flex-start;
+  }
+  .lane-icon {
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    background: var(--lane-fg, var(--ink));
+    color: #FFFFFF;
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    font-size: 13px;
+  }
+  .lane-icon i.ti { color: #FFFFFF; }
+  .lane-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+  }
+  .lane-body {
+    display: flex;
+    gap: var(--gap);
+    align-items: stretch;
+  }
+  .lane-segment {
+    width: var(--col-w);
+    flex: 0 0 var(--col-w);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .lane-card {
+    background: var(--lane-bg, #F6F1E5);
+    color: var(--lane-fg, var(--ink));
+    border-radius: 16px;
+    padding: 14px 16px 15px;
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .lane-card.empty {
+    background: transparent;
+    border: 1px dashed var(--hairline-soft);
+    align-items: center; justify-content: center;
+    color: var(--ink-fade);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12.5px;
+    min-height: 60px;
+  }
+  .lane-card.quiet {
+    background: transparent;
+    border: 1px dashed var(--hairline-soft);
+    color: var(--ink-muted);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12.5px;
+    align-items: center; justify-content: center;
+    min-height: 60px;
+  }
+  .lane-text {
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.4;
+    font-weight: 500;
+  }
+  .lane-storici-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--sans);
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    margin-top: 2px;
+    padding-top: 8px;
+    border-top: 1px dashed currentColor;
+    opacity: 0.85;
+  }
+
+  /* Laura lane palette */
+  .lane.lane-laura {
+    --lane-bg: var(--sys-man-soft);
+    --lane-fg: var(--sys-man);
+  }
+
+  /* DEM lane palette */
+  .lane.lane-dem {
+    --lane-bg: var(--sys-mail-soft);
+    --lane-fg: var(--sys-mail);
+  }
+  .dem-card {
+    background: var(--lane-bg);
+    color: var(--lane-fg);
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .dem-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px -10px rgba(10,10,10,0.14);
+  }
+  .dem-card-icon {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 9px;
+    background: var(--lane-fg);
+    color: #FFFFFF;
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    font-size: 13px;
+  }
+  .dem-card-icon i.ti { color: #FFFFFF; }
+  .dem-card-info { flex: 1; min-width: 0; }
+  .dem-card-title {
+    font-family: var(--sans);
+    font-size: 12.5px;
+    color: var(--ink);
+    font-weight: 500;
+    line-height: 1.3;
+    margin-bottom: 2px;
+  }
+  .dem-card-timing {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    line-height: 1.3;
   }
 
   /* ============================================================
@@ -1055,6 +1211,100 @@
   // Touchpoint index (built after render): tp-id → { tp, phase }
   const touchpointIndex = new Map();
 
+  // ============================================================
+  // SWIM LANES — always-on layers running across all phases
+  // ============================================================
+  const laura = {
+    label: "Presidio Laura",
+    icon: "ti-user",
+    storiciFromPhase: 7,
+    storiciNote: "Check-in 1:1 storici",
+    segments: {
+      1: "Costruisce la lista enoteche e fa il primo contatto manuale.",
+      2: "Telefonate di validazione, raccolta email per gli outbound.",
+      3: "Telefonata di proposta dell'appuntamento.",
+      4: "Conduce l'incontro: ascolto, presentazione, listino.",
+      5: "Follow-up WhatsApp a metà periodo per non perdere il filo.",
+      6: "Chiude l'ordine, cura i No verso la newsletter.",
+      7: "Onboarding personale del nuovo rivenditore.",
+      8: "Cura WhatsApp settimanale + presidio personale storici.",
+      9: "Raccoglie feedback e propone la campagna successiva.",
+    },
+  };
+
+  const dems = {
+    label: "DEM MailUp",
+    icon: "ti-mail",
+    startPhase: 2,
+    items: {
+      2: [
+        { id: "dem-1", title: "DEM Benvenuto progetto Giotto",
+          timing: "Settimana dopo l'iscrizione", system: "email", icon: "ti-mail",
+          actor: "auto",
+          assets: [
+            { type: "doc", title: "Brief DEM Benvenuto", url: "#" },
+            { type: "image", title: "Visual header DEM", url: "#" },
+          ]},
+      ],
+      3: [
+        { id: "dem-2", title: "DEM Storia del progetto sociale",
+          timing: "+2 settimane", system: "email", icon: "ti-newspaper",
+          actor: "auto",
+          assets: [
+            { type: "doc", title: "Copy DEM editoriale", url: "#" },
+            { type: "image", title: "Foto laboratorio", url: "#" },
+          ]},
+      ],
+      4: [
+        { id: "dem-3", title: "DEM Linea Natale e plus retail",
+          timing: "Pre-incontro", system: "email", icon: "ti-mail",
+          actor: "auto",
+          assets: [
+            { type: "pdf", title: "Schede prodotti Natale 2026", url: "#" },
+          ]},
+      ],
+      5: [
+        { id: "dem-4", title: "DEM Reminder commerciale soft",
+          timing: "Metà fase", system: "email", icon: "ti-mail",
+          actor: "auto",
+          assets: [
+            { type: "doc", title: "Copy DEM follow-up", url: "#" },
+          ]},
+      ],
+      7: [
+        { id: "dem-5", title: "DEM Welcome rivenditore",
+          timing: "Subito dopo conferma ordine", system: "email", icon: "ti-mail",
+          actor: "auto",
+          assets: [
+            { type: "doc", title: "Template DEM benvenuto rivenditore", url: "#" },
+          ]},
+      ],
+      8: [
+        { id: "dem-6", title: "DEM Lancio campagna Natale",
+          timing: "Inizio Ottobre", system: "email", icon: "ti-mail",
+          actor: "auto",
+          assets: [
+            { type: "image", title: "Visual lancio Natale", url: "#" },
+            { type: "doc", title: "Copy DEM lancio", url: "#" },
+          ]},
+        { id: "dem-7", title: "DEM Push commerciale fine campagna",
+          timing: "Metà Novembre", system: "email", icon: "ti-chart-bar",
+          actor: "auto",
+          assets: [
+            { type: "doc", title: "Brief DEM push", url: "#" },
+          ]},
+      ],
+      9: [
+        { id: "dem-8", title: "DEM Wrap-up + teaser nuova campagna",
+          timing: "Inizio Gennaio", system: "email", icon: "ti-arrow-right",
+          actor: "auto",
+          assets: [
+            { type: "doc", title: "Brief teaser Colomba/Pasqua 2027", url: "#" },
+          ]},
+      ],
+    },
+  };
+
   const phases = [
     {
       n: 1, name: "Generazione lead", period: "Maggio – Giugno 2026",
@@ -1456,12 +1706,79 @@
   }
 
   // ============================================================
+  // LANES (always-on layers below the phase columns)
+  // ============================================================
+  function renderLauraLane() {
+    const segments = phases.map(p => {
+      const text = laura.segments[p.n];
+      const showStorici = p.n >= laura.storiciFromPhase;
+      if (!text) {
+        return `<div class="lane-segment"><div class="lane-card empty">non attivo</div></div>`;
+      }
+      return `
+        <div class="lane-segment">
+          <div class="lane-card">
+            <div class="lane-text">${text}</div>
+            ${showStorici ? `<div class="lane-storici-tag">+ ${laura.storiciNote}</div>` : ""}
+          </div>
+        </div>`;
+    }).join("");
+    return `
+      <div class="lane lane-laura">
+        <div class="lane-header">
+          <span class="lane-icon"><i class="ti ${laura.icon}"></i></span>
+          <span class="lane-label">${laura.label}</span>
+        </div>
+        <div class="lane-body">${segments}</div>
+      </div>`;
+  }
+
+  function renderDemLane() {
+    const segments = phases.map(p => {
+      const items = dems.items[p.n] || [];
+      if (p.n < dems.startPhase) {
+        return `<div class="lane-segment"><div class="lane-card empty">non attivo</div></div>`;
+      }
+      if (!items.length) {
+        return `<div class="lane-segment"><div class="lane-card quiet">— nessuna DEM</div></div>`;
+      }
+      return `
+        <div class="lane-segment">
+          ${items.map(d => {
+            // Register DEM in the same touchpointIndex so it can use the asset drawer
+            touchpointIndex.set(d.id, { tp: { ...d, text: d.title }, phase: p });
+            return `
+              <div class="dem-card" data-tp-id="${d.id}" tabindex="0" role="button" aria-label="Vedi asset DEM">
+                <span class="dem-card-icon"><i class="ti ${d.icon}"></i></span>
+                <div class="dem-card-info">
+                  <div class="dem-card-title">${d.title}</div>
+                  <div class="dem-card-timing">${d.timing}</div>
+                </div>
+              </div>`;
+          }).join("")}
+        </div>`;
+    }).join("");
+    return `
+      <div class="lane lane-dem">
+        <div class="lane-header">
+          <span class="lane-icon"><i class="ti ${dems.icon}"></i></span>
+          <span class="lane-label">${dems.label}</span>
+        </div>
+        <div class="lane-body">${segments}</div>
+      </div>`;
+  }
+
+  // ============================================================
   // BOOT
   // ============================================================
   const track = document.getElementById("track");
   const nav = document.getElementById("nav");
 
-  track.insertAdjacentHTML("beforeend", phases.map(renderColumn).join(""));
+  track.insertAdjacentHTML("beforeend",
+    `<div class="phases-row" id="phasesRow">${phases.map(renderColumn).join("")}</div>` +
+    renderLauraLane() +
+    renderDemLane()
+  );
 
   nav.innerHTML = phases.map(p => `
     <button class="pill" data-target="phase-${p.n}">
@@ -1586,9 +1903,9 @@
     panel.setAttribute("aria-hidden", "true");
   }
 
-  // Click delegation on rail nodes
+  // Click delegation on touchpoint cards AND DEM cards
   track.addEventListener("click", (e) => {
-    const node = e.target.closest(".rail-node");
+    const node = e.target.closest(".rail-node, .dem-card");
     if (!node) return;
     const tpId = node.dataset.tpId;
     if (tpId) openPanel(tpId);
@@ -1597,7 +1914,7 @@
   // Keyboard activation
   track.addEventListener("keydown", (e) => {
     if (e.key !== "Enter" && e.key !== " ") return;
-    const node = e.target.closest(".rail-node");
+    const node = e.target.closest(".rail-node, .dem-card");
     if (!node) return;
     e.preventDefault();
     const tpId = node.dataset.tpId;
