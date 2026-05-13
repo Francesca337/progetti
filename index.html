@@ -44,12 +44,12 @@
     --actor-auto:    #8E7848;
     --actor-sched:   #4F6B2C;
 
-    --sys-zoho:   #2A3D5C;
-    --sys-wa:     #4A5A2A;
-    --sys-mail:   #7A4A1A;
-    --sys-man:    #7A3920;
-    --sys-ads:    #4F4677;
-    --sys-log:    #4F4738;
+    --sys-zoho:   #2A3D5C;  --sys-zoho-soft: #E5ECF4;
+    --sys-wa:     #4A5A2A;  --sys-wa-soft:   #ECF1D8;
+    --sys-mail:   #B36A1F;  --sys-mail-soft: #FBE6CC;
+    --sys-man:    #B5421E;  --sys-man-soft:  #FBDDC9;
+    --sys-ads:    #6757A0;  --sys-ads-soft:  #ECE6F4;
+    --sys-log:    #6F6452;  --sys-log-soft:  #EFE9DC;
 
     --branch-yes:    #4F6B2C;
     --branch-maybe:  #A87A1E;
@@ -191,24 +191,30 @@
     width: var(--col-w);
     flex: 0 0 var(--col-w);
     background: var(--card);
-    border-radius: 0;
+    border-radius: 28px;
     overflow: hidden;
     display: flex; flex-direction: column;
     position: relative;
     z-index: 2;
+    box-shadow: 0 1px 0 rgba(168,144,96,0.05),
+                0 18px 44px -28px rgba(10,10,10,0.10);
   }
-  .col.current { box-shadow: 0 0 0 1px var(--gold) inset; }
+  .col.current {
+    box-shadow: 0 0 0 1.5px var(--gold) inset,
+                0 1px 0 rgba(168,144,96,0.05),
+                0 18px 44px -22px rgba(168,144,96,0.22);
+  }
 
   /* Column header (light, editorial) */
   .col-header {
-    padding: 36px 32px 26px;
+    padding: 32px 28px 24px;
     position: relative;
     background: var(--card);
   }
   .col-header::after {
     content: ""; position: absolute;
-    left: 32px; right: 32px; bottom: 0;
-    height: 1px; background: var(--hairline);
+    left: 28px; right: 28px; bottom: 0;
+    height: 1px; background: var(--hairline-soft);
   }
   .here-dot {
     position: absolute; top: 30px; right: 32px;
@@ -296,16 +302,15 @@
   /* Entry annotation (storici) */
   .annotation {
     font-family: var(--sans);
-    font-size: 12.5px;
+    font-size: 12px;
     line-height: 1.5;
     color: var(--gold-deep);
-    background: transparent;
+    background: var(--bg);
     border: none;
-    border-top: 1px solid var(--hairline-soft);
-    border-bottom: 1px solid var(--hairline-soft);
-    padding: 12px 0 12px 28px;
+    padding: 14px 16px 14px 44px;
     position: relative;
     letter-spacing: 0.1px;
+    border-radius: 14px;
   }
   .annotation::before {
     content: "ENTRY POINT";
@@ -314,12 +319,12 @@
     font-size: 9.5px;
     color: var(--gold);
     letter-spacing: 2px;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 4px;
   }
   .annotation i.ti {
     position: absolute;
-    left: 0; top: 30px;
+    left: 16px; top: 14px;
     font-size: 18px;
     color: var(--gold);
   }
@@ -329,89 +334,60 @@
      ============================================================ */
   .stream {
     display: flex; flex-direction: column;
-    gap: 0;
+    gap: 14px;
   }
-  .stream + .stream { margin-top: 6px; }
+  .stream + .stream { margin-top: 10px; }
   .stream-header {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    margin-bottom: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px 6px 12px;
+    background: var(--bg);
+    border-radius: 999px;
+    align-self: flex-start;
+  }
+  .stream-header::before {
+    content: "↘";
+    color: var(--gold-deep);
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 400;
+  }
+  .stream.loop .stream-header::before {
+    content: "↻";
   }
   .stream-name {
     font-family: var(--sans);
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 600;
     color: var(--ink);
-    letter-spacing: 2.2px;
+    letter-spacing: 1.8px;
     text-transform: uppercase;
+    line-height: 1;
   }
-  .stream-caption {
-    font-family: var(--serif);
-    font-style: italic;
-    font-weight: 400;
-    font-size: 13.5px;
-    color: var(--ink-muted);
-    letter-spacing: 0.1px;
-  }
-  .stream.loop .stream-name::before {
-    content: "↻  ";
-    color: var(--gold);
-    font-weight: 400;
-  }
+  .stream-caption { display: none; }
 
   /* ============================================================
-     RAIL (vertical timeline)
+     RAIL (cards stack — no line, no dots)
      ============================================================ */
   .rail {
-    position: relative;
-    padding: 6px 0 0 28px;
     display: flex; flex-direction: column;
-  }
-  .rail::before {
-    content: "";
-    position: absolute;
-    left: 6px;
-    top: 16px;
-    bottom: 10px;
-    width: 1px;
-    background: var(--rule);
-  }
-  .rail-node {
-    position: relative;
-    padding: 0 0 18px 0;
-  }
-  .rail-node:last-child { padding-bottom: 0; }
-  .rail-node::before {
-    content: "";
-    position: absolute;
-    left: -25px;
-    top: 8px;
-    width: 9px; height: 9px;
-    border-radius: 50%;
-    background: var(--card);
-    border: 1.5px solid var(--ink-fade);
-    box-sizing: border-box;
-    z-index: 2;
-  }
-  .rail-node.actor-manual::before {
-    background: var(--actor-manual);
-    border-color: var(--actor-manual);
-  }
-  .rail-node.actor-auto::before {
-    background: var(--gold);
-    border-color: var(--gold);
-  }
-  .rail-node.actor-sched::before {
-    background: var(--actor-sched);
-    border-color: var(--actor-sched);
+    gap: 10px;
   }
 
-  /* Sequence link between two nodes */
+  /* Sequence link between two cards */
   .rail-link {
-    position: relative;
-    padding: 0 0 14px 0;
-    margin-top: -8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+  }
+  .rail-link::before {
+    content: "";
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
   }
   .rail-link .chip {
     display: inline-flex;
@@ -433,41 +409,47 @@
   }
 
   /* ============================================================
-     NODE (touchpoint)
+     NODE (touchpoint card)
      ============================================================ */
   .node {
     display: flex; flex-direction: column;
-    gap: 8px;
+    gap: 10px;
+    padding: 16px 20px 16px 16px;
+    border-radius: 18px;
+    background: var(--node-bg, #F6F1E5);
   }
   .node-head {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 12px;
+    padding-right: 20px;
   }
   .node-icon {
     flex-shrink: 0;
-    width: 28px; height: 28px;
-    border-radius: 50%;
+    width: 36px; height: 36px;
+    border-radius: 11px;
     display: inline-flex;
     align-items: center; justify-content: center;
-    font-size: 14px;
-    margin-top: -2px;
-    border: 1px solid currentColor;
-    background: transparent;
+    font-size: 17px;
+    border: none;
+    background: var(--node-fg, var(--ink-soft));
+    color: #FFFFFF;
   }
+  .node-icon i.ti { color: #FFFFFF; }
   .node-text {
     font-family: var(--sans);
-    font-size: 15px;
-    line-height: 1.4;
+    font-size: 14.5px;
+    line-height: 1.35;
     color: var(--ink);
     flex: 1;
-    font-weight: 400;
+    font-weight: 500;
+    letter-spacing: -0.1px;
   }
   .node-meta {
     display: flex; flex-wrap: wrap;
     align-items: center;
-    gap: 4px 12px;
-    padding-left: 40px;
+    gap: 4px 14px;
+    padding-left: 48px;
     font-size: 11.5px;
   }
 
@@ -529,11 +511,11 @@
     font-weight: 400;
     font-size: 13px;
     color: var(--ink-muted);
-    padding-left: 40px;
+    padding-left: 48px;
     line-height: 1.45;
   }
 
-  /* System colors */
+  /* System color tokens — used both on cards (--node-bg/fg) and badges */
   .sys-zoho      { color: var(--sys-zoho); }
   .sys-whatsapp  { color: var(--sys-wa); }
   .sys-email     { color: var(--sys-mail); }
@@ -541,12 +523,13 @@
   .sys-ads       { color: var(--sys-ads); }
   .sys-logistica { color: var(--sys-log); }
 
-  .node-icon.sys-zoho      { color: var(--sys-zoho); }
-  .node-icon.sys-whatsapp  { color: var(--sys-wa); }
-  .node-icon.sys-email     { color: var(--sys-mail); }
-  .node-icon.sys-manuale   { color: var(--sys-man); }
-  .node-icon.sys-ads       { color: var(--sys-ads); }
-  .node-icon.sys-logistica { color: var(--sys-log); }
+  /* Card pastel backgrounds + filled icon color (driven by data-system) */
+  .rail-node[data-system="zoho"]      { --node-bg: var(--sys-zoho-soft); --node-fg: var(--sys-zoho); }
+  .rail-node[data-system="whatsapp"]  { --node-bg: var(--sys-wa-soft);   --node-fg: var(--sys-wa); }
+  .rail-node[data-system="email"]     { --node-bg: var(--sys-mail-soft); --node-fg: var(--sys-mail); }
+  .rail-node[data-system="manuale"]   { --node-bg: var(--sys-man-soft);  --node-fg: var(--sys-man); }
+  .rail-node[data-system="ads"]       { --node-bg: var(--sys-ads-soft);  --node-fg: var(--sys-ads); }
+  .rail-node[data-system="logistica"] { --node-bg: var(--sys-log-soft);  --node-fg: var(--sys-log); }
 
   /* ============================================================
      BRANCHES
@@ -567,10 +550,19 @@
     text-transform: uppercase;
   }
   .branch {
-    border-left: 2px solid var(--bc);
-    background: transparent;
-    padding: 4px 0 4px 16px;
+    background: var(--bg);
+    padding: 14px 16px;
+    border-radius: 16px;
     display: flex; flex-direction: column; gap: 10px;
+    position: relative;
+  }
+  .branch::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 14px; bottom: 14px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: var(--bc);
   }
   .branch-head {
     font-family: var(--serif);
@@ -579,6 +571,7 @@
     font-style: italic;
     color: var(--bc);
     line-height: 1;
+    padding-left: 8px;
   }
   .branch.yes   { --bc: var(--branch-yes); }
   .branch.maybe { --bc: var(--branch-maybe); }
@@ -646,8 +639,19 @@
   .botbar .badge {
     color: var(--ink-muted);
     font-size: 9.5px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: var(--card);
+    border: none;
   }
-  .botbar .badge i.ti { color: var(--gold-deep); font-size: 13px; }
+  .botbar .badge i.ti { font-size: 13px; }
+  .botbar .badge.bsys-zoho      { background: var(--sys-zoho-soft); color: var(--sys-zoho); }
+  .botbar .badge.bsys-whatsapp  { background: var(--sys-wa-soft);   color: var(--sys-wa); }
+  .botbar .badge.bsys-email     { background: var(--sys-mail-soft); color: var(--sys-mail); }
+  .botbar .badge.bsys-manuale   { background: var(--sys-man-soft);  color: var(--sys-man); }
+  .botbar .badge.bsys-ads       { background: var(--sys-ads-soft);  color: var(--sys-ads); }
+  .botbar .badge.bsys-logistica { background: var(--sys-log-soft);  color: var(--sys-log); }
+  .botbar .badge i.ti { color: currentColor; }
 
   /* ============================================================
      PHASE OUTCOME (label between two phases)
@@ -655,8 +659,8 @@
   .phase-outcome {
     position: absolute;
     transform: translate(-50%, -100%);
-    background: var(--bg);
-    padding: 6px 12px 8px;
+    background: var(--card);
+    padding: 10px 16px 11px;
     max-width: 240px;
     text-align: center;
     font-family: var(--serif);
@@ -668,30 +672,38 @@
     letter-spacing: 0.1px;
     z-index: 3;
     pointer-events: none;
+    border-radius: 14px;
+    box-shadow: 0 1px 0 rgba(168,144,96,0.10),
+                0 8px 18px -10px rgba(10,10,10,0.10);
   }
 
   /* ============================================================
-     LEAD COUNT (in column header)
+     LEAD COUNT (stat card in column header)
      ============================================================ */
   .col-leads {
-    display: inline-flex; align-items: baseline; gap: 4px;
-    margin-top: 8px;
-    font-family: var(--sans);
-    font-size: 11px;
-    color: var(--gold-deep);
-    letter-spacing: 1.4px;
-    text-transform: uppercase;
-    font-weight: 500;
+    display: inline-flex; align-items: baseline; gap: 8px;
+    margin-top: 18px;
+    padding: 10px 16px 11px;
+    background: var(--bg);
+    border-radius: 14px;
   }
   .col-leads .num {
     font-family: var(--serif);
     font-style: italic;
-    font-size: 17px;
+    font-size: 26px;
     font-weight: 400;
     color: var(--ink);
-    letter-spacing: 0;
+    letter-spacing: -0.5px;
     line-height: 1;
     text-transform: none;
+  }
+  .col-leads .label {
+    font-family: var(--sans);
+    font-size: 9.5px;
+    color: var(--ink-muted);
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    font-weight: 600;
   }
 
   /* Outcome delta (small chip below the outcome text) */
@@ -710,25 +722,32 @@
   .outcome-delta.negative { color: var(--ink-muted); }
 
   /* ============================================================
-     RAIL NODE — clickable affordance
+     RAIL NODE — clickable card
      ============================================================ */
   .rail-node {
     cursor: pointer;
-    transition: opacity 0.15s;
+    border-radius: 18px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .rail-node:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px -14px rgba(10,10,10,0.16);
   }
   .rail-node .node-head {
     position: relative;
+    align-items: center;
   }
-  .rail-node:hover .node-text { color: var(--gold-deep); }
   .rail-node .node-chev {
-    position: absolute; right: 0; top: 4px;
-    color: var(--ink-fade);
-    font-size: 14px;
-    transition: color 0.15s, transform 0.15s;
+    position: absolute; right: 0; top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-muted);
+    font-size: 16px;
+    opacity: 0.5;
+    transition: opacity 0.15s, transform 0.15s;
   }
   .rail-node:hover .node-chev {
-    color: var(--gold-deep);
-    transform: translateX(2px);
+    opacity: 1;
+    transform: translateY(-50%) translateX(2px);
   }
 
   /* ============================================================
@@ -967,12 +986,12 @@
   <div class="legend-divider"></div>
   <div class="legend-section">
     <span class="legend-label">Sistema</span>
-    <span class="badge"><i class="ti ti-database"></i>Zoho</span>
-    <span class="badge"><i class="ti ti-brand-whatsapp"></i>WhatsApp</span>
-    <span class="badge"><i class="ti ti-mail"></i>Email</span>
-    <span class="badge"><i class="ti ti-user"></i>Manuale</span>
-    <span class="badge"><i class="ti ti-speakerphone"></i>Ads</span>
-    <span class="badge"><i class="ti ti-truck"></i>Logistica</span>
+    <span class="badge bsys-zoho"><i class="ti ti-database"></i>Zoho</span>
+    <span class="badge bsys-whatsapp"><i class="ti ti-brand-whatsapp"></i>WhatsApp</span>
+    <span class="badge bsys-email"><i class="ti ti-mail"></i>Email</span>
+    <span class="badge bsys-manuale"><i class="ti ti-user"></i>Manuale</span>
+    <span class="badge bsys-ads"><i class="ti ti-speakerphone"></i>Ads</span>
+    <span class="badge bsys-logistica"><i class="ti ti-truck"></i>Logistica</span>
   </div>
   <div class="zoom-controls">
     <button class="zoom-btn" type="button" data-zoom="-1" aria-label="Zoom out">−</button>
@@ -1337,7 +1356,7 @@
     const id = "tp-" + (++_tpCounter);
     touchpointIndex.set(id, { tp, phase });
     return `
-      <div class="rail-node ${actorCls}" data-tp-id="${id}" tabindex="0" role="button" aria-label="Vedi asset">
+      <div class="rail-node ${actorCls}" data-tp-id="${id}" data-system="${tp.system || ''}" tabindex="0" role="button" aria-label="Vedi asset">
         <div class="node">
           <div class="node-head">
             <span class="node-icon ${iconCls}"><i class="ti ${tp.icon}"></i></span>
@@ -1346,7 +1365,6 @@
           </div>
           <div class="node-meta">
             ${actorPill(tp.actor)}
-            ${badgeForSystem(tp.system)}
             ${timingPill(tp.timing)}
           </div>
           ${tp.extra ? `<div class="node-extra">${tp.extra}</div>` : ""}
@@ -1420,7 +1438,7 @@
           <span class="col-num">${pad(p.n)}</span>
           <h2 class="col-name">${p.name}</h2>
           <div class="col-period">${p.period}</div>
-          ${p.leads != null ? `<div class="col-leads"><span class="num">${formatLeads(p.leads)}</span> lead</div>` : ""}
+          ${p.leads != null ? `<div class="col-leads"><span class="num">${formatLeads(p.leads)}</span><span class="label">lead</span></div>` : ""}
           ${p.tags ? `<div class="col-tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>` : ""}
         </div>
         <div class="col-body">
