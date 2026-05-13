@@ -659,23 +659,44 @@
   .phase-outcome {
     position: absolute;
     transform: translate(-50%, -50%);
-    background: var(--card);
-    padding: 10px 16px 11px;
-    max-width: 180px;
+    background: var(--ink);
+    color: #FAF1DB;
+    padding: 11px 22px 12px;
+    max-width: 230px;
     text-align: center;
     font-family: var(--serif);
     font-style: italic;
     font-weight: 400;
-    font-size: 14px;
-    color: var(--gold-deep);
-    line-height: 1.3;
-    letter-spacing: 0.1px;
+    font-size: 13.5px;
+    line-height: 1.35;
+    letter-spacing: 0.2px;
     z-index: 3;
     pointer-events: none;
-    border-radius: 14px;
-    box-shadow: 0 1px 0 rgba(168,144,96,0.10),
-                0 10px 22px -12px rgba(10,10,10,0.14);
+    border-radius: 999px;
+    box-shadow: 0 12px 28px -12px rgba(10,10,10,0.45),
+                0 1px 0 rgba(255,255,255,0.05) inset;
   }
+  .phase-outcome::before {
+    content: "→";
+    margin-right: 8px;
+    color: var(--gold);
+    font-style: normal;
+    font-family: var(--sans);
+    font-weight: 400;
+  }
+  .outcome-delta {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--sans);
+    font-style: normal;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: #B7AB91;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+  }
+  .outcome-delta.positive { color: #93B16A; }
+  .outcome-delta.negative { color: #B7AB91; }
 
   /* ============================================================
      LEAD COUNT (stat card in column header)
@@ -705,21 +726,6 @@
     text-transform: uppercase;
     font-weight: 600;
   }
-
-  /* Outcome delta (small chip below the outcome text) */
-  .outcome-delta {
-    display: block;
-    margin-top: 4px;
-    font-family: var(--sans);
-    font-style: normal;
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--ink-muted);
-    letter-spacing: 1.4px;
-    text-transform: uppercase;
-  }
-  .outcome-delta.positive { color: var(--branch-yes); }
-  .outcome-delta.negative { color: var(--ink-muted); }
 
   /* ============================================================
      RAIL NODE — clickable card
