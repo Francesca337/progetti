@@ -26,8 +26,8 @@
   :root {
     --bg:          #F2E8D7;
     --bg-alt:      #EDE1C9;
-    --card:        #FBF6EA;
-    --card-soft:   #F6EFDC;
+    --card:        #FFFFFF;
+    --card-soft:   #FBF6EA;
 
     --ink:         #0A0A0A;
     --ink-soft:    #2A2620;
@@ -312,8 +312,8 @@
     font-size: 11px;
     line-height: 1.5;
     color: var(--gold-deep);
-    background: var(--gold-pale);
-    border: 1px solid var(--hairline);
+    background: transparent;
+    border: 1px solid var(--gold);
     padding: 10px 12px 10px 36px;
     border-radius: 2px;
     position: relative;
@@ -452,7 +452,7 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    background: var(--bg);
+    background: var(--card);
     border: 1px solid var(--hairline);
     color: var(--gold-deep);
     padding: 2px 9px;
@@ -514,14 +514,16 @@
     font-weight: 600;
     letter-spacing: 1.3px;
     text-transform: uppercase;
-    padding: 3px 7px 3px 6px;
+    padding: 2px 7px 2px 6px;
     border-radius: 2px;
     line-height: 1;
+    background: transparent;
+    border: 1px solid currentColor;
   }
   .actor i.ti { font-size: 11px; }
-  .actor-manual { background: var(--actor-manual-bg); color: var(--actor-manual-fg); }
-  .actor-auto   { background: var(--actor-auto-bg);   color: var(--actor-auto-fg); }
-  .actor-sched  { background: var(--actor-sched-bg);  color: var(--actor-sched-fg); }
+  .actor-manual { color: var(--actor-manual-bg); }
+  .actor-auto   { color: var(--gold-deep); }
+  .actor-sched  { color: var(--actor-sched-bg); }
 
   /* System badge */
   .badge {
@@ -559,13 +561,13 @@
     line-height: 1.45;
   }
 
-  /* System colors */
-  .sys-zoho      { color: var(--sys-zoho-fg);  background: var(--sys-zoho-bg); border-color: rgba(42,61,92,0.18); }
-  .sys-whatsapp  { color: var(--sys-wa-fg);    background: var(--sys-wa-bg);   border-color: rgba(74,90,42,0.18); }
-  .sys-email     { color: var(--sys-mail-fg);  background: var(--sys-mail-bg); border-color: rgba(122,74,26,0.18); }
-  .sys-manuale   { color: var(--sys-man-fg);   background: var(--sys-man-bg);  border-color: rgba(122,57,32,0.18); }
-  .sys-ads       { color: var(--sys-ads-fg);   background: var(--sys-ads-bg);  border-color: rgba(79,70,119,0.18); }
-  .sys-logistica { color: var(--sys-log-fg);   background: var(--sys-log-bg);  border-color: rgba(79,71,56,0.18); }
+  /* System colors — outlined treatment, no fill */
+  .sys-zoho      { color: var(--sys-zoho-fg);  background: transparent; border-color: rgba(42,61,92,0.35); }
+  .sys-whatsapp  { color: var(--sys-wa-fg);    background: transparent; border-color: rgba(74,90,42,0.40); }
+  .sys-email     { color: var(--sys-mail-fg);  background: transparent; border-color: rgba(122,74,26,0.35); }
+  .sys-manuale   { color: var(--sys-man-fg);   background: transparent; border-color: rgba(122,57,32,0.35); }
+  .sys-ads       { color: var(--sys-ads-fg);   background: transparent; border-color: rgba(79,70,119,0.35); }
+  .sys-logistica { color: var(--sys-log-fg);   background: transparent; border-color: rgba(79,71,56,0.35); }
 
   .node-icon.sys-zoho      { color: var(--sys-zoho-fg); background: transparent; }
   .node-icon.sys-whatsapp  { color: var(--sys-wa-fg);   background: transparent; }
@@ -593,9 +595,9 @@
   }
   .branch {
     border-left: 2px solid var(--bc);
-    background: var(--bbg);
-    border-radius: 0 2px 2px 0;
-    padding: 10px 12px;
+    background: transparent;
+    border-radius: 0;
+    padding: 4px 0 4px 12px;
     display: flex; flex-direction: column; gap: 8px;
   }
   .branch-head {
@@ -612,9 +614,9 @@
     background: var(--bc);
     border-radius: 50%;
   }
-  .branch.yes   { --bc: var(--branch-yes);   --bbg: var(--branch-yes-bg); }
-  .branch.maybe { --bc: var(--branch-maybe); --bbg: var(--branch-maybe-bg); }
-  .branch.no    { --bc: var(--branch-no);    --bbg: var(--branch-no-bg); }
+  .branch.yes   { --bc: var(--branch-yes); }
+  .branch.maybe { --bc: var(--branch-maybe); }
+  .branch.no    { --bc: var(--branch-no); }
   .b-step {
     display: flex; align-items: flex-start; gap: 8px;
     padding: 4px 0;
@@ -688,6 +690,10 @@
     font-size: 8.5px;
     padding: 3px 7px;
   }
+  /* On the dark bottom bar, keep actor pills filled for legibility */
+  .botbar .actor-manual { background: var(--actor-manual-bg); color: var(--actor-manual-fg); border-color: transparent; }
+  .botbar .actor-auto   { background: var(--actor-auto-bg);   color: var(--actor-auto-fg);   border-color: transparent; }
+  .botbar .actor-sched  { background: var(--actor-sched-bg);  color: var(--actor-sched-fg);  border-color: transparent; }
 
   /* ============================================================
      SCROLLBAR
