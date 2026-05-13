@@ -4,108 +4,178 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Journey Retail — Pasticceria Giotto · Natale 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
   :root {
-    --bg: #EDE9E2;
-    --bar: #1C1B18;
-    --col-bg: #FFFFFF;
-    --col-border: rgba(26,25,23,0.10);
-    --col-header: #1C1B18;
-    --col-header-current: #251F10;
-    --text: #1A1917;
-    --text-soft: #8C8A84;
-    --arrow: #C0BDB6;
+    /* Brand palette */
+    --bg:          #F2E8D7;   /* cream peach */
+    --bg-alt:      #EDE1C9;   /* deeper cream */
+    --card:        #FBF6EA;   /* card surface */
+    --card-soft:   #F6EFDC;   /* nested surface */
 
-    --sys-zoho-bg: #E6F1FB;       --sys-zoho-fg: #0C447C;
-    --sys-wa-bg:   #EAF3DE;       --sys-wa-fg:   #27500A;
-    --sys-mail-bg: #FAEEDA;       --sys-mail-fg: #633806;
-    --sys-man-bg:  #FAECE7;       --sys-man-fg:  #712B13;
-    --sys-ads-bg:  #EEEDFE;       --sys-ads-fg:  #3C3489;
-    --sys-log-bg:  #F1EFE8;       --sys-log-fg:  #444441;
+    --ink:         #0A0A0A;   /* deep black */
+    --ink-soft:    #2A2620;   /* warm dark */
+    --ink-muted:   #8C8276;   /* warm muted */
+    --ink-fade:    #B3A893;   /* faded text */
 
-    --branch-yes: #4F9D3A;
-    --branch-maybe: #C28A1E;
-    --branch-no: #B3402A;
+    --gold:        #A89060;   /* signature gold */
+    --gold-deep:   #8E7848;   /* deeper gold for text contrast */
+    --gold-soft:   #D6C39A;   /* light gold */
+    --gold-pale:   #EFE3C7;   /* pale gold bg */
 
-    --top-h: 54px;
-    --bot-h: 38px;
-    --col-w: 268px;
-    --gap: 56px;
+    --hairline:    rgba(168,144,96,0.32);
+    --hairline-soft: rgba(168,144,96,0.18);
+    --rule:        rgba(10,10,10,0.08);
+
+    /* System badge palette — desaturated, brand-aligned */
+    --sys-zoho-bg:   #E3E8EF; --sys-zoho-fg:   #2A3D5C;
+    --sys-wa-bg:     #E2E8D4; --sys-wa-fg:     #4A5A2A;
+    --sys-mail-bg:   #F1E2C8; --sys-mail-fg:   #7A4A1A;
+    --sys-man-bg:    #F0DCCB; --sys-man-fg:    #7A3920;
+    --sys-ads-bg:    #E4DFEC; --sys-ads-fg:    #4F4677;
+    --sys-log-bg:    #E6DFD0; --sys-log-fg:    #4F4738;
+
+    --branch-yes:   #4F6B2C;
+    --branch-yes-bg:#E8EBD6;
+    --branch-maybe: #A87A1E;
+    --branch-maybe-bg:#F2E6C4;
+    --branch-no:    #9C4628;
+    --branch-no-bg: #F1DCCE;
+
+    --top-h: 72px;
+    --bot-h: 44px;
+    --col-w: 280px;
+    --gap: 64px;
+
+    --serif: "Cormorant Garamond", "Gazpacho", Georgia, serif;
+    --sans: "Inter", "Neue Montreal", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   }
 
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    font-family: var(--sans);
     background: var(--bg);
-    color: var(--text);
+    color: var(--ink-soft);
     font-size: 13px;
-    line-height: 1.4;
+    line-height: 1.45;
+    font-weight: 400;
     min-height: 100vh;
     overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   /* ---------- TOP BAR ---------- */
   .topbar {
     position: fixed; top: 0; left: 0; right: 0;
     height: var(--top-h);
-    background: var(--bar);
-    color: #F4F2EC;
+    background: var(--ink);
+    color: #F5EBD7;
     display: flex; align-items: center;
-    padding: 0 20px;
+    padding: 0 28px;
     z-index: 50;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(168,144,96,0.18);
   }
   .brand {
-    display: flex; flex-direction: column;
+    display: flex; align-items: center;
+    gap: 18px;
     margin-right: 28px;
-    min-width: 220px;
     flex-shrink: 0;
   }
-  .brand strong {
-    font-size: 13.5px;
-    letter-spacing: 0.2px;
-    font-weight: 600;
+  .wordmark {
+    display: flex; flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    padding-right: 18px;
+    border-right: 1px solid rgba(168,144,96,0.22);
   }
-  .brand span {
-    font-size: 11px;
-    color: #9F9C93;
-    margin-top: 2px;
+  .wordmark .top, .wordmark .bot {
+    font-family: var(--serif);
+    font-size: 8.5px;
+    letter-spacing: 4.5px;
+    color: var(--gold-soft);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  .wordmark .top { margin-bottom: 4px; }
+  .wordmark .bot { margin-top: 4px; font-size: 7.5px; letter-spacing: 3.5px; }
+  .wordmark .giotto {
+    font-family: var(--serif);
+    font-size: 19px;
+    font-weight: 500;
+    color: #FAF1DB;
+    letter-spacing: 0;
+    display: flex; align-items: center;
+    gap: 5px;
+  }
+  .wordmark .giotto .bar {
+    width: 1px;
+    height: 14px;
+    background: rgba(255,255,255,0.35);
+  }
+  .subtitle {
+    display: flex; flex-direction: column;
+    line-height: 1.3;
+  }
+  .subtitle .kicker {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--gold-soft);
+    margin-bottom: 1px;
+  }
+  .subtitle .title {
+    font-size: 12px;
+    color: #E8DDC6;
+    letter-spacing: 0.4px;
+    font-weight: 400;
   }
   .nav {
-    display: flex; gap: 6px; overflow-x: auto;
+    display: flex; gap: 4px; overflow-x: auto;
     flex: 1;
     scrollbar-width: none;
+    padding: 0 4px;
   }
   .nav::-webkit-scrollbar { display: none; }
   .pill {
     flex-shrink: 0;
     background: transparent;
-    border: 1px solid rgba(255,255,255,0.14);
-    color: #B8B5AC;
-    padding: 6px 11px;
+    border: 1px solid rgba(168,144,96,0.22);
+    color: #B7AB91;
+    padding: 7px 12px;
     border-radius: 999px;
-    font-size: 11.5px;
-    font-weight: 500;
+    font-size: 10.5px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
     cursor: pointer;
-    transition: background 0.18s, color 0.18s, border-color 0.18s;
+    transition: all 0.2s ease;
     white-space: nowrap;
-    font-family: inherit;
+    font-family: var(--sans);
+    display: inline-flex; align-items: center; gap: 8px;
   }
-  .pill:hover { color: #F4F2EC; border-color: rgba(255,255,255,0.3); }
+  .pill:hover {
+    color: #F5EBD7;
+    border-color: var(--gold);
+  }
   .pill.active {
-    background: #F4F2EC;
-    color: #1C1B18;
-    border-color: #F4F2EC;
+    background: var(--gold);
+    color: var(--ink);
+    border-color: var(--gold);
   }
   .pill .num {
+    font-family: var(--serif);
+    font-size: 13px;
+    font-weight: 500;
+    font-style: italic;
     font-variant-numeric: tabular-nums;
-    margin-right: 6px;
-    opacity: 0.65;
-    font-weight: 600;
+    color: var(--gold-soft);
+    line-height: 1;
   }
-  .pill.active .num { opacity: 1; }
+  .pill.active .num { color: var(--ink); }
 
   /* ---------- SCROLL AREA ---------- */
   .scroll-area {
@@ -115,7 +185,7 @@
     left: 0; right: 0;
     overflow-x: auto;
     overflow-y: auto;
-    padding: 28px 40px 32px 40px;
+    padding: 36px 48px 40px 48px;
   }
   .track {
     display: flex;
@@ -123,237 +193,296 @@
     gap: var(--gap);
     min-width: max-content;
     position: relative;
-    padding-bottom: 20px;
+    padding-bottom: 24px;
   }
 
   /* ---------- COLUMN ---------- */
   .col {
     width: var(--col-w);
     flex: 0 0 var(--col-w);
-    background: var(--col-bg);
-    border: 1px solid var(--col-border);
-    border-radius: 12px;
+    background: var(--card);
+    border: 1px solid var(--hairline-soft);
+    border-radius: 2px;
     overflow: hidden;
     display: flex; flex-direction: column;
-    box-shadow: 0 1px 0 rgba(26,25,23,0.04), 0 8px 24px -16px rgba(26,25,23,0.18);
     position: relative;
     z-index: 2;
+    box-shadow: 0 1px 0 rgba(168,144,96,0.05);
+  }
+  .col.current {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 1px var(--gold);
   }
   .col-header {
-    background: var(--col-header);
-    color: #F4F2EC;
-    padding: 14px 16px 13px;
+    background: var(--ink);
+    color: #F5EBD7;
+    padding: 22px 22px 20px;
     position: relative;
   }
-  .col.current .col-header { background: var(--col-header-current); }
+  .col-header::after {
+    content: "";
+    position: absolute;
+    left: 22px; right: 22px;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold) 30%, transparent 100%);
+  }
+  .col.current .col-header {
+    background: #14110A;
+  }
+  .col-numline {
+    display: flex; align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
   .col-num {
-    font-size: 10.5px;
-    font-weight: 600;
-    letter-spacing: 0.8px;
-    color: #B5A98A;
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--gold);
     font-variant-numeric: tabular-nums;
-    margin-bottom: 4px;
-    display: flex; align-items: center; gap: 8px;
-    flex-wrap: wrap;
+    letter-spacing: -0.5px;
+  }
+  .col-fase {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 11px;
+    color: var(--gold-soft);
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    line-height: 1;
   }
   .here-dot {
-    display: inline-flex; align-items: center; gap: 5px;
-    background: rgba(255, 222, 138, 0.14);
-    color: #F5D78A;
-    padding: 2px 7px 2px 6px;
-    border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--gold);
     font-size: 9.5px;
-    font-weight: 600;
-    letter-spacing: 0.4px;
+    font-weight: 500;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    margin-left: auto;
+    font-family: var(--sans);
   }
   .here-dot .d {
     width: 6px; height: 6px;
-    background: #F5D78A;
+    background: var(--gold);
     border-radius: 50%;
-    box-shadow: 0 0 0 0 rgba(245,215,138,0.6);
-    animation: pulse 1.8s ease-out infinite;
+    box-shadow: 0 0 0 0 rgba(168,144,96,0.6);
+    animation: pulse 2s ease-out infinite;
   }
   @keyframes pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(245,215,138,0.55); }
-    70%  { box-shadow: 0 0 0 7px rgba(245,215,138,0); }
-    100% { box-shadow: 0 0 0 0 rgba(245,215,138,0); }
+    0%   { box-shadow: 0 0 0 0 rgba(168,144,96,0.55); }
+    70%  { box-shadow: 0 0 0 8px rgba(168,144,96,0); }
+    100% { box-shadow: 0 0 0 0 rgba(168,144,96,0); }
   }
   .col-name {
-    font-size: 14.5px;
-    font-weight: 600;
-    letter-spacing: -0.1px;
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.2px;
+    color: #FAF1DB;
     margin: 0;
+    line-height: 1.15;
   }
   .col-period {
-    font-size: 11px;
-    color: #B8B5AC;
-    margin-top: 3px;
+    font-family: var(--sans);
+    font-size: 10.5px;
+    color: var(--gold-soft);
+    margin-top: 8px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
     font-variant-numeric: tabular-nums;
+    font-weight: 400;
   }
   .col-tags {
     display: flex; flex-wrap: wrap; gap: 5px;
-    margin-top: 9px;
+    margin-top: 12px;
   }
   .tag {
-    font-size: 9.5px;
-    font-weight: 500;
-    color: #DCD7C9;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.10);
-    padding: 2px 7px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 10.5px;
+    color: var(--gold-soft);
+    border: 1px solid rgba(168,144,96,0.35);
+    padding: 2px 9px;
     border-radius: 999px;
     letter-spacing: 0.2px;
+    background: transparent;
   }
 
   .col-body {
-    padding: 14px 14px 16px;
+    padding: 18px 18px 22px;
     display: flex; flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     flex: 1;
   }
   .note {
-    font-size: 11.5px;
-    line-height: 1.45;
-    color: var(--text-soft);
-    background: #F7F4ED;
-    border-left: 2px solid #D5CFC1;
-    padding: 8px 10px;
-    border-radius: 0 6px 6px 0;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    padding: 6px 0 6px 12px;
+    border-left: 1px solid var(--gold);
+    margin: 2px 0 4px;
   }
   .annotation {
+    font-family: var(--sans);
     font-size: 11px;
-    line-height: 1.45;
-    color: #0C447C;
-    background: #E6F1FB;
-    border-left: 2px solid #6FA5D8;
-    padding: 8px 10px 8px 30px;
-    border-radius: 0 6px 6px 0;
+    line-height: 1.5;
+    color: var(--gold-deep);
+    background: var(--gold-pale);
+    border: 1px solid var(--hairline);
+    padding: 9px 11px 9px 32px;
+    border-radius: 2px;
     position: relative;
+    letter-spacing: 0.2px;
   }
   .annotation i.ti {
     position: absolute;
-    left: 9px; top: 8px;
+    left: 10px; top: 9px;
     font-size: 14px;
+    color: var(--gold);
   }
 
   /* ---------- TOUCHPOINT ---------- */
   .tp {
-    background: #FBFAF6;
-    border: 1px solid rgba(26,25,23,0.07);
-    border-radius: 8px;
-    padding: 9px 10px 10px;
-    display: flex; flex-direction: column; gap: 6px;
+    background: transparent;
+    border-top: 1px solid var(--rule);
+    padding: 10px 0 4px;
+    display: flex; flex-direction: column; gap: 7px;
   }
+  .tp:first-of-type { border-top: none; padding-top: 4px; }
   .tp-row {
-    display: flex; align-items: flex-start; gap: 8px;
+    display: flex; align-items: flex-start; gap: 10px;
   }
   .tp-icon {
     flex-shrink: 0;
-    width: 22px; height: 22px;
-    border-radius: 6px;
+    width: 24px; height: 24px;
+    border-radius: 50%;
     display: inline-flex;
     align-items: center; justify-content: center;
     font-size: 13px;
     margin-top: 1px;
+    border: 1px solid currentColor;
+    background: transparent;
   }
+  .tp-icon i.ti { opacity: 0.9; }
   .tp-text {
-    font-size: 11.8px;
-    line-height: 1.38;
-    color: var(--text);
+    font-family: var(--sans);
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--ink-soft);
     flex: 1;
+    font-weight: 400;
   }
   .tp-meta {
-    display: flex; flex-wrap: wrap; gap: 5px;
+    display: flex; flex-wrap: wrap; gap: 6px;
     align-items: center;
+    padding-left: 34px;
   }
   .badge {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 10px;
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: var(--sans);
+    font-size: 9.5px;
     font-weight: 500;
-    padding: 2px 7px;
+    padding: 3px 8px 3px 7px;
     border-radius: 999px;
-    letter-spacing: 0.1px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
     white-space: nowrap;
+    border: 1px solid transparent;
   }
   .badge i.ti { font-size: 11px; }
   .timing {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 10px;
-    color: var(--text-soft);
-    background: #F1EEE5;
-    border: 1px solid rgba(26,25,23,0.05);
-    padding: 2px 7px;
-    border-radius: 999px;
-    font-variant-numeric: tabular-nums;
-  }
-  .timing i.ti { font-size: 10.5px; }
-  .tp-extra {
-    font-size: 10.5px;
-    color: var(--text-soft);
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: var(--serif);
     font-style: italic;
-    padding-left: 30px;
-    line-height: 1.4;
+    font-size: 11px;
+    color: var(--ink-muted);
+    padding: 2px 0;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.1px;
+  }
+  .timing i.ti { font-size: 10.5px; color: var(--gold); }
+  .tp-extra {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    padding-left: 34px;
+    line-height: 1.45;
   }
 
   /* ---------- SYSTEM COLORS ---------- */
-  .sys-zoho     { background: var(--sys-zoho-bg);  color: var(--sys-zoho-fg); }
-  .sys-whatsapp { background: var(--sys-wa-bg);    color: var(--sys-wa-fg); }
-  .sys-email    { background: var(--sys-mail-bg);  color: var(--sys-mail-fg); }
-  .sys-manuale  { background: var(--sys-man-bg);   color: var(--sys-man-fg); }
-  .sys-ads      { background: var(--sys-ads-bg);   color: var(--sys-ads-fg); }
-  .sys-logistica{ background: var(--sys-log-bg);   color: var(--sys-log-fg); }
+  .sys-zoho      { color: var(--sys-zoho-fg);  background: var(--sys-zoho-bg); border-color: rgba(42,61,92,0.18); }
+  .sys-whatsapp  { color: var(--sys-wa-fg);    background: var(--sys-wa-bg);   border-color: rgba(74,90,42,0.18); }
+  .sys-email     { color: var(--sys-mail-fg);  background: var(--sys-mail-bg); border-color: rgba(122,74,26,0.18); }
+  .sys-manuale   { color: var(--sys-man-fg);   background: var(--sys-man-bg);  border-color: rgba(122,57,32,0.18); }
+  .sys-ads       { color: var(--sys-ads-fg);   background: var(--sys-ads-bg);  border-color: rgba(79,70,119,0.18); }
+  .sys-logistica { color: var(--sys-log-fg);   background: var(--sys-log-bg);  border-color: rgba(79,71,56,0.18); }
+
+  /* icon-only variant (just stroked circle) */
+  .tp-icon.sys-zoho      { color: var(--sys-zoho-fg);  background: transparent; }
+  .tp-icon.sys-whatsapp  { color: var(--sys-wa-fg);    background: transparent; }
+  .tp-icon.sys-email     { color: var(--sys-mail-fg);  background: transparent; }
+  .tp-icon.sys-manuale   { color: var(--sys-man-fg);   background: transparent; }
+  .tp-icon.sys-ads       { color: var(--sys-ads-fg);   background: transparent; }
+  .tp-icon.sys-logistica { color: var(--sys-log-fg);   background: transparent; }
 
   /* ---------- BRANCHES ---------- */
   .branch-block {
-    margin-top: 4px;
-    display: flex; flex-direction: column; gap: 8px;
+    margin-top: 8px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+    display: flex; flex-direction: column; gap: 10px;
   }
   .branch-title {
-    font-size: 9.5px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-soft);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-muted);
     margin-bottom: 2px;
-  }
-  .branch {
-    border-left: 3px solid var(--bc);
-    background: var(--bbg);
-    border-radius: 0 8px 8px 0;
-    padding: 8px 10px;
-    display: flex; flex-direction: column; gap: 7px;
-  }
-  .branch-head {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--bc);
-    display: flex; align-items: center; gap: 6px;
     letter-spacing: 0.2px;
   }
+  .branch {
+    border-left: 2px solid var(--bc);
+    background: var(--bbg);
+    border-radius: 0 2px 2px 0;
+    padding: 10px 12px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .branch-head {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 500;
+    font-style: italic;
+    color: var(--bc);
+    display: flex; align-items: center; gap: 8px;
+    letter-spacing: 0.3px;
+  }
   .branch-head .dot {
-    width: 7px; height: 7px;
+    width: 6px; height: 6px;
     background: var(--bc);
     border-radius: 50%;
   }
-  .branch.yes   { --bc: var(--branch-yes);   --bbg: #F1F7EC; }
-  .branch.maybe { --bc: var(--branch-maybe); --bbg: #FAF3DF; }
-  .branch.no    { --bc: var(--branch-no);    --bbg: #FAE9E2; }
+  .branch.yes   { --bc: var(--branch-yes);   --bbg: var(--branch-yes-bg); }
+  .branch.maybe { --bc: var(--branch-maybe); --bbg: var(--branch-maybe-bg); }
+  .branch.no    { --bc: var(--branch-no);    --bbg: var(--branch-no-bg); }
   .b-step {
-    display: flex; align-items: flex-start; gap: 7px;
-    background: rgba(255,255,255,0.6);
-    border: 1px solid rgba(26,25,23,0.05);
-    padding: 6px 8px;
-    border-radius: 6px;
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 4px 0;
   }
-  .b-step .tp-icon { width: 20px; height: 20px; font-size: 12px; }
+  .b-step .tp-icon { width: 22px; height: 22px; font-size: 11.5px; }
   .b-step-text {
-    font-size: 11px;
-    line-height: 1.35;
+    font-family: var(--sans);
+    font-size: 11.5px;
+    line-height: 1.4;
     flex: 1;
-    color: var(--text);
+    color: var(--ink-soft);
   }
   .b-step-text .badge {
-    margin-top: 4px;
+    margin-top: 5px;
   }
 
   /* ---------- CONNECTOR ARROWS ---------- */
@@ -370,48 +499,60 @@
   .botbar {
     position: fixed; bottom: 0; left: 0; right: 0;
     height: var(--bot-h);
-    background: var(--bar);
-    color: #B8B5AC;
+    background: var(--ink);
+    color: var(--gold-soft);
     display: flex; align-items: center;
-    padding: 0 20px;
+    padding: 0 28px;
     gap: 14px;
     z-index: 50;
     overflow-x: auto;
-    font-size: 11px;
     scrollbar-width: none;
+    border-top: 1px solid rgba(168,144,96,0.18);
   }
   .botbar::-webkit-scrollbar { display: none; }
   .legend-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    color: #6B6962;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12.5px;
+    color: var(--gold);
     flex-shrink: 0;
+    padding-right: 6px;
+    border-right: 1px solid rgba(168,144,96,0.22);
+    margin-right: 4px;
   }
   .botbar .badge {
     flex-shrink: 0;
-    font-size: 10.5px;
-    padding: 3px 9px;
+    background: transparent;
+    border: 1px solid rgba(168,144,96,0.22);
+    color: #D6C39A;
+    padding: 4px 10px;
   }
+  .botbar .badge i.ti { color: var(--gold); }
 
   /* ---------- SCROLLBAR ---------- */
   .scroll-area::-webkit-scrollbar { height: 10px; width: 10px; }
   .scroll-area::-webkit-scrollbar-track { background: transparent; }
   .scroll-area::-webkit-scrollbar-thumb {
-    background: rgba(26,25,23,0.18);
+    background: rgba(168,144,96,0.35);
     border-radius: 10px;
     border: 2px solid var(--bg);
   }
-  .scroll-area::-webkit-scrollbar-thumb:hover { background: rgba(26,25,23,0.32); }
+  .scroll-area::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 </style>
 </head>
 <body>
 
 <header class="topbar">
   <div class="brand">
-    <strong>Journey Retail · Pasticceria Giotto</strong>
-    <span>Campagna Natale 2026 — operativo rivenditori</span>
+    <div class="wordmark">
+      <span class="top">Pasticceria</span>
+      <span class="giotto">G<span class="bar"></span>I<span class="bar"></span>O<span class="bar"></span>T<span class="bar"></span>T<span class="bar"></span>O</span>
+      <span class="bot">Oltre la dolcezza</span>
+    </div>
+    <div class="subtitle">
+      <span class="kicker">Journey Retail</span>
+      <span class="title">Campagna Natale 2026 — operativo rivenditori</span>
+    </div>
   </div>
   <nav class="nav" id="nav"></nav>
 </header>
@@ -420,9 +561,9 @@
   <div class="track" id="track">
     <svg class="connector" id="connector" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5"
-                markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#C0BDB6"></path>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5"
+                markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10" fill="none" stroke="#A89060" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
         </marker>
       </defs>
     </svg>
@@ -431,29 +572,29 @@
 
 <footer class="botbar">
   <span class="legend-label">Sistemi</span>
-  <span class="badge sys-zoho"><i class="ti ti-database"></i>Zoho CRM</span>
-  <span class="badge sys-whatsapp"><i class="ti ti-brand-whatsapp"></i>WhatsApp Business</span>
-  <span class="badge sys-email"><i class="ti ti-mail"></i>Email automatica</span>
-  <span class="badge sys-manuale"><i class="ti ti-user"></i>Manuale Laura</span>
-  <span class="badge sys-ads"><i class="ti ti-speakerphone"></i>Meta / Google Ads</span>
-  <span class="badge sys-logistica"><i class="ti ti-truck"></i>Logistica</span>
+  <span class="badge"><i class="ti ti-database"></i>Zoho CRM</span>
+  <span class="badge"><i class="ti ti-brand-whatsapp"></i>WhatsApp Business</span>
+  <span class="badge"><i class="ti ti-mail"></i>Email automatica</span>
+  <span class="badge"><i class="ti ti-user"></i>Manuale Laura</span>
+  <span class="badge"><i class="ti ti-speakerphone"></i>Meta / Google Ads</span>
+  <span class="badge"><i class="ti ti-truck"></i>Logistica</span>
 </footer>
 
 <script>
   // -------------- SYSTEM CATALOG ----------------
   const SYS = {
-    manuale:   { label: "Manuale Laura",     cls: "sys-manuale",   icon: "ti-user" },
-    ads:       { label: "Meta / Google Ads", cls: "sys-ads",       icon: "ti-speakerphone" },
-    email:     { label: "Email automatica",  cls: "sys-email",     icon: "ti-mail" },
-    zoho:      { label: "Zoho CRM",          cls: "sys-zoho",      icon: "ti-database" },
-    whatsapp:  { label: "WhatsApp Business", cls: "sys-whatsapp",  icon: "ti-brand-whatsapp" },
-    logistica: { label: "Logistica",         cls: "sys-logistica", icon: "ti-truck" },
+    manuale:   { label: "Manuale",     cls: "sys-manuale",   icon: "ti-user" },
+    ads:       { label: "Ads",         cls: "sys-ads",       icon: "ti-speakerphone" },
+    email:     { label: "Email",       cls: "sys-email",     icon: "ti-mail" },
+    zoho:      { label: "Zoho CRM",    cls: "sys-zoho",      icon: "ti-database" },
+    whatsapp:  { label: "WhatsApp",    cls: "sys-whatsapp",  icon: "ti-brand-whatsapp" },
+    logistica: { label: "Logistica",   cls: "sys-logistica", icon: "ti-truck" },
   };
 
   // -------------- DATA ----------------
   const phases = [
     {
-      n: 1, name: "Generazione lead", period: "Mag–Giu 2026",
+      n: 1, name: "Generazione lead", period: "Maggio – Giugno 2026",
       current: true,
       note: "Due stream paralleli: outbound (lista manuale) e inbound (ads → landing → Zoho). Avvio immediato.",
       touchpoints: [
@@ -464,7 +605,7 @@
       ],
     },
     {
-      n: 2, name: "Esplorazione", period: "Mag–Giu 2026",
+      n: 2, name: "Esplorazione", period: "Maggio – Giugno 2026",
       tags: ["parallela alla lead gen"],
       note: "Laura lavora la lista outbound mentre i lead inbound entrano da soli in Zoho.",
       touchpoints: [
@@ -474,7 +615,7 @@
       ],
     },
     {
-      n: 3, name: "Proposta appuntamento", period: "Giu 2026",
+      n: 3, name: "Proposta appuntamento", period: "Giugno 2026",
       note: "Task automatico da Zoho 72h dopo la mail — Laura non deve ricordarselo.",
       touchpoints: [
         { text: "Task automatico Zoho: chiama per proporre l'incontro", system: "zoho", icon: "ti-bell", timing: "+72h dalla mail automatica" },
@@ -494,7 +635,7 @@
       ],
     },
     {
-      n: 4, name: "Incontro", period: "Giu–Lug 2026",
+      n: 4, name: "Incontro", period: "Giugno – Luglio 2026",
       touchpoints: [
         { text: "Laura porta la campionatura prodotti Natale 2026", system: "manuale", icon: "ti-gift", timing: "Giu–Lug 2026" },
         { text: "Mostra materiali di comunicazione da tablet", system: "manuale", icon: "ti-device-tablet" },
@@ -502,7 +643,7 @@
       ],
     },
     {
-      n: 5, name: "Ragionamento", period: "Lug 2026",
+      n: 5, name: "Ragionamento", period: "Luglio 2026",
       note: "1–2 settimane in base al momento dell'anno. Touchpoint attivo a metà periodo.",
       touchpoints: [
         { text: "Reminder Zoho con data di richiamo personalizzata", system: "zoho", icon: "ti-bell" },
@@ -510,7 +651,7 @@
       ],
     },
     {
-      n: 6, name: "Risposta", period: "Lug–Ago 2026",
+      n: 6, name: "Risposta", period: "Luglio – Agosto 2026",
       note: "Momento decisivo. I No definitivi restano nel perimetro Giotto via newsletter.",
       branches: [
         { kind: "yes",   label: "Sì",    steps: [
@@ -526,7 +667,7 @@
       ],
     },
     {
-      n: 7, name: "Onboarding", period: "Ago–Set 2026",
+      n: 7, name: "Onboarding", period: "Agosto – Settembre 2026",
       tags: ["storici entrano qui"],
       note: "I rivenditori storici che riacquistano saltano le fasi 1–6 ed entrano direttamente qui.",
       annotation: { icon: "ti-arrow-down-right", text: "Rivenditori storici: entrano direttamente da qui" },
@@ -536,7 +677,7 @@
       ],
     },
     {
-      n: 8, name: "Campagna attiva", period: "Ott–Dic 2026",
+      n: 8, name: "Campagna attiva", period: "Ottobre – Dicembre 2026",
       note: "Touchpoint ricorrenti per tutti i rivenditori attivi — nuovi e storici.",
       touchpoints: [
         { text: "Scheda prodotto mensile (approfondimento campagna Natale)", system: "email", icon: "ti-mail", timing: "1× al mese" },
@@ -546,7 +687,7 @@
       ],
     },
     {
-      n: 9, name: "Fine campagna", period: "Gen 2027",
+      n: 9, name: "Fine campagna", period: "Gennaio 2027",
       touchpoints: [
         { text: "Mail automatica di feedback sulla campagna", system: "email", icon: "ti-mail", timing: "Gen 2027" },
         { text: "Laura propone la campagna successiva (Colomba / Pasqua 2027)", system: "manuale", icon: "ti-arrow-right", timing: "Gen 2027",
@@ -618,8 +759,9 @@
     return `
       <section class="col ${isCurrent ? "current" : ""}" id="phase-${p.n}" data-phase="${p.n}">
         <div class="col-header">
-          <div class="col-num">
-            <span>FASE ${pad(p.n)}</span>
+          <div class="col-numline">
+            <span class="col-num">${pad(p.n)}</span>
+            <span class="col-fase">Fase</span>
             ${isCurrent ? `<span class="here-dot"><span class="d"></span>Siamo qui</span>` : ""}
           </div>
           <h2 class="col-name">${p.name}</h2>
@@ -655,12 +797,11 @@
     pill.addEventListener("click", () => {
       const target = document.getElementById(pill.dataset.target);
       if (!target) return;
-      const left = target.offsetLeft - 40;
+      const left = target.offsetLeft - 48;
       scrollArea.scrollTo({ left, behavior: "smooth" });
     });
   });
 
-  // IntersectionObserver: highlight pill of column most visible
   const colEls = [...document.querySelectorAll(".col")];
   const ratios = new Map();
   const observer = new IntersectionObserver((entries) => {
@@ -692,17 +833,18 @@
       const b = colEls[i + 1];
       const ax = a.offsetLeft + a.offsetWidth;
       const bx = b.offsetLeft;
-      const y = a.offsetTop + 36;
+      const y = a.offsetTop + 48;
       const midX = (ax + bx) / 2;
 
       const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      const d = `M ${ax + 2} ${y} C ${midX} ${y}, ${midX} ${y}, ${bx - 8} ${y}`;
+      const d = `M ${ax + 4} ${y} C ${midX} ${y}, ${midX} ${y}, ${bx - 10} ${y}`;
       path.setAttribute("d", d);
       path.setAttribute("class", "link");
       path.setAttribute("fill", "none");
-      path.setAttribute("stroke", "#C0BDB6");
-      path.setAttribute("stroke-width", "1.5");
-      path.setAttribute("stroke-dasharray", "4 4");
+      path.setAttribute("stroke", "#A89060");
+      path.setAttribute("stroke-width", "1");
+      path.setAttribute("stroke-dasharray", "3 5");
+      path.setAttribute("opacity", "0.7");
       path.setAttribute("marker-end", "url(#arrowhead)");
       svg.appendChild(path);
     }
@@ -712,6 +854,12 @@
   window.addEventListener("resize", drawConnectors);
   setTimeout(drawConnectors, 200);
   setTimeout(drawConnectors, 800);
+  setTimeout(drawConnectors, 2000); // re-run after webfonts load
+
+  // Re-run on font load if available
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(drawConnectors);
+  }
 
   setTimeout(() => {
     if (!pills.some(p => p.classList.contains("active"))) {
