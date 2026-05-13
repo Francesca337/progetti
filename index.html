@@ -58,7 +58,7 @@
     --top-h: 76px;
     --bot-h: 48px;
     --col-w: 332px;
-    --gap: 88px;
+    --gap: 152px;
 
     --serif: "Gazpacho", Georgia, serif;
     --sans:  "Neue Montreal", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
@@ -658,10 +658,10 @@
      ============================================================ */
   .phase-outcome {
     position: absolute;
-    transform: translate(-50%, -100%);
+    transform: translate(-50%, -50%);
     background: var(--card);
     padding: 10px 16px 11px;
-    max-width: 240px;
+    max-width: 180px;
     text-align: center;
     font-family: var(--serif);
     font-style: italic;
@@ -674,7 +674,7 @@
     pointer-events: none;
     border-radius: 14px;
     box-shadow: 0 1px 0 rgba(168,144,96,0.10),
-                0 8px 18px -10px rgba(10,10,10,0.10);
+                0 10px 22px -12px rgba(10,10,10,0.14);
   }
 
   /* ============================================================
@@ -1622,15 +1622,17 @@
     [...svg.querySelectorAll("path.link")].forEach(n => n.remove());
     [...track.querySelectorAll(".phase-outcome")].forEach(n => n.remove());
 
+    // Single horizontal line for all connectors at ~½ of the shortest column,
+    // so the outcome chip floats between phases at column mid-height.
+    const minColH = Math.min(...colEls.map(c => c.offsetHeight));
+    const baseY = Math.floor(minColH / 2);
+
     for (let i = 0; i < colEls.length - 1; i++) {
       const a = colEls[i];
       const b = colEls[i + 1];
       const ax = a.offsetLeft + a.offsetWidth;
       const bx = b.offsetLeft;
-      // y sits 30px below the column top — chip is anchored by its bottom
-      // so it grows upward into the empty header padding without overlapping
-      // the big phase number "01" / "02"
-      const y = a.offsetTop + 30;
+      const y = a.offsetTop + baseY;
       const midX = (ax + bx) / 2;
 
       const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
