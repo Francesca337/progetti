@@ -673,6 +673,39 @@
   }
 
   /* ============================================================
+     ZOOM CONTROLS (bottom bar)
+     ============================================================ */
+  .zoom-controls {
+    margin-left: auto;
+    display: flex; align-items: center;
+    gap: 2px;
+    padding-left: 14px;
+    border-left: 1px solid var(--hairline);
+    flex-shrink: 0;
+  }
+  .zoom-btn {
+    background: transparent;
+    border: none;
+    color: var(--ink-muted);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    padding: 4px 9px;
+    line-height: 1;
+    border-radius: 2px;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.15s;
+  }
+  .zoom-btn:hover { color: var(--ink); }
+  .zoom-pct {
+    min-width: 50px;
+    font-size: 11px;
+    color: var(--gold-deep);
+    letter-spacing: 0.2px;
+  }
+
+  /* ============================================================
      SCROLLBAR
      ============================================================ */
   .scroll-area::-webkit-scrollbar { height: 12px; width: 12px; }
@@ -731,6 +764,11 @@
     <span class="badge"><i class="ti ti-user"></i>Manuale</span>
     <span class="badge"><i class="ti ti-speakerphone"></i>Ads</span>
     <span class="badge"><i class="ti ti-truck"></i>Logistica</span>
+  </div>
+  <div class="zoom-controls">
+    <button class="zoom-btn" type="button" data-zoom="-1" aria-label="Zoom out">−</button>
+    <button class="zoom-btn zoom-pct" type="button" data-zoom="0" aria-label="Reset zoom">100%</button>
+    <button class="zoom-btn" type="button" data-zoom="1" aria-label="Zoom in">+</button>
   </div>
 </footer>
 
@@ -1066,7 +1104,6 @@
           ${p.tags ? `<div class="col-tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>` : ""}
         </div>
         <div class="col-body">
-          ${p.note ? `<div class="note">${p.note}</div>` : ""}
           ${p.annotation ? `<div class="annotation"><i class="ti ${p.annotation.icon}"></i>${p.annotation.text}</div>` : ""}
           ${body}
           ${renderBranches(p.branches)}
@@ -1115,17 +1152,73 @@
     if (rafId == null) rafId = requestAnimationFrame(scrollLoop);
   }
 
+  // ----- Zoom (Cmd/Ctrl+wheel, pinch trackpad, keyboard, controls) -----
+  const ZOOM_MIN = 0.5;
+  const ZOOM_MAX = 1.8;
+  let zoomLevel = 1.0;
+  const zoomPctEl = document.querySelector(".zoom-pct");
+
+  function updateZoomLabel() {
+    if (zoomPctEl) zoomPctEl.textContent = Math.round(zoomLevel * 100) + "%";
+  }
+
+  function setZoom(nextZoom, anchorX) {
+    const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, nextZoom));
+    if (Math.abs(clamped - zoomLevel) < 0.001) return;
+    if (anchorX == null) anchorX = scrollArea.clientWidth / 2;
+
+    const ratio = clamped / zoomLevel;
+    const beforeContentX = scrollArea.scrollLeft + anchorX;
+
+    zoomLevel = clamped;
+    track.style.zoom = clamped;
+
+    // Keep the point under the anchor visually stable
+    scrollArea.scrollLeft = beforeContentX * ratio - anchorX;
+    targetX = scrollArea.scrollLeft;
+
+    updateZoomLabel();
+    requestAnimationFrame(drawConnectors);
+  }
+
   scrollArea.addEventListener("wheel", (e) => {
-    // Only intercept dominant HORIZONTAL gestures (trackpad swipes).
-    // Vertical wheel falls through to native vertical scroll so tall
-    // columns can be read top-to-bottom without losing content below.
+    // Cmd/Ctrl+wheel OR trackpad pinch (Mac sends ctrlKey=true on pinch) → zoom
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+      const rect = scrollArea.getBoundingClientRect();
+      const cursorX = e.clientX - rect.left;
+      // Multiplicative zoom: smooth across small/large wheel deltas
+      const factor = Math.pow(0.998, e.deltaY);
+      setZoom(zoomLevel * factor, cursorX);
+      return;
+    }
+    // Horizontal swipe (trackpad) → smooth lerp on X
     const absX = Math.abs(e.deltaX);
     const absY = Math.abs(e.deltaY);
     if (absX > absY && absX > 0) {
       e.preventDefault();
       scrollSmoothX(targetX + e.deltaX * WHEEL_MULT);
     }
+    // Vertical wheel falls through to native vertical scroll
   }, { passive: false });
+
+  window.addEventListener("keydown", (e) => {
+    if (!(e.ctrlKey || e.metaKey)) return;
+    if (e.key === "0") { e.preventDefault(); setZoom(1.0); }
+    else if (e.key === "=" || e.key === "+") { e.preventDefault(); setZoom(zoomLevel * 1.15); }
+    else if (e.key === "-") { e.preventDefault(); setZoom(zoomLevel / 1.15); }
+  });
+
+  document.querySelectorAll(".zoom-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const dir = parseInt(btn.dataset.zoom, 10);
+      if (dir === 0) setZoom(1.0);
+      else if (dir > 0) setZoom(zoomLevel * 1.15);
+      else setZoom(zoomLevel / 1.15);
+    });
+  });
+
+  updateZoomLabel();
 
   // If user drags scrollbar / touches, sync the target
   scrollArea.addEventListener("scroll", () => {
