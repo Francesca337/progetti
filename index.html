@@ -179,6 +179,9 @@
     overflow-x: auto;
     overflow-y: auto;
     padding: 48px 56px 56px 56px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
   .track {
     display: flex; align-items: flex-start;
@@ -1081,12 +1084,50 @@
   const scrollArea = document.getElementById("scrollArea");
   const pills = [...nav.querySelectorAll(".pill")];
 
+  // ----- Smooth horizontal scroll (Apple-style lerp) -----
+  const LERP = 0.14;
+  const WHEEL_MULT = 1.0;
+  let targetX = scrollArea.scrollLeft;
+  let rafId = null;
+
+  function scrollLoop() {
+    const cur = scrollArea.scrollLeft;
+    const dx = targetX - cur;
+    if (Math.abs(dx) < 0.5) {
+      scrollArea.scrollLeft = targetX;
+      rafId = null;
+      return;
+    }
+    scrollArea.scrollLeft = cur + dx * LERP;
+    rafId = requestAnimationFrame(scrollLoop);
+  }
+
+  function scrollSmoothX(toX) {
+    const max = scrollArea.scrollWidth - scrollArea.clientWidth;
+    targetX = Math.max(0, Math.min(max, toX));
+    if (rafId == null) rafId = requestAnimationFrame(scrollLoop);
+  }
+
+  scrollArea.addEventListener("wheel", (e) => {
+    // Use the dominant axis (vertical wheel maps to horizontal canvas)
+    const absX = Math.abs(e.deltaX);
+    const absY = Math.abs(e.deltaY);
+    const delta = absX > absY ? e.deltaX : e.deltaY;
+    if (delta === 0) return;
+    e.preventDefault();
+    scrollSmoothX(targetX + delta * WHEEL_MULT);
+  }, { passive: false });
+
+  // If user drags scrollbar / touches, sync the target
+  scrollArea.addEventListener("scroll", () => {
+    if (rafId == null) targetX = scrollArea.scrollLeft;
+  });
+
   pills.forEach(pill => {
     pill.addEventListener("click", () => {
       const target = document.getElementById(pill.dataset.target);
       if (!target) return;
-      const left = target.offsetLeft - 56;
-      scrollArea.scrollTo({ left, behavior: "smooth" });
+      scrollSmoothX(target.offsetLeft - 56);
     });
   });
 
