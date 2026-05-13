@@ -672,6 +672,29 @@
   .botbar .badge i.ti { color: var(--gold); font-size: 13px; }
 
   /* ============================================================
+     PHASE OUTCOME (label between two phases)
+     ============================================================ */
+  .phase-outcome {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: var(--card);
+    padding: 8px 14px;
+    max-width: 230px;
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 14.5px;
+    color: var(--gold-deep);
+    line-height: 1.3;
+    letter-spacing: 0.1px;
+    z-index: 3;
+    pointer-events: none;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  /* ============================================================
      SCROLLBAR
      ============================================================ */
   .scroll-area::-webkit-scrollbar { height: 12px; width: 12px; }
@@ -756,10 +779,11 @@
     {
       n: 1, name: "Generazione lead", period: "Maggio – Giugno 2026",
       current: true,
-      note: "Due percorsi paralleli che alimentano la stessa pipeline Zoho.",
+      note: "Due percorsi paralleli — entrambi convergono nella stessa pipeline.",
+      outcome: "Il contatto entra in Zoho",
       streams: [
         {
-          name: "Outbound", caption: "lista costruita a mano",
+          name: "Outbound",
           touchpoints: [
             { text: "Estrapolazione contatti enoteche per area geografica",
               system: "manuale", icon: "ti-search", actor: "manual",
@@ -767,17 +791,16 @@
           ]
         },
         {
-          name: "Inbound", caption: "lead da campagna ads",
+          name: "Inbound",
           touchpoints: [
             { text: "Campagna awareness geo-targeted",
               system: "ads", icon: "ti-speakerphone", actor: "auto",
-              timing: "Mag 2026",
-              extra: "Prepara il terreno prima delle chiamate" },
-            { text: "Campagna lead gen Nord Italia → landing",
+              timing: "Mag 2026" },
+            { text: "Campagna lead gen Nord Italia → landing con form",
               system: "ads", icon: "ti-target", actor: "auto",
               timing: "Mag 2026",
               link: { text: "in parallelo all'awareness", icon: "ti-arrow-right" },
-              extra: "Il lead entra in pipeline Zoho senza azione manuale" },
+              extra: "Compilando il form ricevono la guida rivenditori (stesso doc dell'outbound)" },
           ]
         },
       ]
@@ -785,30 +808,30 @@
 
     {
       n: 2, name: "Esplorazione", period: "Maggio – Giugno 2026",
-      tags: ["parallela alla lead gen"],
-      note: "Outbound: Laura lavora la lista. Inbound: i lead della landing arrivano da soli.",
+      note: "Laura valida tutti i contatti via telefonata — outbound e inbound. La differenza sta nel come arriva la guida rivenditori.",
       streams: [
         {
-          name: "Outbound", caption: "lista da Fase 01",
+          name: "Outbound",
           touchpoints: [
-            { text: "Laura chiama i contatti della lista outbound",
+            { text: "Laura chiama per validare il contatto",
               system: "manuale", icon: "ti-phone", actor: "manual",
               timing: "Avvio immediato" },
             { text: "Raccoglie l'email durante la chiamata",
               system: "manuale", icon: "ti-at", actor: "manual",
               link: { text: "a fine chiamata", icon: "ti-arrow-down" } },
-            { text: "Mail automatica con allegato retail (benefit Giotto)",
+            { text: "Mail automatica con guida rivenditori (benefit Giotto)",
               system: "email", icon: "ti-mail", actor: "auto",
               timing: "Entro 24h",
               link: { text: "trigger: email salvata in Zoho", icon: "ti-bolt" } },
           ]
         },
         {
-          name: "Inbound", caption: "lead già in pipeline",
+          name: "Inbound",
           touchpoints: [
-            { text: "I lead della landing entrano direttamente in Zoho — confluiscono nelle fasi successive",
-              system: "zoho", icon: "ti-database", actor: "auto",
-              timing: "In continua" },
+            { text: "Laura chiama per validare il contatto",
+              system: "manuale", icon: "ti-phone", actor: "manual",
+              timing: "Avvio immediato",
+              extra: "Guida rivenditori già consegnata via form della landing" },
           ]
         },
       ]
@@ -888,7 +911,6 @@
 
     {
       n: 7, name: "Onboarding", period: "Agosto – Settembre 2026",
-      tags: ["entry point storici"],
       note: "I rivenditori storici che riacquistano saltano le fasi 1–6 ed entrano direttamente qui.",
       annotation: { icon: "ti-arrow-down-right", text: "Rivenditori storici: ingresso diretto in questa fase" },
       touchpoints: [
@@ -908,7 +930,7 @@
       note: "Touchpoint ricorrenti per tutti i rivenditori attivi — nuovi e storici insieme.",
       streams: [
         {
-          name: "Ricorrenti", caption: "loop di nutrimento", loop: true,
+          name: "Ricorrenti", loop: true,
           touchpoints: [
             { text: "Scheda prodotto mensile (approfondimento campagna Natale)",
               system: "email", icon: "ti-mail", actor: "sched",
@@ -916,12 +938,13 @@
             { text: "WhatsApp: contenuti social selezionati da Laura",
               system: "whatsapp", icon: "ti-brand-whatsapp", actor: "manual",
               timing: "Ogni venerdì" },
-            { text: "Newsletter editoriale «Storie dal carcere»",
+            { text: "Newsletter editoriale «Seconda occasione»",
               system: "email", icon: "ti-newspaper", actor: "sched",
               timing: "Ogni 2 del mese" },
-            { text: "Mail con i numeri salienti della campagna",
+            { text: "Mail numeri salienti + anteprima campagna successiva",
               system: "email", icon: "ti-chart-bar", actor: "auto",
-              timing: "Nov 2026 — 3 settimane prima della chiusura" },
+              timing: "Fine campagna — Dic 2026",
+              extra: "Introduce la prossima campagna (Colomba / Pasqua 2027)" },
           ]
         }
       ]
@@ -1008,7 +1031,6 @@
       <div class="stream ${stream.loop ? "loop" : ""}">
         <div class="stream-header">
           <span class="stream-name">${stream.name}</span>
-          <span class="stream-caption">${stream.caption || ""}</span>
         </div>
         ${renderRail(stream.touchpoints)}
       </div>`;
@@ -1147,13 +1169,14 @@
     svg.setAttribute("width", track.scrollWidth);
     svg.setAttribute("height", track.scrollHeight);
     [...svg.querySelectorAll("path.link")].forEach(n => n.remove());
+    [...track.querySelectorAll(".phase-outcome")].forEach(n => n.remove());
 
     for (let i = 0; i < colEls.length - 1; i++) {
       const a = colEls[i];
       const b = colEls[i + 1];
       const ax = a.offsetLeft + a.offsetWidth;
       const bx = b.offsetLeft;
-      const y = a.offsetTop + 88;
+      const y = a.offsetTop + 24;
       const midX = (ax + bx) / 2;
 
       const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -1166,6 +1189,17 @@
       path.setAttribute("opacity", "0.6");
       path.setAttribute("marker-end", "url(#arrowhead)");
       svg.appendChild(path);
+
+      // Phase outcome label centered on the connector
+      const phase = phases[i];
+      if (phase.outcome) {
+        const label = document.createElement("div");
+        label.className = "phase-outcome";
+        label.textContent = phase.outcome;
+        label.style.left = midX + "px";
+        label.style.top = y + "px";
+        track.appendChild(label);
+      }
     }
   }
 
