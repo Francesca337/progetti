@@ -671,6 +671,217 @@
   }
 
   /* ============================================================
+     LEAD COUNT (in column header)
+     ============================================================ */
+  .col-leads {
+    display: inline-flex; align-items: baseline; gap: 4px;
+    margin-top: 8px;
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--gold-deep);
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .col-leads .num {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: 0;
+    line-height: 1;
+    text-transform: none;
+  }
+
+  /* Outcome delta (small chip below the outcome text) */
+  .outcome-delta {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--sans);
+    font-style: normal;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+  }
+  .outcome-delta.positive { color: var(--branch-yes); }
+  .outcome-delta.negative { color: var(--ink-muted); }
+
+  /* ============================================================
+     RAIL NODE — clickable affordance
+     ============================================================ */
+  .rail-node {
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .rail-node .node-head {
+    position: relative;
+  }
+  .rail-node:hover .node-text { color: var(--gold-deep); }
+  .rail-node .node-chev {
+    position: absolute; right: 0; top: 4px;
+    color: var(--ink-fade);
+    font-size: 14px;
+    transition: color 0.15s, transform 0.15s;
+  }
+  .rail-node:hover .node-chev {
+    color: var(--gold-deep);
+    transform: translateX(2px);
+  }
+
+  /* ============================================================
+     ASSET PANEL (slide-over from right)
+     ============================================================ */
+  .asset-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,10,0.18);
+    z-index: 99;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+  }
+  .asset-backdrop.open { opacity: 1; pointer-events: auto; }
+
+  .asset-panel {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: 460px;
+    max-width: 92vw;
+    background: var(--card);
+    z-index: 100;
+    transform: translateX(100%);
+    transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+    overflow-y: auto;
+    border-left: 1px solid var(--hairline);
+    box-shadow: -4px 0 24px -10px rgba(10,10,10,0.10);
+  }
+  .asset-panel.open { transform: translateX(0); }
+
+  .asset-panel-inner {
+    padding: 32px 36px 56px;
+    display: flex; flex-direction: column;
+    gap: 24px;
+  }
+  .asset-panel-header {
+    display: flex; align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .asset-panel-kicker {
+    display: block;
+    font-family: var(--sans);
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--gold-deep);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .asset-panel-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.25;
+    letter-spacing: -0.2px;
+  }
+  .asset-panel-close {
+    background: transparent;
+    border: 1px solid var(--hairline);
+    border-radius: 50%;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--ink-muted);
+    flex-shrink: 0;
+    font-size: 14px;
+    transition: color 0.15s, border-color 0.15s;
+    padding: 0;
+  }
+  .asset-panel-close:hover {
+    color: var(--ink);
+    border-color: var(--ink-muted);
+  }
+
+  .asset-panel-meta {
+    display: flex; flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+    margin-top: -6px;
+  }
+
+  .asset-panel-section-title {
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--ink-muted);
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    margin: 4px 0 6px;
+  }
+
+  .asset-card {
+    display: flex; align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--hairline);
+    border-radius: 4px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, background 0.15s;
+    background: transparent;
+  }
+  .asset-card:hover {
+    border-color: var(--gold);
+    background: var(--bg);
+  }
+  .asset-icon {
+    width: 42px; height: 42px;
+    border-radius: 4px;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    color: var(--gold-deep);
+    flex-shrink: 0;
+  }
+  .asset-info { flex: 1; min-width: 0; }
+  .asset-title {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--ink);
+    font-weight: 500;
+    line-height: 1.3;
+    margin-bottom: 3px;
+  }
+  .asset-type {
+    font-family: var(--sans);
+    font-size: 9.5px;
+    color: var(--ink-muted);
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+  }
+  .asset-arrow {
+    color: var(--ink-fade);
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .asset-empty {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14.5px;
+    color: var(--ink-muted);
+    padding: 32px 0 8px;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  /* ============================================================
      ZOOM CONTROLS (bottom bar)
      ============================================================ */
   .zoom-controls {
@@ -770,6 +981,23 @@
   </div>
 </footer>
 
+<div class="asset-backdrop" id="assetBackdrop"></div>
+<aside class="asset-panel" id="assetPanel" aria-hidden="true">
+  <div class="asset-panel-inner">
+    <header class="asset-panel-header">
+      <div>
+        <span class="asset-panel-kicker" id="assetPanelKicker">Touchpoint</span>
+        <h2 class="asset-panel-title" id="assetPanelTitle"></h2>
+      </div>
+      <button class="asset-panel-close" type="button" id="assetPanelClose" aria-label="Chiudi">
+        <i class="ti ti-x"></i>
+      </button>
+    </header>
+    <div class="asset-panel-meta" id="assetPanelMeta"></div>
+    <div class="asset-panel-body" id="assetPanelBody"></div>
+  </div>
+</aside>
+
 <script>
   // ============================================================
   // CATALOGS
@@ -789,11 +1017,24 @@
     sched:  { label: "Ricorrente", cls: "actor-sched" },
   };
 
+  const ASSET_TYPE = {
+    pdf:    { label: "PDF",      icon: "ti-file-text" },
+    doc:    { label: "Doc",      icon: "ti-file-description" },
+    sheet:  { label: "Sheet",    icon: "ti-table" },
+    image:  { label: "Immagine", icon: "ti-photo" },
+    video:  { label: "Video",    icon: "ti-video" },
+    folder: { label: "Cartella", icon: "ti-folder" },
+    link:   { label: "Link",     icon: "ti-external-link" },
+  };
+
+  // Touchpoint index (built after render): tp-id → { tp, phase }
+  const touchpointIndex = new Map();
+
   const phases = [
     {
       n: 1, name: "Generazione lead", period: "Maggio – Giugno 2026",
       current: true,
-      note: "Due percorsi paralleli — entrambi convergono nella stessa pipeline.",
+      leads: 1500,
       outcome: "Il contatto entra in Zoho",
       streams: [
         {
@@ -801,7 +1042,11 @@
           touchpoints: [
             { text: "Estrapolazione contatti enoteche per area geografica",
               system: "manuale", icon: "ti-search", actor: "manual",
-              timing: "Avvio immediato" },
+              timing: "Avvio immediato",
+              assets: [
+                { type: "sheet", title: "Lista contatti enoteche Nord Italia", url: "#" },
+                { type: "doc", title: "Criteri di selezione e segmentazione", url: "#" },
+              ]},
           ]
         },
         {
@@ -809,12 +1054,22 @@
           touchpoints: [
             { text: "Campagna awareness geo-targeted",
               system: "ads", icon: "ti-speakerphone", actor: "auto",
-              timing: "Mag 2026" },
+              timing: "Mag 2026",
+              assets: [
+                { type: "folder", title: "Creatività ad awareness (Meta + Google)", url: "#" },
+                { type: "doc", title: "Brief campagna awareness", url: "#" },
+                { type: "image", title: "Visual chiave Natale 2026", url: "#" },
+              ]},
             { text: "Campagna lead gen Nord Italia → landing con form",
               system: "ads", icon: "ti-target", actor: "auto",
               timing: "Mag 2026",
               link: { text: "in parallelo all'awareness", icon: "ti-arrow-right" },
-              extra: "Compilando il form ricevono la guida rivenditori (stesso doc dell'outbound)" },
+              extra: "Compilando il form ricevono la guida rivenditori (stesso doc dell'outbound)",
+              assets: [
+                { type: "link", title: "Landing rivenditori giotto.it/diventa-rivenditore", url: "#" },
+                { type: "folder", title: "Creatività ad lead gen", url: "#" },
+                { type: "pdf", title: "Guida rivenditori 2026 (delivered via form)", url: "#" },
+              ]},
           ]
         },
       ]
@@ -822,7 +1077,7 @@
 
     {
       n: 2, name: "Esplorazione", period: "Maggio – Giugno 2026",
-      note: "Laura valida tutti i contatti via telefonata — outbound e inbound. La differenza sta nel come arriva la guida rivenditori.",
+      leads: 1200,
       outcome: "Contatto validato e informato",
       streams: [
         {
@@ -830,14 +1085,22 @@
           touchpoints: [
             { text: "Laura chiama per validare il contatto",
               system: "manuale", icon: "ti-phone", actor: "manual",
-              timing: "Avvio immediato" },
+              timing: "Avvio immediato",
+              assets: [
+                { type: "doc", title: "Script chiamata di validazione", url: "#" },
+                { type: "doc", title: "Domande qualificazione rivenditore", url: "#" },
+              ]},
             { text: "Raccoglie l'email durante la chiamata",
               system: "manuale", icon: "ti-at", actor: "manual",
               link: { text: "a fine chiamata", icon: "ti-arrow-down" } },
             { text: "Mail automatica con guida rivenditori (benefit Giotto)",
               system: "email", icon: "ti-mail", actor: "auto",
               timing: "Entro 24h",
-              link: { text: "trigger: email salvata in Zoho", icon: "ti-bolt" } },
+              link: { text: "trigger: email salvata in Zoho", icon: "ti-bolt" },
+              assets: [
+                { type: "pdf", title: "Guida rivenditori Giotto 2026", url: "#" },
+                { type: "doc", title: "Template mail automatica (Zoho)", url: "#" },
+              ]},
           ]
         },
         {
@@ -846,7 +1109,10 @@
             { text: "Laura chiama per validare il contatto",
               system: "manuale", icon: "ti-phone", actor: "manual",
               timing: "Avvio immediato",
-              extra: "Guida rivenditori già consegnata via form della landing" },
+              extra: "Guida rivenditori già consegnata via form della landing",
+              assets: [
+                { type: "doc", title: "Script chiamata di validazione", url: "#" },
+              ]},
           ]
         },
       ]
@@ -854,7 +1120,7 @@
 
     {
       n: 3, name: "Proposta appuntamento", period: "Giugno 2026",
-      note: "Task automatico da Zoho 72h dopo la mail. Laura non deve ricordarselo.",
+      leads: 780,
       outcome: "Appuntamento fissato a calendario",
       touchpoints: [
         { text: "Task Zoho: chiama per proporre l'incontro",
@@ -863,7 +1129,11 @@
         { text: "Laura propone l'incontro per far assaggiare la campionatura",
           system: "manuale", icon: "ti-phone", actor: "manual",
           timing: "Giu 2026",
-          link: { text: "Laura prende il task", icon: "ti-arrow-down" } },
+          link: { text: "Laura prende il task", icon: "ti-arrow-down" },
+          assets: [
+            { type: "doc", title: "Script proposta appuntamento", url: "#" },
+            { type: "doc", title: "Calendario disponibilità Laura (giugno)", url: "#" },
+          ]},
       ],
       branches: [
         { kind: "yes",   label: "Sì",    steps: [
@@ -881,23 +1151,36 @@
 
     {
       n: 4, name: "Incontro", period: "Giugno – Luglio 2026",
+      leads: 460,
       outcome: "Campionatura e listino in mano al rivenditore",
       touchpoints: [
         { text: "Laura porta la campionatura prodotti Natale 2026",
           system: "manuale", icon: "ti-gift", actor: "manual",
-          timing: "Giu–Lug 2026" },
+          timing: "Giu–Lug 2026",
+          assets: [
+            { type: "doc", title: "Pack list campionatura Natale 2026", url: "#" },
+            { type: "image", title: "Foto prodotti campionatura", url: "#" },
+          ]},
         { text: "Mostra materiali di comunicazione da tablet",
           system: "manuale", icon: "ti-device-tablet", actor: "manual",
-          link: { text: "durante l'incontro", icon: "ti-arrow-down" } },
+          link: { text: "durante l'incontro", icon: "ti-arrow-down" },
+          assets: [
+            { type: "video", title: "Video racconto progetto Giotto", url: "#" },
+            { type: "pdf", title: "Presentazione campagna Natale 2026", url: "#" },
+            { type: "folder", title: "Materiali POP per il punto vendita", url: "#" },
+          ]},
         { text: "Presenta e lascia il listino",
           system: "manuale", icon: "ti-file-text", actor: "manual",
-          link: { text: "a fine incontro", icon: "ti-arrow-down" } },
+          link: { text: "a fine incontro", icon: "ti-arrow-down" },
+          assets: [
+            { type: "pdf", title: "Listino prodotti retail Natale 2026", url: "#" },
+          ]},
       ],
     },
 
     {
       n: 5, name: "Ragionamento", period: "Luglio 2026",
-      note: "1–2 settimane in base al periodo. Touchpoint attivo a metà fase.",
+      leads: 460,
       outcome: "Il rivenditore è pronto a rispondere",
       touchpoints: [
         { text: "Reminder Zoho con data di richiamo personalizzata",
@@ -906,13 +1189,16 @@
         { text: "WhatsApp di Laura: «Com'è andata con la campionatura?»",
           system: "whatsapp", icon: "ti-brand-whatsapp", actor: "manual",
           timing: "A metà del periodo",
-          link: { text: "Laura usa il reminder come innesco", icon: "ti-arrow-down" } },
+          link: { text: "Laura usa il reminder come innesco", icon: "ti-arrow-down" },
+          assets: [
+            { type: "doc", title: "Template messaggio WhatsApp follow-up", url: "#" },
+          ]},
       ],
     },
 
     {
       n: 6, name: "Risposta", period: "Luglio – Agosto 2026",
-      note: "Momento decisivo. I No definitivi restano nel perimetro Giotto via newsletter.",
+      leads: 290,
       outcome: "Ordine raccolto",
       branches: [
         { kind: "yes",   label: "Sì",    steps: [
@@ -930,24 +1216,34 @@
 
     {
       n: 7, name: "Onboarding", period: "Agosto – Settembre 2026",
-      note: "I rivenditori storici che riacquistano saltano le fasi 1–6 ed entrano direttamente qui.",
+      leads: 470,
       outcome: "Rivenditore attivato con kit campagna",
-      annotation: { icon: "ti-arrow-down-right", text: "Rivenditori storici: ingresso diretto in questa fase" },
+      annotation: { icon: "ti-arrow-down-right", text: "Rivenditori storici: ingresso diretto in questa fase (+180 lead)" },
       touchpoints: [
         { text: "Mail automatica: store locator + scontistica dedicata per i primi 6 mesi",
           system: "email", icon: "ti-mail", actor: "auto",
           timing: "Entro 24h dalla conferma ordine",
-          link: { text: "trigger: ordine confermato in Zoho", icon: "ti-bolt" } },
+          link: { text: "trigger: ordine confermato in Zoho", icon: "ti-bolt" },
+          assets: [
+            { type: "doc", title: "Template mail benvenuto rivenditore", url: "#" },
+            { type: "link", title: "Store locator giotto.it/dove-trovarci", url: "#" },
+            { type: "doc", title: "Schema scontistica primi 6 mesi", url: "#" },
+          ]},
         { text: "Spedizione ordine + kit comunicazione campagna Natale nella scatola",
           system: "logistica", icon: "ti-truck", actor: "auto",
           timing: "Set 2026",
-          link: { text: "dopo conferma pagamento", icon: "ti-arrow-down" } },
+          link: { text: "dopo conferma pagamento", icon: "ti-arrow-down" },
+          assets: [
+            { type: "doc", title: "Checklist kit comunicazione Natale", url: "#" },
+            { type: "doc", title: "Brief packaging dedicato rivenditori", url: "#" },
+            { type: "image", title: "Lookbook materiali POP nella scatola", url: "#" },
+          ]},
       ],
     },
 
     {
       n: 8, name: "Campagna attiva", period: "Ottobre – Dicembre 2026",
-      note: "Touchpoint ricorrenti per tutti i rivenditori attivi — nuovi e storici insieme.",
+      leads: 470,
       outcome: "Campagna conclusa, prossima campagna anticipata",
       streams: [
         {
@@ -955,17 +1251,33 @@
           touchpoints: [
             { text: "Scheda prodotto mensile (approfondimento campagna Natale)",
               system: "email", icon: "ti-mail", actor: "sched",
-              timing: "1× al mese" },
+              timing: "1× al mese",
+              assets: [
+                { type: "doc", title: "Template scheda prodotto mensile", url: "#" },
+                { type: "folder", title: "Schede mensili Ott/Nov/Dic 2026", url: "#" },
+              ]},
             { text: "WhatsApp: contenuti social selezionati da Laura",
               system: "whatsapp", icon: "ti-brand-whatsapp", actor: "manual",
-              timing: "Ogni venerdì" },
+              timing: "Ogni venerdì",
+              assets: [
+                { type: "folder", title: "Contenuti social settimanali (drive condiviso)", url: "#" },
+                { type: "doc", title: "Calendario editoriale ottobre–dicembre", url: "#" },
+              ]},
             { text: "Newsletter editoriale «Seconda occasione»",
               system: "email", icon: "ti-newspaper", actor: "sched",
-              timing: "Ogni 2 del mese" },
+              timing: "Ogni 2 del mese",
+              assets: [
+                { type: "doc", title: "Template newsletter Seconda occasione", url: "#" },
+                { type: "folder", title: "Articoli & immagini editoriali", url: "#" },
+              ]},
             { text: "Mail numeri salienti + anteprima campagna successiva",
               system: "email", icon: "ti-chart-bar", actor: "auto",
               timing: "Fine campagna — Dic 2026",
-              extra: "Introduce la prossima campagna (Colomba / Pasqua 2027)" },
+              extra: "Introduce la prossima campagna (Colomba / Pasqua 2027)",
+              assets: [
+                { type: "doc", title: "Template mail wrap-up campagna", url: "#" },
+                { type: "doc", title: "Brief teaser Colomba / Pasqua 2027", url: "#" },
+              ]},
           ]
         }
       ]
@@ -973,15 +1285,24 @@
 
     {
       n: 9, name: "Fine campagna", period: "Gennaio 2027",
+      leads: 470,
       touchpoints: [
         { text: "Mail automatica di feedback sulla campagna",
           system: "email", icon: "ti-mail", actor: "auto",
-          timing: "Gen 2027" },
+          timing: "Gen 2027",
+          assets: [
+            { type: "doc", title: "Template mail feedback campagna", url: "#" },
+            { type: "link", title: "Form feedback rivenditori", url: "#" },
+          ]},
         { text: "Laura propone la campagna successiva (Colomba / Pasqua 2027)",
           system: "manuale", icon: "ti-arrow-right", actor: "manual",
           timing: "Gen 2027",
           link: { text: "subito dopo il feedback", icon: "ti-arrow-down" },
-          extra: "Momento di massimo calore — non lasciarlo raffreddare" },
+          extra: "Momento di massimo calore — non lasciarlo raffreddare",
+          assets: [
+            { type: "doc", title: "Brief campagna Colomba / Pasqua 2027", url: "#" },
+            { type: "doc", title: "Script proposta nuova campagna", url: "#" },
+          ]},
       ],
     },
   ];
@@ -1016,16 +1337,20 @@
     </div>`;
   }
 
-  function renderNode(tp) {
+  let _tpCounter = 0;
+  function renderNode(tp, phase) {
     const sys = SYS[tp.system];
     const iconCls = sys ? sys.cls : "";
     const actorCls = tp.actor ? `actor-${tp.actor}` : "";
+    const id = "tp-" + (++_tpCounter);
+    touchpointIndex.set(id, { tp, phase });
     return `
-      <div class="rail-node ${actorCls}">
+      <div class="rail-node ${actorCls}" data-tp-id="${id}" tabindex="0" role="button" aria-label="Vedi asset">
         <div class="node">
           <div class="node-head">
             <span class="node-icon ${iconCls}"><i class="ti ${tp.icon}"></i></span>
             <div class="node-text">${tp.text}</div>
+            <i class="ti ti-chevron-right node-chev"></i>
           </div>
           <div class="node-meta">
             ${actorPill(tp.actor)}
@@ -1037,23 +1362,23 @@
       </div>`;
   }
 
-  function renderRail(touchpoints) {
+  function renderRail(touchpoints, phase) {
     if (!touchpoints || !touchpoints.length) return "";
     return `<div class="rail">
       ${touchpoints.map((tp, i) => `
         ${i > 0 ? renderLink(tp.link) : ""}
-        ${renderNode(tp)}
+        ${renderNode(tp, phase)}
       `).join("")}
     </div>`;
   }
 
-  function renderStream(stream) {
+  function renderStream(stream, phase) {
     return `
       <div class="stream ${stream.loop ? "loop" : ""}">
         <div class="stream-header">
           <span class="stream-name">${stream.name}</span>
         </div>
-        ${renderRail(stream.touchpoints)}
+        ${renderRail(stream.touchpoints, phase)}
       </div>`;
   }
 
@@ -1084,13 +1409,17 @@
       </div>`;
   }
 
+  function formatLeads(n) {
+    return n.toLocaleString("it-IT");
+  }
+
   function renderColumn(p) {
     const isCurrent = !!p.current;
     let body = "";
     if (p.streams && p.streams.length) {
-      body = p.streams.map(renderStream).join("");
+      body = p.streams.map(s => renderStream(s, p)).join("");
     } else if (p.touchpoints && p.touchpoints.length) {
-      body = renderRail(p.touchpoints);
+      body = renderRail(p.touchpoints, p);
     }
     return `
       <section class="col ${isCurrent ? "current" : ""}" id="phase-${p.n}" data-phase="${p.n}">
@@ -1099,6 +1428,7 @@
           <span class="col-num">${pad(p.n)}</span>
           <h2 class="col-name">${p.name}</h2>
           <div class="col-period">${p.period}</div>
+          ${p.leads != null ? `<div class="col-leads"><span class="num">${formatLeads(p.leads)}</span> lead</div>` : ""}
           ${p.tags ? `<div class="col-tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>` : ""}
         </div>
         <div class="col-body">
@@ -1184,6 +1514,86 @@
 
   updateZoomLabel();
 
+  // ----- Asset Panel (slide-over) -----
+  const panel = document.getElementById("assetPanel");
+  const backdrop = document.getElementById("assetBackdrop");
+  const panelTitle = document.getElementById("assetPanelTitle");
+  const panelKicker = document.getElementById("assetPanelKicker");
+  const panelMeta = document.getElementById("assetPanelMeta");
+  const panelBody = document.getElementById("assetPanelBody");
+  const panelClose = document.getElementById("assetPanelClose");
+
+  function renderAssetCard(asset) {
+    const t = ASSET_TYPE[asset.type] || ASSET_TYPE.link;
+    return `
+      <a class="asset-card" href="${asset.url || "#"}" target="_blank" rel="noopener">
+        <span class="asset-icon"><i class="ti ${t.icon}"></i></span>
+        <span class="asset-info">
+          <span class="asset-title">${asset.title}</span>
+          <span class="asset-type">${t.label}</span>
+        </span>
+        <i class="ti ti-arrow-up-right asset-arrow"></i>
+      </a>`;
+  }
+
+  function openPanel(tpId) {
+    const entry = touchpointIndex.get(tpId);
+    if (!entry) return;
+    const { tp, phase } = entry;
+
+    panelKicker.textContent = `Fase ${pad(phase.n)} · ${phase.name}`;
+    panelTitle.textContent = tp.text;
+
+    panelMeta.innerHTML = [
+      actorPill(tp.actor),
+      badgeForSystem(tp.system),
+      timingPill(tp.timing),
+    ].filter(Boolean).join("");
+
+    if (tp.assets && tp.assets.length) {
+      panelBody.innerHTML = `
+        <div class="asset-panel-section-title">Asset & materiali</div>
+        ${tp.assets.map(renderAssetCard).join("")}
+      `;
+    } else {
+      panelBody.innerHTML = `<div class="asset-empty">Nessun asset associato a questo touchpoint.</div>`;
+    }
+
+    panel.classList.add("open");
+    backdrop.classList.add("open");
+    panel.setAttribute("aria-hidden", "false");
+  }
+
+  function closePanel() {
+    panel.classList.remove("open");
+    backdrop.classList.remove("open");
+    panel.setAttribute("aria-hidden", "true");
+  }
+
+  // Click delegation on rail nodes
+  track.addEventListener("click", (e) => {
+    const node = e.target.closest(".rail-node");
+    if (!node) return;
+    const tpId = node.dataset.tpId;
+    if (tpId) openPanel(tpId);
+  });
+
+  // Keyboard activation
+  track.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const node = e.target.closest(".rail-node");
+    if (!node) return;
+    e.preventDefault();
+    const tpId = node.dataset.tpId;
+    if (tpId) openPanel(tpId);
+  });
+
+  panelClose.addEventListener("click", closePanel);
+  backdrop.addEventListener("click", closePanel);
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closePanel();
+  });
+
   const colEls = [...document.querySelectorAll(".col")];
   const ratios = new Map();
   const observer = new IntersectionObserver((entries) => {
@@ -1221,14 +1631,33 @@
       path.setAttribute("marker-end", "url(#arrowhead)");
       svg.appendChild(path);
 
-      // Phase outcome label centered on the connector
+      // Phase outcome label centered on the connector + lead delta
       const phase = phases[i];
-      if (phase.outcome) {
+      const next = phases[i + 1];
+      if (phase.outcome || (phase.leads != null && next.leads != null)) {
         const label = document.createElement("div");
         label.className = "phase-outcome";
-        label.textContent = phase.outcome;
         label.style.left = midX + "px";
         label.style.top = y + "px";
+
+        if (phase.outcome) {
+          const span = document.createElement("span");
+          span.textContent = phase.outcome;
+          label.appendChild(span);
+        }
+
+        if (phase.leads != null && next.leads != null && phase.leads > 0) {
+          const delta = next.leads - phase.leads;
+          if (delta !== 0) {
+            const pct = Math.round((delta / phase.leads) * 100);
+            const sign = delta > 0 ? "+" : "−";
+            const deltaEl = document.createElement("span");
+            deltaEl.className = "outcome-delta " + (delta > 0 ? "positive" : "negative");
+            deltaEl.textContent = `${sign}${formatLeads(Math.abs(delta))} lead · ${sign}${Math.abs(pct)}%`;
+            label.appendChild(deltaEl);
+          }
+        }
+
         track.appendChild(label);
       }
     }
