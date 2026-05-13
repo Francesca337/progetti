@@ -1116,13 +1116,15 @@
   }
 
   scrollArea.addEventListener("wheel", (e) => {
-    // Use the dominant axis (vertical wheel maps to horizontal canvas)
+    // Only intercept dominant HORIZONTAL gestures (trackpad swipes).
+    // Vertical wheel falls through to native vertical scroll so tall
+    // columns can be read top-to-bottom without losing content below.
     const absX = Math.abs(e.deltaX);
     const absY = Math.abs(e.deltaY);
-    const delta = absX > absY ? e.deltaX : e.deltaY;
-    if (delta === 0) return;
-    e.preventDefault();
-    scrollSmoothX(targetX + delta * WHEEL_MULT);
+    if (absX > absY && absX > 0) {
+      e.preventDefault();
+      scrollSmoothX(targetX + e.deltaX * WHEEL_MULT);
+    }
   }, { passive: false });
 
   // If user drags scrollbar / touches, sync the target
