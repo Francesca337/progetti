@@ -7,100 +7,51 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
   /* ---------- BRAND TYPEFACES ---------- */
-  @font-face {
-    font-family: "Gazpacho";
-    src: url("fonts/Gazpacho-Light.woff2") format("woff2");
-    font-weight: 300; font-style: normal; font-display: swap;
-  }
-  @font-face {
-    font-family: "Gazpacho";
-    src: url("fonts/Gazpacho-LightItalic.woff2") format("woff2");
-    font-weight: 300; font-style: italic; font-display: swap;
-  }
-  @font-face {
-    font-family: "Gazpacho";
-    src: url("fonts/Gazpacho-Regular.woff2") format("woff2");
-    font-weight: 400; font-style: normal; font-display: swap;
-  }
-  @font-face {
-    font-family: "Gazpacho";
-    src: url("fonts/Gazpacho-Italic.woff2") format("woff2");
-    font-weight: 400; font-style: italic; font-display: swap;
-  }
-  @font-face {
-    font-family: "Gazpacho";
-    src: url("fonts/Gazpacho-Medium.woff2") format("woff2");
-    font-weight: 500; font-style: normal; font-display: swap;
-  }
-  @font-face {
-    font-family: "Gazpacho";
-    src: url("fonts/Gazpacho-MediumItalic.woff2") format("woff2");
-    font-weight: 500; font-style: italic; font-display: swap;
-  }
-  @font-face {
-    font-family: "Gazpacho";
-    src: url("fonts/Gazpacho-Bold.woff2") format("woff2");
-    font-weight: 700; font-style: normal; font-display: swap;
-  }
+  @font-face { font-family:"Gazpacho"; src:url("fonts/Gazpacho-Light.woff2") format("woff2");        font-weight:300; font-style:normal; font-display:swap; }
+  @font-face { font-family:"Gazpacho"; src:url("fonts/Gazpacho-LightItalic.woff2") format("woff2");  font-weight:300; font-style:italic; font-display:swap; }
+  @font-face { font-family:"Gazpacho"; src:url("fonts/Gazpacho-Regular.woff2") format("woff2");      font-weight:400; font-style:normal; font-display:swap; }
+  @font-face { font-family:"Gazpacho"; src:url("fonts/Gazpacho-Italic.woff2") format("woff2");       font-weight:400; font-style:italic; font-display:swap; }
+  @font-face { font-family:"Gazpacho"; src:url("fonts/Gazpacho-Medium.woff2") format("woff2");       font-weight:500; font-style:normal; font-display:swap; }
+  @font-face { font-family:"Gazpacho"; src:url("fonts/Gazpacho-MediumItalic.woff2") format("woff2"); font-weight:500; font-style:italic; font-display:swap; }
+  @font-face { font-family:"Gazpacho"; src:url("fonts/Gazpacho-Bold.woff2") format("woff2");         font-weight:700; font-style:normal; font-display:swap; }
 
-  @font-face {
-    font-family: "Neue Montreal";
-    src: url("fonts/NeueMontreal-Light.woff2") format("woff2");
-    font-weight: 300; font-style: normal; font-display: swap;
-  }
-  @font-face {
-    font-family: "Neue Montreal";
-    src: url("fonts/NeueMontreal-LightItalic.woff2") format("woff2");
-    font-weight: 300; font-style: italic; font-display: swap;
-  }
-  @font-face {
-    font-family: "Neue Montreal";
-    src: url("fonts/NeueMontreal-Regular.woff2") format("woff2");
-    font-weight: 400; font-style: normal; font-display: swap;
-  }
-  @font-face {
-    font-family: "Neue Montreal";
-    src: url("fonts/NeueMontreal-Italic.woff2") format("woff2");
-    font-weight: 400; font-style: italic; font-display: swap;
-  }
-  @font-face {
-    font-family: "Neue Montreal";
-    src: url("fonts/NeueMontreal-Medium.woff2") format("woff2");
-    font-weight: 500; font-style: normal; font-display: swap;
-  }
-  @font-face {
-    font-family: "Neue Montreal";
-    src: url("fonts/NeueMontreal-MediumItalic.woff2") format("woff2");
-    font-weight: 500; font-style: italic; font-display: swap;
-  }
-  @font-face {
-    font-family: "Neue Montreal";
-    src: url("fonts/NeueMontreal-Bold.woff2") format("woff2");
-    font-weight: 700; font-style: normal; font-display: swap;
-  }
+  @font-face { font-family:"Neue Montreal"; src:url("fonts/NeueMontreal-Light.woff2") format("woff2");        font-weight:300; font-style:normal; font-display:swap; }
+  @font-face { font-family:"Neue Montreal"; src:url("fonts/NeueMontreal-LightItalic.woff2") format("woff2");  font-weight:300; font-style:italic; font-display:swap; }
+  @font-face { font-family:"Neue Montreal"; src:url("fonts/NeueMontreal-Regular.woff2") format("woff2");      font-weight:400; font-style:normal; font-display:swap; }
+  @font-face { font-family:"Neue Montreal"; src:url("fonts/NeueMontreal-Italic.woff2") format("woff2");       font-weight:400; font-style:italic; font-display:swap; }
+  @font-face { font-family:"Neue Montreal"; src:url("fonts/NeueMontreal-Medium.woff2") format("woff2");       font-weight:500; font-style:normal; font-display:swap; }
+  @font-face { font-family:"Neue Montreal"; src:url("fonts/NeueMontreal-MediumItalic.woff2") format("woff2"); font-weight:500; font-style:italic; font-display:swap; }
+  @font-face { font-family:"Neue Montreal"; src:url("fonts/NeueMontreal-Bold.woff2") format("woff2");         font-weight:700; font-style:normal; font-display:swap; }
 
   :root {
-    /* Brand palette */
-    --bg:          #F2E8D7;   /* cream peach */
-    --bg-alt:      #EDE1C9;   /* deeper cream */
-    --card:        #FBF6EA;   /* card surface */
-    --card-soft:   #F6EFDC;   /* nested surface */
+    --bg:          #F2E8D7;
+    --bg-alt:      #EDE1C9;
+    --card:        #FBF6EA;
+    --card-soft:   #F6EFDC;
 
-    --ink:         #0A0A0A;   /* deep black */
-    --ink-soft:    #2A2620;   /* warm dark */
-    --ink-muted:   #8C8276;   /* warm muted */
-    --ink-fade:    #B3A893;   /* faded text */
+    --ink:         #0A0A0A;
+    --ink-soft:    #2A2620;
+    --ink-muted:   #8C8276;
+    --ink-fade:    #B3A893;
 
-    --gold:        #A89060;   /* signature gold */
-    --gold-deep:   #8E7848;   /* deeper gold for text contrast */
-    --gold-soft:   #D6C39A;   /* light gold */
-    --gold-pale:   #EFE3C7;   /* pale gold bg */
+    --gold:        #A89060;
+    --gold-deep:   #8E7848;
+    --gold-soft:   #D6C39A;
+    --gold-pale:   #EFE3C7;
 
-    --hairline:    rgba(168,144,96,0.32);
-    --hairline-soft: rgba(168,144,96,0.18);
-    --rule:        rgba(10,10,10,0.08);
+    --hairline:      rgba(168,144,96,0.32);
+    --hairline-soft: rgba(168,144,96,0.20);
+    --rule:          rgba(10,10,10,0.08);
 
-    /* System badge palette — desaturated, brand-aligned */
+    /* Actor palette */
+    --actor-manual-bg:    #7A3920;
+    --actor-manual-fg:    #FBE9DD;
+    --actor-auto-bg:      var(--gold);
+    --actor-auto-fg:      #1A1100;
+    --actor-sched-bg:     #4F6B2C;
+    --actor-sched-fg:     #ECF1D7;
+
+    /* System badge palette */
     --sys-zoho-bg:   #E3E8EF; --sys-zoho-fg:   #2A3D5C;
     --sys-wa-bg:     #E2E8D4; --sys-wa-fg:     #4A5A2A;
     --sys-mail-bg:   #F1E2C8; --sys-mail-fg:   #7A4A1A;
@@ -108,20 +59,17 @@
     --sys-ads-bg:    #E4DFEC; --sys-ads-fg:    #4F4677;
     --sys-log-bg:    #E6DFD0; --sys-log-fg:    #4F4738;
 
-    --branch-yes:   #4F6B2C;
-    --branch-yes-bg:#E8EBD6;
-    --branch-maybe: #A87A1E;
-    --branch-maybe-bg:#F2E6C4;
-    --branch-no:    #9C4628;
-    --branch-no-bg: #F1DCCE;
+    --branch-yes:    #4F6B2C; --branch-yes-bg:   #E8EBD6;
+    --branch-maybe:  #A87A1E; --branch-maybe-bg: #F2E6C4;
+    --branch-no:     #9C4628; --branch-no-bg:    #F1DCCE;
 
     --top-h: 72px;
     --bot-h: 44px;
-    --col-w: 280px;
+    --col-w: 304px;
     --gap: 64px;
 
-    --serif: "Gazpacho", "Cormorant Garamond", Georgia, serif;
-    --sans: "Neue Montreal", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --serif: "Gazpacho", Georgia, serif;
+    --sans:  "Neue Montreal", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   }
 
   * { box-sizing: border-box; }
@@ -139,7 +87,9 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* ---------- TOP BAR ---------- */
+  /* ============================================================
+     TOP BAR
+     ============================================================ */
   .topbar {
     position: fixed; top: 0; left: 0; right: 0;
     height: var(--top-h);
@@ -150,58 +100,40 @@
     z-index: 50;
     border-bottom: 1px solid rgba(168,144,96,0.18);
   }
-  .brand {
-    display: flex; align-items: center;
-    gap: 18px;
-    margin-right: 28px;
-    flex-shrink: 0;
-  }
+  .brand { display: flex; align-items: center; gap: 18px; margin-right: 28px; flex-shrink: 0; }
   .wordmark {
-    display: flex; flex-direction: column;
-    align-items: center;
+    display: flex; flex-direction: column; align-items: center;
     line-height: 1;
     padding-right: 18px;
     border-right: 1px solid rgba(168,144,96,0.22);
   }
   .wordmark .top, .wordmark .bot {
     font-family: var(--serif);
-    font-size: 8.5px;
-    letter-spacing: 4.5px;
+    font-size: 8.5px; letter-spacing: 4.5px;
     color: var(--gold-soft);
-    font-weight: 500;
-    text-transform: uppercase;
+    font-weight: 400; text-transform: uppercase;
   }
   .wordmark .top { margin-bottom: 4px; }
   .wordmark .bot { margin-top: 4px; font-size: 7.5px; letter-spacing: 3.5px; }
   .wordmark .giotto {
     font-family: var(--serif);
-    font-size: 19px;
-    font-weight: 500;
+    font-size: 19px; font-weight: 400;
     color: #FAF1DB;
-    letter-spacing: 0;
-    display: flex; align-items: center;
-    gap: 5px;
+    display: flex; align-items: center; gap: 5px;
   }
-  .wordmark .giotto .bar {
-    width: 1px;
-    height: 14px;
-    background: rgba(255,255,255,0.35);
-  }
-  .subtitle {
-    display: flex; flex-direction: column;
-    line-height: 1.3;
-  }
+  .wordmark .giotto .bar { width: 1px; height: 14px; background: rgba(255,255,255,0.35); }
+  .subtitle { display: flex; flex-direction: column; line-height: 1.3; }
   .subtitle .kicker {
     font-family: var(--serif);
     font-style: italic;
-    font-size: 12px;
+    font-size: 12.5px;
     color: var(--gold-soft);
     margin-bottom: 1px;
   }
   .subtitle .title {
-    font-size: 12px;
-    color: #E8DDC6;
-    letter-spacing: 0.4px;
+    font-size: 11.5px;
+    color: #C9BEA6;
+    letter-spacing: 0.3px;
     font-weight: 400;
   }
   .nav {
@@ -227,27 +159,20 @@
     font-family: var(--sans);
     display: inline-flex; align-items: center; gap: 8px;
   }
-  .pill:hover {
-    color: #F5EBD7;
-    border-color: var(--gold);
-  }
-  .pill.active {
-    background: var(--gold);
-    color: var(--ink);
-    border-color: var(--gold);
-  }
+  .pill:hover { color: #F5EBD7; border-color: var(--gold); }
+  .pill.active { background: var(--gold); color: var(--ink); border-color: var(--gold); }
   .pill .num {
     font-family: var(--serif);
-    font-size: 13px;
-    font-weight: 500;
-    font-style: italic;
+    font-size: 13px; font-weight: 500; font-style: italic;
     font-variant-numeric: tabular-nums;
     color: var(--gold-soft);
     line-height: 1;
   }
-  .pill.active .num { color: var(--ink); }
+  .pill.active .num { color: var(--ink); font-style: italic; }
 
-  /* ---------- SCROLL AREA ---------- */
+  /* ============================================================
+     SCROLL AREA + TRACK
+     ============================================================ */
   .scroll-area {
     position: fixed;
     top: var(--top-h);
@@ -258,15 +183,16 @@
     padding: 36px 48px 40px 48px;
   }
   .track {
-    display: flex;
-    align-items: flex-start;
+    display: flex; align-items: flex-start;
     gap: var(--gap);
     min-width: max-content;
     position: relative;
     padding-bottom: 24px;
   }
 
-  /* ---------- COLUMN ---------- */
+  /* ============================================================
+     COLUMN
+     ============================================================ */
   .col {
     width: var(--col-w);
     flex: 0 0 var(--col-w);
@@ -279,10 +205,9 @@
     z-index: 2;
     box-shadow: 0 1px 0 rgba(168,144,96,0.05);
   }
-  .col.current {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 1px var(--gold);
-  }
+  .col.current { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+
+  /* Column header */
   .col-header {
     background: var(--ink);
     color: #F5EBD7;
@@ -290,26 +215,15 @@
     position: relative;
   }
   .col-header::after {
-    content: "";
-    position: absolute;
-    left: 22px; right: 22px;
-    bottom: 0;
-    height: 1px;
+    content: ""; position: absolute;
+    left: 22px; right: 22px; bottom: 0; height: 1px;
     background: linear-gradient(90deg, var(--gold) 0%, var(--gold) 30%, transparent 100%);
   }
-  .col.current .col-header {
-    background: #14110A;
-  }
-  .col-numline {
-    display: flex; align-items: baseline;
-    gap: 12px;
-    margin-bottom: 6px;
-  }
+  .col.current .col-header { background: #14110A; }
+  .col-numline { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
   .col-num {
     font-family: var(--serif);
-    font-size: 36px;
-    font-weight: 500;
-    line-height: 1;
+    font-size: 38px; font-weight: 400; line-height: 1;
     color: var(--gold);
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.5px;
@@ -326,10 +240,8 @@
   .here-dot {
     display: inline-flex; align-items: center; gap: 6px;
     color: var(--gold);
-    font-size: 9.5px;
-    font-weight: 500;
-    letter-spacing: 1.6px;
-    text-transform: uppercase;
+    font-size: 9.5px; font-weight: 500;
+    letter-spacing: 1.6px; text-transform: uppercase;
     margin-left: auto;
     font-family: var(--sans);
   }
@@ -347,8 +259,7 @@
   }
   .col-name {
     font-family: var(--serif);
-    font-size: 22px;
-    font-weight: 500;
+    font-size: 23px; font-weight: 400;
     letter-spacing: -0.2px;
     color: #FAF1DB;
     margin: 0;
@@ -358,16 +269,13 @@
     font-family: var(--sans);
     font-size: 10.5px;
     color: var(--gold-soft);
-    margin-top: 8px;
+    margin-top: 10px;
     letter-spacing: 1.2px;
     text-transform: uppercase;
     font-variant-numeric: tabular-nums;
     font-weight: 400;
   }
-  .col-tags {
-    display: flex; flex-wrap: wrap; gap: 5px;
-    margin-top: 12px;
-  }
+  .col-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
   .tag {
     font-family: var(--serif);
     font-style: italic;
@@ -376,26 +284,29 @@
     border: 1px solid rgba(168,144,96,0.35);
     padding: 2px 9px;
     border-radius: 999px;
-    letter-spacing: 0.2px;
     background: transparent;
   }
 
   .col-body {
     padding: 18px 18px 22px;
     display: flex; flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     flex: 1;
   }
+
+  /* Note (italic, gold rule) */
   .note {
     font-family: var(--serif);
     font-style: italic;
-    font-size: 13px;
+    font-size: 13.5px;
     line-height: 1.5;
     color: var(--ink-soft);
-    padding: 6px 0 6px 12px;
+    padding: 4px 0 4px 14px;
     border-left: 1px solid var(--gold);
-    margin: 2px 0 4px;
+    margin: 0;
   }
+
+  /* Entry annotation (storici) */
   .annotation {
     font-family: var(--sans);
     font-size: 11px;
@@ -403,88 +314,252 @@
     color: var(--gold-deep);
     background: var(--gold-pale);
     border: 1px solid var(--hairline);
-    padding: 9px 11px 9px 32px;
+    padding: 10px 12px 10px 36px;
     border-radius: 2px;
     position: relative;
     letter-spacing: 0.2px;
   }
+  .annotation::before {
+    content: "Entry point";
+    position: absolute; top: -7px; left: 10px;
+    background: var(--card);
+    padding: 0 6px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 10px;
+    color: var(--gold-deep);
+    letter-spacing: 0.5px;
+  }
   .annotation i.ti {
     position: absolute;
-    left: 10px; top: 9px;
-    font-size: 14px;
+    left: 12px; top: 10px;
+    font-size: 16px;
     color: var(--gold);
   }
 
-  /* ---------- TOUCHPOINT ---------- */
-  .tp {
-    background: transparent;
-    border-top: 1px solid var(--rule);
-    padding: 10px 0 4px;
-    display: flex; flex-direction: column; gap: 7px;
+  /* ============================================================
+     STREAM BLOCK
+     ============================================================ */
+  .stream {
+    display: flex; flex-direction: column;
+    gap: 0;
   }
-  .tp:first-of-type { border-top: none; padding-top: 4px; }
-  .tp-row {
-    display: flex; align-items: flex-start; gap: 10px;
+  .stream-header {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
   }
-  .tp-icon {
+  .stream-header .arrow {
+    color: var(--gold);
+    font-size: 14px;
+    line-height: 1;
+    transform: translateY(1px);
+  }
+  .stream-name {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+  }
+  .stream-caption {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    letter-spacing: 0.1px;
+    margin-left: auto;
+  }
+  .stream.loop .stream-name::before {
+    content: "↻ ";
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  /* ============================================================
+     RAIL (vertical timeline)
+     ============================================================ */
+  .rail {
+    position: relative;
+    padding: 6px 0 4px 24px;
+    display: flex; flex-direction: column;
+  }
+  .rail::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 14px;
+    bottom: 10px;
+    width: 1px;
+    background: var(--gold);
+    opacity: 0.35;
+  }
+  .rail-node {
+    position: relative;
+    padding: 4px 0 12px 0;
+  }
+  .rail-node:last-child { padding-bottom: 4px; }
+  .rail-node::before {
+    content: "";
+    position: absolute;
+    left: -20px;
+    top: 10px;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1.5px solid var(--gold);
+    box-sizing: border-box;
+    z-index: 2;
+  }
+  /* Actor-colored node markers */
+  .rail-node.actor-manual::before {
+    background: var(--actor-manual-bg);
+    border-color: var(--actor-manual-bg);
+  }
+  .rail-node.actor-auto::before {
+    background: var(--actor-auto-bg);
+    border-color: var(--actor-auto-bg);
+  }
+  .rail-node.actor-sched::before {
+    background: var(--actor-sched-bg);
+    border-color: var(--actor-sched-bg);
+  }
+
+  /* Sequence link between two nodes */
+  .rail-link {
+    position: relative;
+    padding: 0 0 8px 0;
+    margin-top: -6px;
+    margin-bottom: 2px;
+  }
+  .rail-link::before {
+    /* the tick on the rail */
+    content: "";
+    position: absolute;
+    left: -22px;
+    top: 6px;
+    width: 7px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.55;
+  }
+  .rail-link .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--bg);
+    border: 1px solid var(--hairline);
+    color: var(--gold-deep);
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 11px;
+    line-height: 1.3;
+  }
+  .rail-link .chip i.ti {
+    font-size: 11px;
+    color: var(--gold);
+  }
+
+  /* ============================================================
+     NODE CARD (touchpoint)
+     ============================================================ */
+  .node {
+    display: flex; flex-direction: column;
+    gap: 5px;
+  }
+  .node-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+  }
+  .node-icon {
     flex-shrink: 0;
-    width: 24px; height: 24px;
+    width: 26px; height: 26px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center; justify-content: center;
     font-size: 13px;
-    margin-top: 1px;
+    margin-top: -1px;
     border: 1px solid currentColor;
-    background: transparent;
   }
-  .tp-icon i.ti { opacity: 0.9; }
-  .tp-text {
+  .node-text {
     font-family: var(--sans);
     font-size: 12.5px;
-    line-height: 1.45;
+    line-height: 1.4;
     color: var(--ink-soft);
     flex: 1;
     font-weight: 400;
   }
-  .tp-meta {
-    display: flex; flex-wrap: wrap; gap: 6px;
+  .node-meta {
+    display: flex; flex-wrap: wrap;
     align-items: center;
-    padding-left: 34px;
+    gap: 5px 7px;
+    padding-left: 35px;
+    margin-top: 1px;
   }
+
+  /* Actor pill (LAURA / AUTO / SCHEDULED) */
+  .actor {
+    display: inline-flex; align-items: center;
+    gap: 4px;
+    font-family: var(--sans);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+    padding: 3px 7px 3px 6px;
+    border-radius: 2px;
+    line-height: 1;
+  }
+  .actor i.ti { font-size: 11px; }
+  .actor-manual { background: var(--actor-manual-bg); color: var(--actor-manual-fg); }
+  .actor-auto   { background: var(--actor-auto-bg);   color: var(--actor-auto-fg); }
+  .actor-sched  { background: var(--actor-sched-bg);  color: var(--actor-sched-fg); }
+
+  /* System badge */
   .badge {
     display: inline-flex; align-items: center; gap: 5px;
     font-family: var(--sans);
     font-size: 9.5px;
     font-weight: 500;
-    padding: 3px 8px 3px 7px;
+    padding: 2px 8px 2px 7px;
     border-radius: 999px;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
     text-transform: uppercase;
     white-space: nowrap;
     border: 1px solid transparent;
   }
   .badge i.ti { font-size: 11px; }
+
+  /* Timing pill (italic serif) */
   .timing {
-    display: inline-flex; align-items: center; gap: 5px;
+    display: inline-flex; align-items: center; gap: 4px;
     font-family: var(--serif);
     font-style: italic;
     font-size: 11px;
     color: var(--ink-muted);
-    padding: 2px 0;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.1px;
   }
-  .timing i.ti { font-size: 10.5px; color: var(--gold); }
-  .tp-extra {
+  .timing i.ti { font-size: 10px; color: var(--gold); }
+
+  .node-extra {
     font-family: var(--serif);
     font-style: italic;
     font-size: 11.5px;
     color: var(--ink-muted);
-    padding-left: 34px;
+    padding-left: 35px;
     line-height: 1.45;
   }
 
-  /* ---------- SYSTEM COLORS ---------- */
+  /* System colors */
   .sys-zoho      { color: var(--sys-zoho-fg);  background: var(--sys-zoho-bg); border-color: rgba(42,61,92,0.18); }
   .sys-whatsapp  { color: var(--sys-wa-fg);    background: var(--sys-wa-bg);   border-color: rgba(74,90,42,0.18); }
   .sys-email     { color: var(--sys-mail-fg);  background: var(--sys-mail-bg); border-color: rgba(122,74,26,0.18); }
@@ -492,27 +567,28 @@
   .sys-ads       { color: var(--sys-ads-fg);   background: var(--sys-ads-bg);  border-color: rgba(79,70,119,0.18); }
   .sys-logistica { color: var(--sys-log-fg);   background: var(--sys-log-bg);  border-color: rgba(79,71,56,0.18); }
 
-  /* icon-only variant (just stroked circle) */
-  .tp-icon.sys-zoho      { color: var(--sys-zoho-fg);  background: transparent; }
-  .tp-icon.sys-whatsapp  { color: var(--sys-wa-fg);    background: transparent; }
-  .tp-icon.sys-email     { color: var(--sys-mail-fg);  background: transparent; }
-  .tp-icon.sys-manuale   { color: var(--sys-man-fg);   background: transparent; }
-  .tp-icon.sys-ads       { color: var(--sys-ads-fg);   background: transparent; }
-  .tp-icon.sys-logistica { color: var(--sys-log-fg);   background: transparent; }
+  .node-icon.sys-zoho      { color: var(--sys-zoho-fg); background: transparent; }
+  .node-icon.sys-whatsapp  { color: var(--sys-wa-fg);   background: transparent; }
+  .node-icon.sys-email     { color: var(--sys-mail-fg); background: transparent; }
+  .node-icon.sys-manuale   { color: var(--sys-man-fg);  background: transparent; }
+  .node-icon.sys-ads       { color: var(--sys-ads-fg);  background: transparent; }
+  .node-icon.sys-logistica { color: var(--sys-log-fg);  background: transparent; }
 
-  /* ---------- BRANCHES ---------- */
+  /* ============================================================
+     BRANCHES
+     ============================================================ */
   .branch-block {
     margin-top: 8px;
     padding-top: 14px;
     border-top: 1px solid var(--rule);
-    display: flex; flex-direction: column; gap: 10px;
+    display: flex; flex-direction: column;
+    gap: 10px;
   }
   .branch-title {
     font-family: var(--serif);
     font-style: italic;
-    font-size: 12px;
+    font-size: 12.5px;
     color: var(--ink-muted);
-    margin-bottom: 2px;
     letter-spacing: 0.2px;
   }
   .branch {
@@ -543,7 +619,7 @@
     display: flex; align-items: flex-start; gap: 8px;
     padding: 4px 0;
   }
-  .b-step .tp-icon { width: 22px; height: 22px; font-size: 11.5px; }
+  .b-step .node-icon { width: 22px; height: 22px; font-size: 11.5px; }
   .b-step-text {
     font-family: var(--sans);
     font-size: 11.5px;
@@ -551,21 +627,22 @@
     flex: 1;
     color: var(--ink-soft);
   }
-  .b-step-text .badge {
-    margin-top: 5px;
-  }
+  .b-step-text .badge { margin-top: 5px; }
 
-  /* ---------- CONNECTOR ARROWS ---------- */
+  /* ============================================================
+     CONNECTOR (between columns)
+     ============================================================ */
   .connector {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     pointer-events: none;
     z-index: 1;
     overflow: visible;
   }
 
-  /* ---------- BOTTOM BAR ---------- */
+  /* ============================================================
+     BOTTOM BAR
+     ============================================================ */
   .botbar {
     position: fixed; bottom: 0; left: 0; right: 0;
     height: var(--bot-h);
@@ -573,33 +650,48 @@
     color: var(--gold-soft);
     display: flex; align-items: center;
     padding: 0 28px;
-    gap: 14px;
+    gap: 12px;
     z-index: 50;
     overflow-x: auto;
     scrollbar-width: none;
     border-top: 1px solid rgba(168,144,96,0.18);
   }
   .botbar::-webkit-scrollbar { display: none; }
+  .legend-section {
+    display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
+  }
   .legend-label {
     font-family: var(--serif);
     font-style: italic;
-    font-size: 12.5px;
+    font-size: 12px;
     color: var(--gold);
     flex-shrink: 0;
-    padding-right: 6px;
-    border-right: 1px solid rgba(168,144,96,0.22);
-    margin-right: 4px;
+    padding-right: 4px;
+  }
+  .legend-divider {
+    width: 1px; height: 18px;
+    background: rgba(168,144,96,0.22);
+    flex-shrink: 0;
+    margin: 0 4px;
   }
   .botbar .badge {
     flex-shrink: 0;
     background: transparent;
     border: 1px solid rgba(168,144,96,0.22);
     color: #D6C39A;
-    padding: 4px 10px;
+    padding: 3px 9px;
+    font-size: 9.5px;
   }
   .botbar .badge i.ti { color: var(--gold); }
+  .botbar .actor {
+    font-size: 8.5px;
+    padding: 3px 7px;
+  }
 
-  /* ---------- SCROLLBAR ---------- */
+  /* ============================================================
+     SCROLLBAR
+     ============================================================ */
   .scroll-area::-webkit-scrollbar { height: 10px; width: 10px; }
   .scroll-area::-webkit-scrollbar-track { background: transparent; }
   .scroll-area::-webkit-scrollbar-thumb {
@@ -641,55 +733,128 @@
 </main>
 
 <footer class="botbar">
-  <span class="legend-label">Sistemi</span>
-  <span class="badge"><i class="ti ti-database"></i>Zoho CRM</span>
-  <span class="badge"><i class="ti ti-brand-whatsapp"></i>WhatsApp Business</span>
-  <span class="badge"><i class="ti ti-mail"></i>Email automatica</span>
-  <span class="badge"><i class="ti ti-user"></i>Manuale Laura</span>
-  <span class="badge"><i class="ti ti-speakerphone"></i>Meta / Google Ads</span>
-  <span class="badge"><i class="ti ti-truck"></i>Logistica</span>
+  <div class="legend-section">
+    <span class="legend-label">Attore</span>
+    <span class="actor actor-manual"><i class="ti ti-user"></i>Laura</span>
+    <span class="actor actor-auto"><i class="ti ti-bolt"></i>Auto</span>
+    <span class="actor actor-sched"><i class="ti ti-repeat"></i>Ricorrente</span>
+  </div>
+  <div class="legend-divider"></div>
+  <div class="legend-section">
+    <span class="legend-label">Sistema</span>
+    <span class="badge"><i class="ti ti-database"></i>Zoho CRM</span>
+    <span class="badge"><i class="ti ti-brand-whatsapp"></i>WhatsApp</span>
+    <span class="badge"><i class="ti ti-mail"></i>Email</span>
+    <span class="badge"><i class="ti ti-user"></i>Manuale</span>
+    <span class="badge"><i class="ti ti-speakerphone"></i>Ads</span>
+    <span class="badge"><i class="ti ti-truck"></i>Logistica</span>
+  </div>
 </footer>
 
 <script>
-  // -------------- SYSTEM CATALOG ----------------
+  // ============================================================
+  // CATALOGS
+  // ============================================================
   const SYS = {
-    manuale:   { label: "Manuale",     cls: "sys-manuale",   icon: "ti-user" },
-    ads:       { label: "Ads",         cls: "sys-ads",       icon: "ti-speakerphone" },
-    email:     { label: "Email",       cls: "sys-email",     icon: "ti-mail" },
-    zoho:      { label: "Zoho CRM",    cls: "sys-zoho",      icon: "ti-database" },
-    whatsapp:  { label: "WhatsApp",    cls: "sys-whatsapp",  icon: "ti-brand-whatsapp" },
-    logistica: { label: "Logistica",   cls: "sys-logistica", icon: "ti-truck" },
+    manuale:   { label: "Manuale",   cls: "sys-manuale",   icon: "ti-user" },
+    ads:       { label: "Ads",       cls: "sys-ads",       icon: "ti-speakerphone" },
+    email:     { label: "Email",     cls: "sys-email",     icon: "ti-mail" },
+    zoho:      { label: "Zoho CRM",  cls: "sys-zoho",      icon: "ti-database" },
+    whatsapp:  { label: "WhatsApp",  cls: "sys-whatsapp",  icon: "ti-brand-whatsapp" },
+    logistica: { label: "Logistica", cls: "sys-logistica", icon: "ti-truck" },
   };
 
-  // -------------- DATA ----------------
+  const ACTOR = {
+    manual: { label: "Laura",      cls: "actor-manual", icon: "ti-user" },
+    auto:   { label: "Auto",       cls: "actor-auto",   icon: "ti-bolt" },
+    sched:  { label: "Ricorrente", cls: "actor-sched",  icon: "ti-repeat" },
+  };
+
+  // ============================================================
+  // DATA
+  // Each phase has either `touchpoints` (single rail)
+  // or `streams` (multiple parallel rails).
+  // Each step can carry:
+  //   - actor: "manual" | "auto" | "sched"
+  //   - system: key into SYS
+  //   - icon: tabler icon class
+  //   - timing: italic timestamp
+  //   - extra: italic post-note below
+  //   - link: { text, icon? } — chip rendered BEFORE this step (cause→effect)
+  // ============================================================
   const phases = [
     {
       n: 1, name: "Generazione lead", period: "Maggio – Giugno 2026",
       current: true,
-      note: "Due stream paralleli: outbound (lista manuale) e inbound (ads → landing → Zoho). Avvio immediato.",
-      touchpoints: [
-        { text: "Estrapolazione contatti enoteche per area geografica", system: "manuale", icon: "ti-search", timing: "Avvio immediato" },
-        { text: "Campagna awareness geo-targeted — prepara il terreno prima delle chiamate", system: "ads", icon: "ti-speakerphone", timing: "Mag 2026" },
-        { text: "Campagna lead gen Nord Italia → landing → ingresso automatico in Zoho", system: "ads", icon: "ti-target", timing: "Mag 2026",
-          extra: "Landing già integrata — lead entra in pipeline senza azione manuale" },
-      ],
+      note: "Due percorsi paralleli che alimentano la stessa pipeline Zoho.",
+      streams: [
+        {
+          name: "Outbound", caption: "lista costruita a mano",
+          touchpoints: [
+            { text: "Estrapolazione contatti enoteche per area geografica",
+              system: "manuale", icon: "ti-search", actor: "manual",
+              timing: "Avvio immediato" },
+          ]
+        },
+        {
+          name: "Inbound", caption: "lead da campagna ads",
+          touchpoints: [
+            { text: "Campagna awareness geo-targeted",
+              system: "ads", icon: "ti-speakerphone", actor: "auto",
+              timing: "Mag 2026",
+              extra: "Prepara il terreno prima delle chiamate" },
+            { text: "Campagna lead gen Nord Italia → landing",
+              system: "ads", icon: "ti-target", actor: "auto",
+              timing: "Mag 2026",
+              link: { text: "in parallelo all'awareness", icon: "ti-arrow-right" },
+              extra: "Landing già integrata: il lead entra in pipeline Zoho senza azione manuale" },
+          ]
+        },
+      ]
     },
+
     {
       n: 2, name: "Esplorazione", period: "Maggio – Giugno 2026",
       tags: ["parallela alla lead gen"],
-      note: "Laura lavora la lista outbound mentre i lead inbound entrano da soli in Zoho.",
-      touchpoints: [
-        { text: "Laura chiama i contatti della lista outbound", system: "manuale", icon: "ti-phone", timing: "Avvio immediato" },
-        { text: "Raccoglie l'email durante la chiamata", system: "manuale", icon: "ti-at" },
-        { text: "Mail automatica con allegato retail (benefit rivenditori Giotto)", system: "email", icon: "ti-mail", timing: "Entro 24h — trigger: email in Zoho" },
-      ],
+      note: "Outbound: Laura lavora la lista. Inbound: i lead della landing arrivano da soli.",
+      streams: [
+        {
+          name: "Outbound", caption: "lista da Fase 01",
+          touchpoints: [
+            { text: "Laura chiama i contatti della lista outbound",
+              system: "manuale", icon: "ti-phone", actor: "manual",
+              timing: "Avvio immediato" },
+            { text: "Raccoglie l'email durante la chiamata",
+              system: "manuale", icon: "ti-at", actor: "manual",
+              link: { text: "a fine chiamata", icon: "ti-arrow-down" } },
+            { text: "Mail automatica con allegato retail (benefit Giotto)",
+              system: "email", icon: "ti-mail", actor: "auto",
+              timing: "Entro 24h",
+              link: { text: "trigger: email salvata in Zoho", icon: "ti-bolt" } },
+          ]
+        },
+        {
+          name: "Inbound", caption: "lead già in pipeline",
+          touchpoints: [
+            { text: "I lead della landing entrano direttamente in Zoho — confluiscono nelle fasi successive",
+              system: "zoho", icon: "ti-database", actor: "auto",
+              timing: "In continua" },
+          ]
+        },
+      ]
     },
+
     {
       n: 3, name: "Proposta appuntamento", period: "Giugno 2026",
-      note: "Task automatico da Zoho 72h dopo la mail — Laura non deve ricordarselo.",
+      note: "Task automatico da Zoho 72h dopo la mail. Laura non deve ricordarselo.",
       touchpoints: [
-        { text: "Task automatico Zoho: chiama per proporre l'incontro", system: "zoho", icon: "ti-bell", timing: "+72h dalla mail automatica" },
-        { text: "Laura propone incontro per far assaggiare la campionatura", system: "manuale", icon: "ti-phone", timing: "Giu 2026" },
+        { text: "Task Zoho: chiama per proporre l'incontro",
+          system: "zoho", icon: "ti-bell", actor: "auto",
+          timing: "+72h dalla mail" },
+        { text: "Laura propone l'incontro per far assaggiare la campionatura",
+          system: "manuale", icon: "ti-phone", actor: "manual",
+          timing: "Giu 2026",
+          link: { text: "Laura prende il task", icon: "ti-arrow-down" } },
       ],
       branches: [
         { kind: "yes",   label: "Sì",    steps: [
@@ -704,22 +869,36 @@
         ]},
       ],
     },
+
     {
       n: 4, name: "Incontro", period: "Giugno – Luglio 2026",
       touchpoints: [
-        { text: "Laura porta la campionatura prodotti Natale 2026", system: "manuale", icon: "ti-gift", timing: "Giu–Lug 2026" },
-        { text: "Mostra materiali di comunicazione da tablet", system: "manuale", icon: "ti-device-tablet" },
-        { text: "Presenta e lascia il listino", system: "manuale", icon: "ti-file-text" },
+        { text: "Laura porta la campionatura prodotti Natale 2026",
+          system: "manuale", icon: "ti-gift", actor: "manual",
+          timing: "Giu–Lug 2026" },
+        { text: "Mostra materiali di comunicazione da tablet",
+          system: "manuale", icon: "ti-device-tablet", actor: "manual",
+          link: { text: "durante l'incontro", icon: "ti-arrow-down" } },
+        { text: "Presenta e lascia il listino",
+          system: "manuale", icon: "ti-file-text", actor: "manual",
+          link: { text: "a fine incontro", icon: "ti-arrow-down" } },
       ],
     },
+
     {
       n: 5, name: "Ragionamento", period: "Luglio 2026",
-      note: "1–2 settimane in base al momento dell'anno. Touchpoint attivo a metà periodo.",
+      note: "1–2 settimane in base al periodo. Touchpoint attivo a metà fase.",
       touchpoints: [
-        { text: "Reminder Zoho con data di richiamo personalizzata", system: "zoho", icon: "ti-bell" },
-        { text: "WhatsApp a metà periodo: \"Com'è andata con la campionatura?\"", system: "whatsapp", icon: "ti-brand-whatsapp", timing: "A metà del periodo" },
+        { text: "Reminder Zoho con data di richiamo personalizzata",
+          system: "zoho", icon: "ti-bell", actor: "auto",
+          timing: "Inizio fase" },
+        { text: "WhatsApp di Laura: «Com'è andata con la campionatura?»",
+          system: "whatsapp", icon: "ti-brand-whatsapp", actor: "manual",
+          timing: "A metà del periodo",
+          link: { text: "Laura usa il reminder come innesco", icon: "ti-arrow-down" } },
       ],
     },
+
     {
       n: 6, name: "Risposta", period: "Luglio – Agosto 2026",
       note: "Momento decisivo. I No definitivi restano nel perimetro Giotto via newsletter.",
@@ -736,37 +915,66 @@
         ]},
       ],
     },
+
     {
       n: 7, name: "Onboarding", period: "Agosto – Settembre 2026",
-      tags: ["storici entrano qui"],
+      tags: ["entry point storici"],
       note: "I rivenditori storici che riacquistano saltano le fasi 1–6 ed entrano direttamente qui.",
-      annotation: { icon: "ti-arrow-down-right", text: "Rivenditori storici: entrano direttamente da qui" },
+      annotation: { icon: "ti-arrow-down-right", text: "Rivenditori storici: ingresso diretto in questa fase" },
       touchpoints: [
-        { text: "Mail automatica: store locator + scontistica dedicata per i primi 6 mesi", system: "email", icon: "ti-mail", timing: "Entro 24h dalla conferma" },
-        { text: "Spedizione ordine + kit comunicazione campagna Natale nella scatola", system: "logistica", icon: "ti-truck", timing: "Set 2026" },
+        { text: "Mail automatica: store locator + scontistica dedicata per i primi 6 mesi",
+          system: "email", icon: "ti-mail", actor: "auto",
+          timing: "Entro 24h dalla conferma ordine",
+          link: { text: "trigger: ordine confermato in Zoho", icon: "ti-bolt" } },
+        { text: "Spedizione ordine + kit comunicazione campagna Natale nella scatola",
+          system: "logistica", icon: "ti-truck", actor: "auto",
+          timing: "Set 2026",
+          link: { text: "dopo conferma pagamento", icon: "ti-arrow-down" } },
       ],
     },
+
     {
       n: 8, name: "Campagna attiva", period: "Ottobre – Dicembre 2026",
-      note: "Touchpoint ricorrenti per tutti i rivenditori attivi — nuovi e storici.",
-      touchpoints: [
-        { text: "Scheda prodotto mensile (approfondimento campagna Natale)", system: "email", icon: "ti-mail", timing: "1× al mese" },
-        { text: "WhatsApp: contenuti social selezionati da Laura", system: "whatsapp", icon: "ti-brand-whatsapp", timing: "Ogni venerdì" },
-        { text: "Newsletter editoriale \"Storie dal carcere\"", system: "email", icon: "ti-newspaper", timing: "Ogni 2 del mese" },
-        { text: "Mail numeri salienti della campagna", system: "email", icon: "ti-chart-bar", timing: "Nov 2026 — 3 sett. prima chiusura" },
-      ],
+      note: "Touchpoint ricorrenti per tutti i rivenditori attivi — nuovi e storici insieme.",
+      streams: [
+        {
+          name: "Ricorrenti", caption: "loop di nutrimento", loop: true,
+          touchpoints: [
+            { text: "Scheda prodotto mensile (approfondimento campagna Natale)",
+              system: "email", icon: "ti-mail", actor: "sched",
+              timing: "1× al mese" },
+            { text: "WhatsApp: contenuti social selezionati da Laura",
+              system: "whatsapp", icon: "ti-brand-whatsapp", actor: "manual",
+              timing: "Ogni venerdì" },
+            { text: "Newsletter editoriale «Storie dal carcere»",
+              system: "email", icon: "ti-newspaper", actor: "sched",
+              timing: "Ogni 2 del mese" },
+            { text: "Mail con i numeri salienti della campagna",
+              system: "email", icon: "ti-chart-bar", actor: "auto",
+              timing: "Nov 2026 — 3 settimane prima della chiusura" },
+          ]
+        }
+      ]
     },
+
     {
       n: 9, name: "Fine campagna", period: "Gennaio 2027",
       touchpoints: [
-        { text: "Mail automatica di feedback sulla campagna", system: "email", icon: "ti-mail", timing: "Gen 2027" },
-        { text: "Laura propone la campagna successiva (Colomba / Pasqua 2027)", system: "manuale", icon: "ti-arrow-right", timing: "Gen 2027",
+        { text: "Mail automatica di feedback sulla campagna",
+          system: "email", icon: "ti-mail", actor: "auto",
+          timing: "Gen 2027" },
+        { text: "Laura propone la campagna successiva (Colomba / Pasqua 2027)",
+          system: "manuale", icon: "ti-arrow-right", actor: "manual",
+          timing: "Gen 2027",
+          link: { text: "subito dopo il feedback", icon: "ti-arrow-down" },
           extra: "Momento di massimo calore — non lasciarlo raffreddare" },
       ],
     },
   ];
 
-  // -------------- RENDER HELPERS ----------------
+  // ============================================================
+  // RENDER
+  // ============================================================
   const pad = (n) => String(n).padStart(2, "0");
 
   function badgeForSystem(systemKey) {
@@ -775,25 +983,65 @@
     return `<span class="badge ${s.cls}"><i class="ti ${s.icon}"></i>${s.label}</span>`;
   }
 
+  function actorPill(actorKey) {
+    const a = ACTOR[actorKey];
+    if (!a) return "";
+    return `<span class="actor ${a.cls}"><i class="ti ${a.icon}"></i>${a.label}</span>`;
+  }
+
   function timingPill(timing) {
     if (!timing) return "";
     return `<span class="timing"><i class="ti ti-clock"></i>${timing}</span>`;
   }
 
-  function renderTouchpoint(tp) {
+  function renderLink(link) {
+    if (!link) return "";
+    const icon = link.icon || "ti-arrow-down";
+    return `<div class="rail-link">
+      <span class="chip"><i class="ti ${icon}"></i>${link.text}</span>
+    </div>`;
+  }
+
+  function renderNode(tp) {
     const sys = SYS[tp.system];
     const iconCls = sys ? sys.cls : "";
+    const actorCls = tp.actor ? `actor-${tp.actor}` : "";
     return `
-      <div class="tp">
-        <div class="tp-row">
-          <span class="tp-icon ${iconCls}"><i class="ti ${tp.icon}"></i></span>
-          <div class="tp-text">${tp.text}</div>
+      <div class="rail-node ${actorCls}">
+        <div class="node">
+          <div class="node-head">
+            <span class="node-icon ${iconCls}"><i class="ti ${tp.icon}"></i></span>
+            <div class="node-text">${tp.text}</div>
+          </div>
+          <div class="node-meta">
+            ${actorPill(tp.actor)}
+            ${badgeForSystem(tp.system)}
+            ${timingPill(tp.timing)}
+          </div>
+          ${tp.extra ? `<div class="node-extra">${tp.extra}</div>` : ""}
         </div>
-        <div class="tp-meta">
-          ${badgeForSystem(tp.system)}
-          ${timingPill(tp.timing)}
+      </div>`;
+  }
+
+  function renderRail(touchpoints) {
+    if (!touchpoints || !touchpoints.length) return "";
+    return `<div class="rail">
+      ${touchpoints.map((tp, i) => `
+        ${i > 0 ? renderLink(tp.link) : ""}
+        ${renderNode(tp)}
+      `).join("")}
+    </div>`;
+  }
+
+  function renderStream(stream) {
+    return `
+      <div class="stream ${stream.loop ? "loop" : ""}">
+        <div class="stream-header">
+          <span class="arrow">↘</span>
+          <span class="stream-name">${stream.name}</span>
+          <span class="stream-caption">${stream.caption || ""}</span>
         </div>
-        ${tp.extra ? `<div class="tp-extra">${tp.extra}</div>` : ""}
+        ${renderRail(stream.touchpoints)}
       </div>`;
   }
 
@@ -802,7 +1050,7 @@
     const iconCls = sys ? sys.cls : "";
     return `
       <div class="b-step">
-        <span class="tp-icon ${iconCls}"><i class="ti ${step.icon}"></i></span>
+        <span class="node-icon ${iconCls}"><i class="ti ${step.icon}"></i></span>
         <div class="b-step-text">
           ${step.text}
           <div>${badgeForSystem(step.system)}</div>
@@ -826,6 +1074,12 @@
 
   function renderColumn(p) {
     const isCurrent = !!p.current;
+    let body = "";
+    if (p.streams && p.streams.length) {
+      body = p.streams.map(renderStream).join("");
+    } else if (p.touchpoints && p.touchpoints.length) {
+      body = renderRail(p.touchpoints);
+    }
     return `
       <section class="col ${isCurrent ? "current" : ""}" id="phase-${p.n}" data-phase="${p.n}">
         <div class="col-header">
@@ -841,13 +1095,15 @@
         <div class="col-body">
           ${p.note ? `<div class="note">${p.note}</div>` : ""}
           ${p.annotation ? `<div class="annotation"><i class="ti ${p.annotation.icon}"></i>${p.annotation.text}</div>` : ""}
-          ${(p.touchpoints || []).map(renderTouchpoint).join("")}
+          ${body}
           ${renderBranches(p.branches)}
         </div>
       </section>`;
   }
 
-  // -------------- RENDER ----------------
+  // ============================================================
+  // BOOT
+  // ============================================================
   const track = document.getElementById("track");
   const nav = document.getElementById("nav");
 
@@ -859,7 +1115,6 @@
     </button>
   `).join("");
 
-  // -------------- NAV INTERACTION ----------------
   const scrollArea = document.getElementById("scrollArea");
   const pills = [...nav.querySelectorAll(".pill")];
 
@@ -875,27 +1130,18 @@
   const colEls = [...document.querySelectorAll(".col")];
   const ratios = new Map();
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      ratios.set(entry.target.id, entry.intersectionRatio);
-    });
+    entries.forEach(entry => ratios.set(entry.target.id, entry.intersectionRatio));
     let bestId = null, bestR = 0;
-    ratios.forEach((r, id) => {
-      if (r > bestR) { bestR = r; bestId = id; }
-    });
+    ratios.forEach((r, id) => { if (r > bestR) { bestR = r; bestId = id; } });
     pills.forEach(p => p.classList.toggle("active",
       bestId && p.dataset.target === bestId && bestR > 0.05));
-  }, {
-    root: scrollArea,
-    threshold: [0, 0.25, 0.5, 0.75, 1],
-  });
+  }, { root: scrollArea, threshold: [0, 0.25, 0.5, 0.75, 1] });
   colEls.forEach(el => observer.observe(el));
 
-  // -------------- SVG CONNECTORS ----------------
   function drawConnectors() {
     const svg = document.getElementById("connector");
     svg.setAttribute("width", track.scrollWidth);
     svg.setAttribute("height", track.scrollHeight);
-
     [...svg.querySelectorAll("path.link")].forEach(n => n.remove());
 
     for (let i = 0; i < colEls.length - 1; i++) {
@@ -924,9 +1170,7 @@
   window.addEventListener("resize", drawConnectors);
   setTimeout(drawConnectors, 200);
   setTimeout(drawConnectors, 800);
-  setTimeout(drawConnectors, 2000); // re-run after webfonts load
-
-  // Re-run on font load if available
+  setTimeout(drawConnectors, 2000);
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(drawConnectors);
   }
