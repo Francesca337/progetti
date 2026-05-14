@@ -1512,7 +1512,7 @@
 
     {
       n: 8, name: "Campagna attiva", period: "Ottobre – Dicembre 2026",
-      outcome: "Campagna conclusa, prossima campagna anticipata",
+      outcome: "Pronti per il recall di fine novembre",
       streams: [
         {
           name: "Ricorrenti", loop: true,
@@ -1552,7 +1552,41 @@
     },
 
     {
-      n: 9, name: "Fine campagna", period: "Gennaio 2027",
+      n: 9, name: "Recall riordino", period: "Fine Novembre 2026",
+      outcome: "Riordini consolidati prima della chiusura",
+      touchpoints: [
+        { text: "Mail automatica: «Vuoi riordinare prima di fine campagna?» + form rapido",
+          system: "email", icon: "ti-mail", actor: "auto",
+          timing: "30 Novembre",
+          assets: [
+            { type: "doc", title: "Template mail recall riordino", url: "#" },
+            { type: "link", title: "Form rapido di riordino (link Zoho/MailUp)", url: "#" },
+          ]},
+        { text: "WhatsApp broadcast con link al form di riordino",
+          system: "whatsapp", icon: "ti-brand-whatsapp", actor: "auto",
+          timing: "+3 giorni dalla mail",
+          link: { text: "trigger: nessuna risposta alla mail", icon: "ti-bolt" },
+          assets: [
+            { type: "doc", title: "Template messaggio WhatsApp recall", url: "#" },
+          ]},
+        { text: "Task Zoho automatico per Laura: chiama top rivenditori e non-rispondenti",
+          system: "zoho", icon: "ti-bell", actor: "auto",
+          timing: "+5 giorni dal broadcast",
+          link: { text: "auto: segmento top + nessuna risposta", icon: "ti-bolt" }},
+        { text: "Laura chiama personalmente i rivenditori chiave per chiudere il riordino",
+          system: "manuale", icon: "ti-phone", actor: "manual",
+          timing: "Ultima settimana di novembre",
+          link: { text: "manualmente, partendo dai task Zoho", icon: "ti-arrow-down" },
+          extra: "Per i top rivenditori la call diretta converte molto di più dell'automation",
+          assets: [
+            { type: "doc", title: "Lista priorità rivenditori top", url: "#" },
+            { type: "doc", title: "Script call recall riordino", url: "#" },
+          ]},
+      ],
+    },
+
+    {
+      n: 10, name: "Fine campagna", period: "Gennaio 2027",
       touchpoints: [
         { text: "Mail automatica di feedback sulla campagna",
           system: "email", icon: "ti-mail", actor: "auto",
