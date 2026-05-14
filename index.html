@@ -1347,6 +1347,35 @@
               ]},
           ]
         },
+        {
+          name: "Storici",
+          touchpoints: [
+            { text: "DEM preorder con listino prodotti + sconto dedicato",
+              system: "email", icon: "ti-mail", actor: "auto",
+              timing: "Fine Maggio",
+              extra: "Target: rivenditori Natale 24 · Pasqua 25 · Natale 25 · Pasqua 26",
+              assets: [
+                { type: "doc", title: "Template DEM preorder storici", url: "#" },
+                { type: "pdf", title: "Listino prodotti Natale 2026", url: "#" },
+                { type: "doc", title: "Schema sconto preorder", url: "#" },
+                { type: "doc", title: "Lista rivenditori storici (filtro Zoho)", url: "#" },
+              ]},
+            { text: "DEM recall preorder #1",
+              system: "email", icon: "ti-mail", actor: "auto",
+              timing: "+1 settimana",
+              link: { text: "su chi non ha preordinato", icon: "ti-bolt" },
+              assets: [
+                { type: "doc", title: "Template DEM recall preorder #1", url: "#" },
+              ]},
+            { text: "DEM recall preorder finale",
+              system: "email", icon: "ti-mail", actor: "auto",
+              timing: "+2 settimane",
+              link: { text: "ultimo recall ai non-preorder", icon: "ti-bolt" },
+              assets: [
+                { type: "doc", title: "Template DEM recall preorder #2", url: "#" },
+              ]},
+          ]
+        },
       ]
     },
 
@@ -1386,6 +1415,19 @@
               extra: "Guida rivenditori già consegnata via form della landing",
               assets: [
                 { type: "doc", title: "Script chiamata di validazione", url: "#" },
+              ]},
+          ]
+        },
+        {
+          name: "Storici",
+          touchpoints: [
+            { text: "Laura scrive direttamente per proporre call o incontro",
+              system: "manuale", icon: "ti-message", actor: "manual",
+              timing: "Dopo le 3 DEM, ai non-preorder",
+              extra: "Chi preordina salta direttamente all'Onboarding (Fase 07)",
+              assets: [
+                { type: "doc", title: "Lista storici non-preorder (filtro Zoho)", url: "#" },
+                { type: "doc", title: "Script outreach storici", url: "#" },
               ]},
           ]
         },
@@ -1487,7 +1529,7 @@
     {
       n: 7, name: "Onboarding", period: "Agosto – Settembre 2026",
       outcome: "Rivenditore attivato con kit campagna",
-      annotation: { icon: "ti-arrow-down-right", text: "Rivenditori storici: ingresso diretto in questa fase" },
+      annotation: { icon: "ti-arrow-down-right", text: "Storici che hanno preordinato (Fase 01): ingresso diretto in questa fase" },
       touchpoints: [
         { text: "Mail automatica: store locator + scontistica dedicata per i primi 6 mesi",
           system: "email", icon: "ti-mail", actor: "auto",
