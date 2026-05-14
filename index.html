@@ -1371,6 +1371,7 @@
               system: "email", icon: "ti-mail", actor: "auto",
               timing: "+2 settimane",
               link: { text: "ultimo recall ai non-preorder", icon: "ti-bolt" },
+              extra: "Preorder → Onboarding (Fase 07). Niente preorder → Proposta appuntamento (Fase 03).",
               assets: [
                 { type: "doc", title: "Template DEM recall preorder #2", url: "#" },
               ]},
@@ -1418,25 +1419,13 @@
               ]},
           ]
         },
-        {
-          name: "Storici",
-          touchpoints: [
-            { text: "Laura scrive direttamente per proporre call o incontro",
-              system: "manuale", icon: "ti-message", actor: "manual",
-              timing: "Dopo le 3 DEM, ai non-preorder",
-              extra: "Chi preordina salta direttamente all'Onboarding (Fase 07)",
-              assets: [
-                { type: "doc", title: "Lista storici non-preorder (filtro Zoho)", url: "#" },
-                { type: "doc", title: "Script outreach storici", url: "#" },
-              ]},
-          ]
-        },
       ]
     },
 
     {
       n: 3, name: "Proposta appuntamento", period: "Giugno 2026",
       outcome: "Appuntamento fissato a calendario",
+      annotation: { icon: "ti-arrow-down-right", text: "Storici che non hanno preordinato: rientrano qui da Fase 01 (Laura propone call o incontro)" },
       touchpoints: [
         { text: "Task Zoho: chiama per proporre l'incontro",
           system: "zoho", icon: "ti-bell", actor: "auto",
