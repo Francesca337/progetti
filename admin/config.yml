@@ -9,83 +9,12 @@ backend:
     uploadMedia: "cms: upload '{{path}}'"
     deleteMedia: "cms: delete asset '{{path}}'"
 
-# Where uploads land. /assets is referenced as relative path from index.html
 media_folder: "assets"
 public_folder: "assets"
 
 publish_mode: simple
 locale: "it"
 
-# Reused field definitions ------------------------------------------------
-# Asset block (used inside touchpoints)
-_asset_fields: &asset_fields
-  - { name: type, label: Tipo, widget: select,
-      options:
-        - { label: "PDF",      value: "pdf" }
-        - { label: "Doc",      value: "doc" }
-        - { label: "Sheet",    value: "sheet" }
-        - { label: "Immagine", value: "image" }
-        - { label: "Video",    value: "video" }
-        - { label: "Cartella", value: "folder" }
-        - { label: "Link",     value: "link" }
-      default: "doc" }
-  - { name: title, label: Titolo, widget: string }
-  - { name: url, label: "URL o file", widget: file, required: false,
-      hint: "Carica un file (PDF/immagine/video) oppure incolla un URL esterno (Drive, YouTube, ecc.)" }
-
-# Link chip (causa-effetto tra touchpoint consecutivi)
-_link_fields: &link_fields
-  - { name: text, label: Testo del legame, widget: string,
-      hint: "Es. 'a fine chiamata', 'trigger: email salvata in Zoho'" }
-  - { name: icon, label: Icona Tabler, widget: string, default: "ti-arrow-down",
-      hint: "Es. ti-arrow-down, ti-bolt, ti-arrow-right" }
-
-# Touchpoint single object
-_touchpoint_fields: &touchpoint_fields
-  - { name: text, label: Cosa succede, widget: string }
-  - { name: system, label: Sistema/Canale, widget: select,
-      options:
-        - { label: "Manuale (Laura)", value: "manuale" }
-        - { label: "Email",           value: "email" }
-        - { label: "Zoho CRM",        value: "zoho" }
-        - { label: "WhatsApp",        value: "whatsapp" }
-        - { label: "Ads",             value: "ads" }
-        - { label: "Logistica",       value: "logistica" }
-      default: "manuale" }
-  - { name: icon, label: Icona Tabler, widget: string, default: "ti-mail",
-      hint: "Es. ti-mail, ti-phone, ti-bell, ti-gift" }
-  - { name: actor, label: Chi lo fa, widget: select,
-      options:
-        - { label: "Laura (manuale)", value: "manual" }
-        - { label: "Auto (sistema)",  value: "auto" }
-        - { label: "Ricorrente",      value: "sched" }
-      default: "manual" }
-  - { name: timing, label: Quando, widget: string, required: false,
-      hint: "Es. 'Entro 24h', '30 Novembre', '+72h dalla mail'" }
-  - { name: link, label: Legame col touchpoint precedente, widget: object, required: false,
-      collapsed: true,
-      fields: *link_fields }
-  - { name: extra, label: Nota italica (sotto al touchpoint), widget: text, required: false }
-  - { name: assets, label: Asset & materiali, widget: list, required: false,
-      collapsed: true,
-      summary: "{{fields.title}} ({{fields.type}})",
-      fields: *asset_fields }
-
-# Branch step (sì/forse/no) — like a touchpoint but lighter
-_branch_step_fields: &branch_step_fields
-  - { name: text, label: Cosa succede, widget: string }
-  - { name: system, label: Sistema, widget: select,
-      options:
-        - { label: "Manuale (Laura)", value: "manuale" }
-        - { label: "Email",           value: "email" }
-        - { label: "Zoho CRM",        value: "zoho" }
-        - { label: "WhatsApp",        value: "whatsapp" }
-        - { label: "Ads",             value: "ads" }
-        - { label: "Logistica",       value: "logistica" }
-      default: "zoho" }
-  - { name: icon, label: Icona Tabler, widget: string, default: "ti-bell" }
-
-# ------------------------------------------------------------------------
 collections:
   - name: journey
     label: "Journey Retail · Natale 2026"
@@ -96,6 +25,10 @@ collections:
         name: "retail-natale-2026"
         format: "json"
         fields:
+
+          # ============================================================
+          # PHASES
+          # ============================================================
           - name: phases
             label: "Fasi del journey"
             label_singular: "Fase"
@@ -103,78 +36,392 @@ collections:
             collapsed: true
             summary: "Fase {{fields.n}} — {{fields.name}} ({{fields.period}})"
             fields:
-              - { name: n, label: "Numero fase", widget: number, value_type: int, min: 1 }
-              - { name: name, label: "Nome fase", widget: string }
-              - { name: period, label: "Periodo (testo libero)", widget: string }
-              - { name: current, label: "È la fase corrente?", widget: boolean, default: false, required: false }
-              - { name: leads, label: "Numero lead in questa fase", widget: number, value_type: int, required: false }
-              - { name: outcome, label: "Outcome → fase successiva (capsule scura)",
-                  widget: string, required: false,
-                  hint: "Es. 'Il contatto entra in Zoho', 'Appuntamento fissato'" }
-              - { name: annotation, label: "Annotazione (es. entry point storici)",
-                  widget: object, required: false, collapsed: true,
-                  fields:
-                    - { name: icon, label: Icona, widget: string, default: "ti-arrow-down-right" }
-                    - { name: text, label: Testo, widget: string } }
-              - { name: touchpoints, label: "Touchpoint (se la fase NON ha stream)",
-                  widget: list, required: false, collapsed: true,
-                  summary: "{{fields.text}}",
-                  fields: *touchpoint_fields }
-              - { name: streams, label: "Stream paralleli (Outbound / Inbound / Storici / Ricorrenti)",
-                  widget: list, required: false, collapsed: true,
-                  summary: "{{fields.name}}",
-                  fields:
-                    - { name: name, label: "Nome stream", widget: string }
-                    - { name: loop, label: "È un loop ricorrente?", widget: boolean, default: false, required: false }
-                    - { name: touchpoints, label: "Touchpoint dello stream", widget: list,
-                        collapsed: true,
-                        summary: "{{fields.text}}",
-                        fields: *touchpoint_fields } }
-              - { name: branches, label: "Branches Sì / Forse / No (per fasi decisionali)",
-                  widget: list, required: false, collapsed: true,
-                  summary: "{{fields.label}}",
-                  fields:
-                    - { name: kind, label: Esito, widget: select,
-                        options:
-                          - { label: "Sì",    value: "yes" }
-                          - { label: "Forse", value: "maybe" }
-                          - { label: "No",    value: "no" }
-                        default: "yes" }
-                    - { name: label, label: Etichetta visualizzata, widget: string }
-                    - { name: steps, label: Step conseguenti, widget: list,
-                        fields: *branch_step_fields } }
+              - name: n
+                label: "Numero fase"
+                widget: number
+                value_type: int
+                min: 1
+              - name: name
+                label: "Nome fase"
+                widget: string
+              - name: period
+                label: "Periodo (testo libero)"
+                widget: string
+              - name: current
+                label: "È la fase corrente?"
+                widget: boolean
+                default: false
+                required: false
+              - name: leads
+                label: "Numero lead in questa fase"
+                widget: number
+                value_type: int
+                required: false
+              - name: outcome
+                label: "Outcome → fase successiva (capsule scura)"
+                widget: string
+                required: false
+                hint: "Es. 'Il contatto entra in Zoho', 'Appuntamento fissato'"
+              - name: annotation
+                label: "Annotazione (es. entry point storici)"
+                widget: object
+                required: false
+                collapsed: true
+                fields:
+                  - name: icon
+                    label: "Icona Tabler"
+                    widget: string
+                    default: "ti-arrow-down-right"
+                  - name: text
+                    label: "Testo"
+                    widget: string
 
+              # Touchpoints (single rail, no streams)
+              - name: touchpoints
+                label: "Touchpoint (se la fase NON ha stream)"
+                widget: list
+                required: false
+                collapsed: true
+                summary: "{{fields.text}}"
+                fields:
+                  - name: text
+                    label: "Cosa succede"
+                    widget: string
+                  - name: system
+                    label: "Sistema/Canale"
+                    widget: select
+                    default: "manuale"
+                    options:
+                      - label: "Manuale (Laura)"
+                        value: "manuale"
+                      - label: "Email"
+                        value: "email"
+                      - label: "Zoho CRM"
+                        value: "zoho"
+                      - label: "WhatsApp"
+                        value: "whatsapp"
+                      - label: "Ads"
+                        value: "ads"
+                      - label: "Logistica"
+                        value: "logistica"
+                  - name: icon
+                    label: "Icona Tabler"
+                    widget: string
+                    default: "ti-mail"
+                    hint: "Es. ti-mail, ti-phone, ti-bell, ti-gift"
+                  - name: actor
+                    label: "Chi lo fa"
+                    widget: select
+                    default: "manual"
+                    options:
+                      - label: "Laura (manuale)"
+                        value: "manual"
+                      - label: "Auto (sistema)"
+                        value: "auto"
+                      - label: "Ricorrente"
+                        value: "sched"
+                  - name: timing
+                    label: "Quando"
+                    widget: string
+                    required: false
+                    hint: "Es. 'Entro 24h', '30 Novembre', '+72h dalla mail'"
+                  - name: link
+                    label: "Legame col touchpoint precedente"
+                    widget: object
+                    required: false
+                    collapsed: true
+                    fields:
+                      - name: text
+                        label: "Testo del legame"
+                        widget: string
+                      - name: icon
+                        label: "Icona Tabler"
+                        widget: string
+                        default: "ti-arrow-down"
+                  - name: extra
+                    label: "Nota italica (sotto al touchpoint)"
+                    widget: text
+                    required: false
+                  - name: assets
+                    label: "Asset & materiali"
+                    widget: list
+                    required: false
+                    collapsed: true
+                    summary: "{{fields.title}} ({{fields.type}})"
+                    fields:
+                      - name: type
+                        label: "Tipo"
+                        widget: select
+                        default: "doc"
+                        options:
+                          - label: "PDF"
+                            value: "pdf"
+                          - label: "Doc"
+                            value: "doc"
+                          - label: "Sheet"
+                            value: "sheet"
+                          - label: "Immagine"
+                            value: "image"
+                          - label: "Video"
+                            value: "video"
+                          - label: "Cartella"
+                            value: "folder"
+                          - label: "Link"
+                            value: "link"
+                      - name: title
+                        label: "Titolo"
+                        widget: string
+                      - name: url
+                        label: "URL o file"
+                        widget: file
+                        required: false
+                        hint: "Carica un file (PDF/immagine/video) oppure incolla un URL esterno (Drive, YouTube, ecc.)"
+
+              # Streams (parallel paths)
+              - name: streams
+                label: "Stream paralleli (Outbound / Inbound / Storici / Ricorrenti)"
+                widget: list
+                required: false
+                collapsed: true
+                summary: "{{fields.name}}"
+                fields:
+                  - name: name
+                    label: "Nome stream"
+                    widget: string
+                  - name: loop
+                    label: "È un loop ricorrente?"
+                    widget: boolean
+                    default: false
+                    required: false
+                  - name: touchpoints
+                    label: "Touchpoint dello stream"
+                    widget: list
+                    collapsed: true
+                    summary: "{{fields.text}}"
+                    fields:
+                      - name: text
+                        label: "Cosa succede"
+                        widget: string
+                      - name: system
+                        label: "Sistema/Canale"
+                        widget: select
+                        default: "manuale"
+                        options:
+                          - label: "Manuale (Laura)"
+                            value: "manuale"
+                          - label: "Email"
+                            value: "email"
+                          - label: "Zoho CRM"
+                            value: "zoho"
+                          - label: "WhatsApp"
+                            value: "whatsapp"
+                          - label: "Ads"
+                            value: "ads"
+                          - label: "Logistica"
+                            value: "logistica"
+                      - name: icon
+                        label: "Icona Tabler"
+                        widget: string
+                        default: "ti-mail"
+                      - name: actor
+                        label: "Chi lo fa"
+                        widget: select
+                        default: "manual"
+                        options:
+                          - label: "Laura (manuale)"
+                            value: "manual"
+                          - label: "Auto (sistema)"
+                            value: "auto"
+                          - label: "Ricorrente"
+                            value: "sched"
+                      - name: timing
+                        label: "Quando"
+                        widget: string
+                        required: false
+                      - name: link
+                        label: "Legame col touchpoint precedente"
+                        widget: object
+                        required: false
+                        collapsed: true
+                        fields:
+                          - name: text
+                            label: "Testo del legame"
+                            widget: string
+                          - name: icon
+                            label: "Icona Tabler"
+                            widget: string
+                            default: "ti-arrow-down"
+                      - name: extra
+                        label: "Nota italica"
+                        widget: text
+                        required: false
+                      - name: assets
+                        label: "Asset & materiali"
+                        widget: list
+                        required: false
+                        collapsed: true
+                        summary: "{{fields.title}} ({{fields.type}})"
+                        fields:
+                          - name: type
+                            label: "Tipo"
+                            widget: select
+                            default: "doc"
+                            options:
+                              - label: "PDF"
+                                value: "pdf"
+                              - label: "Doc"
+                                value: "doc"
+                              - label: "Sheet"
+                                value: "sheet"
+                              - label: "Immagine"
+                                value: "image"
+                              - label: "Video"
+                                value: "video"
+                              - label: "Cartella"
+                                value: "folder"
+                              - label: "Link"
+                                value: "link"
+                          - name: title
+                            label: "Titolo"
+                            widget: string
+                          - name: url
+                            label: "URL o file"
+                            widget: file
+                            required: false
+
+              # Branches (Sì / Forse / No)
+              - name: branches
+                label: "Branches Sì / Forse / No (fasi decisionali)"
+                widget: list
+                required: false
+                collapsed: true
+                summary: "{{fields.label}}"
+                fields:
+                  - name: kind
+                    label: "Esito"
+                    widget: select
+                    default: "yes"
+                    options:
+                      - label: "Sì"
+                        value: "yes"
+                      - label: "Forse"
+                        value: "maybe"
+                      - label: "No"
+                        value: "no"
+                  - name: label
+                    label: "Etichetta visualizzata"
+                    widget: string
+                  - name: steps
+                    label: "Step conseguenti"
+                    widget: list
+                    fields:
+                      - name: text
+                        label: "Cosa succede"
+                        widget: string
+                      - name: system
+                        label: "Sistema"
+                        widget: select
+                        default: "zoho"
+                        options:
+                          - label: "Manuale (Laura)"
+                            value: "manuale"
+                          - label: "Email"
+                            value: "email"
+                          - label: "Zoho CRM"
+                            value: "zoho"
+                          - label: "WhatsApp"
+                            value: "whatsapp"
+                          - label: "Ads"
+                            value: "ads"
+                          - label: "Logistica"
+                            value: "logistica"
+                      - name: icon
+                        label: "Icona Tabler"
+                        widget: string
+                        default: "ti-bell"
+
+          # ============================================================
+          # SWIM LANES (kept editable, currently not rendered)
+          # ============================================================
           - name: laura
-            label: "Presidio Laura (swim lane — nascosta nel render attuale)"
+            label: "Presidio Laura (lane — non visibile nel render attuale)"
             widget: object
             collapsed: true
             required: false
             fields:
-              - { name: label, label: Nome lane, widget: string }
-              - { name: icon, label: Icona, widget: string, default: "ti-user" }
-              - { name: storiciFromPhase, label: "Da quale fase scatta il check-in storici", widget: number, value_type: int }
-              - { name: storiciNote, label: "Nota tag storici", widget: string }
-              - { name: segments, label: "Cosa fa Laura in ogni fase (chiave = numero fase)", widget: object,
-                  fields:
-                    - { name: "1", label: "Fase 1", widget: text, required: false }
-                    - { name: "2", label: "Fase 2", widget: text, required: false }
-                    - { name: "3", label: "Fase 3", widget: text, required: false }
-                    - { name: "4", label: "Fase 4", widget: text, required: false }
-                    - { name: "5", label: "Fase 5", widget: text, required: false }
-                    - { name: "6", label: "Fase 6", widget: text, required: false }
-                    - { name: "7", label: "Fase 7", widget: text, required: false }
-                    - { name: "8", label: "Fase 8", widget: text, required: false }
-                    - { name: "9", label: "Fase 9", widget: text, required: false }
-                    - { name: "10", label: "Fase 10", widget: text, required: false } }
+              - name: label
+                label: "Nome lane"
+                widget: string
+              - name: icon
+                label: "Icona"
+                widget: string
+                default: "ti-user"
+              - name: storiciFromPhase
+                label: "Da quale fase scatta il check-in storici"
+                widget: number
+                value_type: int
+              - name: storiciNote
+                label: "Nota tag storici"
+                widget: string
+              - name: segments
+                label: "Cosa fa Laura in ogni fase"
+                widget: object
+                fields:
+                  - name: "1"
+                    label: "Fase 1"
+                    widget: text
+                    required: false
+                  - name: "2"
+                    label: "Fase 2"
+                    widget: text
+                    required: false
+                  - name: "3"
+                    label: "Fase 3"
+                    widget: text
+                    required: false
+                  - name: "4"
+                    label: "Fase 4"
+                    widget: text
+                    required: false
+                  - name: "5"
+                    label: "Fase 5"
+                    widget: text
+                    required: false
+                  - name: "6"
+                    label: "Fase 6"
+                    widget: text
+                    required: false
+                  - name: "7"
+                    label: "Fase 7"
+                    widget: text
+                    required: false
+                  - name: "8"
+                    label: "Fase 8"
+                    widget: text
+                    required: false
+                  - name: "9"
+                    label: "Fase 9"
+                    widget: text
+                    required: false
+                  - name: "10"
+                    label: "Fase 10"
+                    widget: text
+                    required: false
 
           - name: dems
-            label: "DEM MailUp (swim lane — nascosta nel render attuale)"
+            label: "DEM MailUp (lane — non visibile nel render attuale)"
             widget: object
             collapsed: true
             required: false
             fields:
-              - { name: label, label: Nome lane, widget: string }
-              - { name: icon, label: Icona, widget: string, default: "ti-mail" }
-              - { name: startPhase, label: "Da che fase parte", widget: number, value_type: int }
-              - { name: items, label: "DEM per fase", widget: object,
-                  hint: "Una chiave per ogni fase in cui ci sono DEM (es. '2', '3', '8'…)" }
+              - name: label
+                label: "Nome lane"
+                widget: string
+              - name: icon
+                label: "Icona"
+                widget: string
+                default: "ti-mail"
+              - name: startPhase
+                label: "Da che fase parte"
+                widget: number
+                value_type: int
