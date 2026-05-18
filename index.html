@@ -569,24 +569,30 @@
      ============================================================ */
   .node {
     display: flex; flex-direction: column;
-    gap: 10px;
-    padding: 16px 20px 16px 16px;
-    border-radius: 18px;
-    background: var(--node-bg, #F6F1E5);
+    gap: 8px;
+    padding: 13px 16px 14px;
+    border-radius: 14px;
+    background: var(--card);
+    border: 1px solid var(--hairline-soft);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  }
+  .rail-node:hover .node {
+    border-color: var(--hairline);
+    box-shadow: 0 8px 18px -12px rgba(10,10,10,0.08);
   }
   .node-head {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding-right: 20px;
+    gap: 10px;
+    padding-right: 22px;
   }
   .node-icon {
     flex-shrink: 0;
-    width: 36px; height: 36px;
-    border-radius: 11px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
     display: inline-flex;
     align-items: center; justify-content: center;
-    font-size: 17px;
+    font-size: 14px;
     border: none;
     background: var(--node-fg, var(--ink-soft));
     color: #FFFFFF;
@@ -594,19 +600,19 @@
   .node-icon i.ti { color: #FFFFFF; }
   .node-text {
     font-family: var(--sans);
-    font-size: 14.5px;
+    font-size: 13.5px;
     line-height: 1.35;
     color: var(--ink);
     flex: 1;
     font-weight: 500;
-    letter-spacing: -0.1px;
+    letter-spacing: -0.05px;
   }
   .node-meta {
     display: flex; flex-wrap: wrap;
     align-items: center;
-    gap: 4px 14px;
-    padding-left: 48px;
-    font-size: 11.5px;
+    gap: 4px 12px;
+    padding-left: 40px;
+    font-size: 11px;
   }
 
   /* Actor as text label (no pill) */
@@ -665,9 +671,9 @@
     font-family: var(--serif);
     font-style: italic;
     font-weight: 400;
-    font-size: 13px;
+    font-size: 12.5px;
     color: var(--ink-muted);
-    padding-left: 48px;
+    padding-left: 40px;
     line-height: 1.45;
   }
 
@@ -679,13 +685,13 @@
   .sys-ads       { color: var(--sys-ads); }
   .sys-logistica { color: var(--sys-log); }
 
-  /* Card pastel backgrounds + filled icon color (driven by data-system) */
-  .rail-node[data-system="zoho"]      { --node-bg: var(--sys-zoho-soft); --node-fg: var(--sys-zoho); }
-  .rail-node[data-system="whatsapp"]  { --node-bg: var(--sys-wa-soft);   --node-fg: var(--sys-wa); }
-  .rail-node[data-system="email"]     { --node-bg: var(--sys-mail-soft); --node-fg: var(--sys-mail); }
-  .rail-node[data-system="manuale"]   { --node-bg: var(--sys-man-soft);  --node-fg: var(--sys-man); }
-  .rail-node[data-system="ads"]       { --node-bg: var(--sys-ads-soft);  --node-fg: var(--sys-ads); }
-  .rail-node[data-system="logistica"] { --node-bg: var(--sys-log-soft);  --node-fg: var(--sys-log); }
+  /* Filled avatar icon color (driven by data-system) */
+  .rail-node[data-system="zoho"]      { --node-fg: var(--sys-zoho); }
+  .rail-node[data-system="whatsapp"]  { --node-fg: var(--sys-wa); }
+  .rail-node[data-system="email"]     { --node-fg: var(--sys-mail); }
+  .rail-node[data-system="manuale"]   { --node-fg: var(--sys-man); }
+  .rail-node[data-system="ads"]       { --node-fg: var(--sys-ads); }
+  .rail-node[data-system="logistica"] { --node-fg: var(--sys-log); }
 
   /* ============================================================
      BRANCHES
@@ -888,12 +894,7 @@
      ============================================================ */
   .rail-node {
     cursor: pointer;
-    border-radius: 18px;
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
-  }
-  .rail-node:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 24px -14px rgba(10,10,10,0.16);
+    border-radius: 14px;
   }
   .rail-node .node-head {
     position: relative;
@@ -902,12 +903,13 @@
   .rail-node .node-chev {
     position: absolute; right: 0; top: 50%;
     transform: translateY(-50%);
-    color: var(--ink-muted);
-    font-size: 16px;
-    opacity: 0.5;
-    transition: opacity 0.15s, transform 0.15s;
+    color: var(--ink-fade);
+    font-size: 14px;
+    opacity: 0.6;
+    transition: opacity 0.15s, transform 0.15s, color 0.15s;
   }
   .rail-node:hover .node-chev {
+    color: var(--ink-muted);
     opacity: 1;
     transform: translateY(-50%) translateX(2px);
   }
