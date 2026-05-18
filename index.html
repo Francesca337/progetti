@@ -1159,6 +1159,171 @@
   }
 
   /* ============================================================
+     EDIT MODE (in-drawer asset editor)
+     ============================================================ */
+  body.editing .admin-link {
+    background: var(--gold);
+    color: var(--ink);
+  }
+  body.editing .admin-link i.ti { color: var(--ink); }
+  body.editing .rail-node { box-shadow: 0 0 0 1px var(--gold) inset; }
+  body.editing .rail-node:hover { box-shadow: 0 0 0 1.5px var(--gold) inset; }
+
+  .edit-bar {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--gold-pale, #EFE3C7);
+    border-radius: 12px;
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--gold-deep);
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  body.editing .asset-panel .edit-bar { display: flex; }
+  .edit-bar-actions { display: flex; gap: 6px; }
+  .edit-btn {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    border-radius: 999px;
+    border: none;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .edit-btn i.ti { font-size: 13px; }
+  .edit-btn.primary { background: var(--ink); color: #F5EBD7; }
+  .edit-btn.primary:hover { background: #1f1c17; }
+  .edit-btn.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+  .edit-btn.ghost { background: transparent; color: var(--ink-muted); }
+  .edit-btn.ghost:hover { color: var(--ink); }
+  .edit-btn.danger { background: transparent; color: #9C4628; }
+  .edit-btn.danger:hover { background: rgba(156,70,40,0.08); }
+
+  /* Asset card in edit mode — show inputs instead of plain title */
+  .asset-card.editing {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 12px 14px;
+  }
+  .asset-card.editing .asset-edit-row {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .asset-card.editing .asset-icon { width: 32px; height: 32px; font-size: 14px; }
+  .asset-card.editing input,
+  .asset-card.editing select {
+    font-family: var(--sans);
+    font-size: 13px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    padding: 8px 10px;
+    background: var(--card);
+    color: var(--ink);
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .asset-card.editing input:focus,
+  .asset-card.editing select:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  .asset-card.editing .asset-type-select { width: auto; min-width: 120px; }
+  .asset-card.editing .asset-row-actions {
+    display: flex; gap: 4px;
+    margin-left: auto;
+  }
+  .asset-card.editing .asset-icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--ink-muted);
+    cursor: pointer;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .asset-card.editing .asset-icon-btn:hover {
+    background: var(--bg);
+    color: var(--ink);
+  }
+  .asset-card.editing .asset-icon-btn.danger:hover {
+    background: rgba(156,70,40,0.08);
+    color: #9C4628;
+  }
+
+  /* Drop zone for new file uploads */
+  .asset-dropzone {
+    border: 2px dashed var(--hairline);
+    border-radius: 14px;
+    padding: 22px 16px;
+    text-align: center;
+    font-family: var(--sans);
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    margin-top: 6px;
+  }
+  .asset-dropzone:hover,
+  .asset-dropzone.dragover {
+    border-color: var(--gold);
+    background: var(--gold-pale, #EFE3C7);
+    color: var(--gold-deep);
+  }
+  .asset-dropzone i.ti {
+    font-size: 22px;
+    display: block;
+    margin: 0 auto 6px;
+    color: var(--gold-deep);
+  }
+  .asset-dropzone .small {
+    font-size: 11px;
+    margin-top: 4px;
+    opacity: 0.75;
+  }
+
+  .asset-add-row {
+    display: flex; gap: 6px;
+    margin-top: 10px;
+    align-items: stretch;
+  }
+  .asset-add-row input {
+    flex: 1;
+    font-family: var(--sans);
+    font-size: 12.5px;
+    padding: 8px 10px;
+    border: 1px solid var(--hairline-soft);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--ink);
+  }
+  .asset-add-row input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  .asset-add-row .edit-btn { flex-shrink: 0; }
+
+  .edit-status {
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--ink-muted);
+    padding: 8px 4px;
+    text-align: center;
+    letter-spacing: 0.2px;
+  }
+  .edit-status.saving { color: var(--gold-deep); }
+  .edit-status.error  { color: #9C4628; }
+  .edit-status.success { color: #4F6B2C; }
+
+  /* ============================================================
      ZOOM CONTROLS (bottom bar)
      ============================================================ */
   .zoom-controls {
@@ -1219,9 +1384,9 @@
     </div>
   </div>
   <nav class="nav" id="nav"></nav>
-  <a href="/admin/" class="admin-link" target="_blank" rel="noopener" title="Apri editor CMS">
-    <i class="ti ti-pencil"></i><span>Modifica</span>
-  </a>
+  <button type="button" class="admin-link" id="editToggle" title="Attiva modifica">
+    <i class="ti ti-pencil"></i><span id="editToggleLabel">Modifica</span>
+  </button>
 </header>
 
 <main class="scroll-area" id="scrollArea">
@@ -1274,6 +1439,16 @@
       </button>
     </header>
     <div class="asset-panel-meta" id="assetPanelMeta"></div>
+    <div class="edit-bar" id="editBar">
+      <span><i class="ti ti-pencil"></i> Modalità modifica</span>
+      <div class="edit-bar-actions">
+        <button type="button" class="edit-btn ghost" id="editCancel">Annulla</button>
+        <button type="button" class="edit-btn primary" id="editSave" disabled>
+          <i class="ti ti-device-floppy"></i>Salva
+        </button>
+      </div>
+    </div>
+    <div class="edit-status" id="editStatus" hidden></div>
     <div class="asset-panel-body" id="assetPanelBody"></div>
   </div>
 </aside>
@@ -1644,10 +1819,20 @@
     panel.setAttribute("aria-hidden", "false");
   }
 
-  function closePanel() {
+  function closePanel(force) {
+    if (typeof isDirty !== "undefined" && isDirty && !force) {
+      if (!confirm("Hai modifiche non salvate. Chiudere comunque?")) return;
+    }
     panel.classList.remove("open");
     backdrop.classList.remove("open");
     panel.setAttribute("aria-hidden", "true");
+    if (typeof activeTpId !== "undefined") {
+      activeTpId = null;
+      draftAssets = null;
+      pendingUploads = [];
+      if (typeof markDirty === "function") markDirty(false);
+      if (typeof setStatus === "function") setStatus("");
+    }
   }
 
   // Click delegation on touchpoint cards AND DEM cards
@@ -1673,6 +1858,369 @@
   window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closePanel();
   });
+
+  // ============================================================
+  // EDIT MODE — inline asset editor (commits via Git Gateway)
+  // ============================================================
+  const CMS_BRANCH = "claude/create-retail-dashboard-pzdUj";
+  const editToggleBtn = document.getElementById("editToggle");
+  const editToggleLabel = document.getElementById("editToggleLabel");
+  const editBar = document.getElementById("editBar");
+  const editSaveBtn = document.getElementById("editSave");
+  const editCancelBtn = document.getElementById("editCancel");
+  const editStatus = document.getElementById("editStatus");
+
+  let editMode = false;
+  let activeTpId = null;         // currently open touchpoint
+  let draftAssets = null;        // working copy of assets being edited
+  let pendingUploads = [];       // {file, name, type, title, tempId}
+  let isDirty = false;
+
+  function setStatus(msg, kind) {
+    editStatus.hidden = !msg;
+    editStatus.textContent = msg || "";
+    editStatus.className = "edit-status" + (kind ? " " + kind : "");
+  }
+
+  function markDirty(dirty) {
+    isDirty = !!dirty;
+    editSaveBtn.disabled = !dirty;
+  }
+
+  function toggleEditMode(on) {
+    editMode = on != null ? on : !editMode;
+    document.body.classList.toggle("editing", editMode);
+    editToggleLabel.textContent = editMode ? "Esci dalla modifica" : "Modifica";
+    editToggleBtn.title = editMode ? "Esci dalla modifica" : "Attiva modifica";
+    if (activeTpId) {
+      // Re-render the panel with new mode
+      openPanel(activeTpId, true);
+    }
+  }
+
+  editToggleBtn.addEventListener("click", async () => {
+    // Require login before entering edit mode
+    if (!editMode) {
+      const user = window.netlifyIdentity && netlifyIdentity.currentUser();
+      if (!user) {
+        netlifyIdentity.open();
+        netlifyIdentity.on("login", () => {
+          netlifyIdentity.close();
+          toggleEditMode(true);
+        });
+        return;
+      }
+    }
+    toggleEditMode();
+  });
+
+  // ---- Git Gateway helpers ------------------------------------
+  async function ggAuth() {
+    const user = window.netlifyIdentity && netlifyIdentity.currentUser();
+    if (!user) throw new Error("Login richiesto");
+    const token = await user.jwt();
+    return { Authorization: `Bearer ${token}` };
+  }
+
+  async function ggGet(path) {
+    const auth = await ggAuth();
+    const url = `/.netlify/git/github/contents/${path}?ref=${encodeURIComponent(CMS_BRANCH)}`;
+    const res = await fetch(url, { headers: auth });
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error(`GET ${path}: ${res.status}`);
+    return res.json();
+  }
+
+  async function ggPut(path, base64Content, message) {
+    const auth = await ggAuth();
+    const existing = await ggGet(path);
+    const body = {
+      message,
+      content: base64Content,
+      branch: CMS_BRANCH,
+    };
+    if (existing && existing.sha) body.sha = existing.sha;
+    const res = await fetch(`/.netlify/git/github/contents/${path}`, {
+      method: "PUT",
+      headers: { ...auth, "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(`PUT ${path}: ${res.status} ${txt}`);
+    }
+    return res.json();
+  }
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(",")[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function inferAssetType(name) {
+    const ext = name.split(".").pop().toLowerCase();
+    if (["pdf"].includes(ext)) return "pdf";
+    if (["jpg","jpeg","png","gif","webp","svg","avif"].includes(ext)) return "image";
+    if (["mp4","mov","webm","m4v"].includes(ext)) return "video";
+    if (["xls","xlsx","csv","numbers"].includes(ext)) return "sheet";
+    return "doc";
+  }
+
+  function slugify(s) {
+    return (s || "asset")
+      .toLowerCase()
+      .normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 60) || "asset";
+  }
+
+  // ---- Drawer rendering in edit mode --------------------------
+  function renderEditAssetCard(asset, idx) {
+    const t = ASSET_TYPE[asset.type] || ASSET_TYPE.link;
+    const isPending = asset._pending;
+    return `
+      <div class="asset-card editing" data-asset-idx="${idx}">
+        <div class="asset-edit-row">
+          <span class="asset-icon"><i class="ti ${t.icon}"></i></span>
+          <input type="text" data-field="title" value="${escapeAttr(asset.title || "")}" placeholder="Titolo asset">
+          <div class="asset-row-actions">
+            <button type="button" class="asset-icon-btn danger" data-action="delete" title="Elimina"><i class="ti ti-trash"></i></button>
+          </div>
+        </div>
+        <div class="asset-edit-row">
+          <select class="asset-type-select" data-field="type">
+            ${Object.entries(ASSET_TYPE).map(([k, v]) =>
+              `<option value="${k}" ${k === asset.type ? "selected" : ""}>${v.label}</option>`
+            ).join("")}
+          </select>
+          <input type="text" data-field="url" value="${escapeAttr(asset.url || "")}" placeholder="${isPending ? 'Sarà caricato al save' : 'URL o path/file'}" ${isPending ? "disabled" : ""}>
+        </div>
+      </div>`;
+  }
+
+  function escapeAttr(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+  }
+
+  function renderEditPanel(tp) {
+    draftAssets = (tp.assets || []).map(a => ({ ...a }));
+    pendingUploads = [];
+    markDirty(false);
+    setStatus("");
+    const assetsHtml = draftAssets.map(renderEditAssetCard).join("");
+    panelBody.innerHTML = `
+      <div class="asset-panel-section-title">Asset & materiali</div>
+      <div id="editAssetList">${assetsHtml || '<div class="asset-empty">Nessun asset. Aggiungine uno qui sotto.</div>'}</div>
+      <label class="asset-dropzone" id="assetDropzone">
+        <i class="ti ti-upload"></i>
+        <div><strong>Trascina un file qui</strong> o clicca per scegliere</div>
+        <div class="small">PDF · immagini · video · doc — finisce in <code>assets/</code></div>
+        <input type="file" id="assetFileInput" hidden multiple>
+      </label>
+      <div class="asset-add-row">
+        <input type="text" id="assetUrlInput" placeholder="Oppure incolla un URL (Drive, YouTube, ecc.)">
+        <button type="button" class="edit-btn primary" id="assetUrlAdd"><i class="ti ti-plus"></i>Aggiungi</button>
+      </div>
+    `;
+
+    // Hook up handlers
+    const list = document.getElementById("editAssetList");
+    list.addEventListener("input", onAssetInput);
+    list.addEventListener("click", onAssetActionClick);
+
+    const dz = document.getElementById("assetDropzone");
+    const fi = document.getElementById("assetFileInput");
+    dz.addEventListener("click", () => fi.click());
+    dz.addEventListener("dragover", (e) => { e.preventDefault(); dz.classList.add("dragover"); });
+    dz.addEventListener("dragleave", () => dz.classList.remove("dragover"));
+    dz.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dz.classList.remove("dragover");
+      handleFiles([...e.dataTransfer.files]);
+    });
+    fi.addEventListener("change", () => handleFiles([...fi.files]));
+
+    const urlBtn = document.getElementById("assetUrlAdd");
+    urlBtn.addEventListener("click", addAssetByUrl);
+  }
+
+  function onAssetInput(e) {
+    const card = e.target.closest(".asset-card");
+    if (!card) return;
+    const idx = +card.dataset.assetIdx;
+    const field = e.target.dataset.field;
+    if (!field || draftAssets[idx] == null) return;
+    draftAssets[idx][field] = e.target.value;
+    markDirty(true);
+  }
+
+  function onAssetActionClick(e) {
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
+    const card = btn.closest(".asset-card");
+    const idx = +card.dataset.assetIdx;
+    if (btn.dataset.action === "delete") {
+      // If the asset was a pending upload, also drop the pendingUpload
+      const a = draftAssets[idx];
+      if (a && a._pending && a._tempId) {
+        pendingUploads = pendingUploads.filter(u => u.tempId !== a._tempId);
+      }
+      draftAssets.splice(idx, 1);
+      refreshAssetList();
+      markDirty(true);
+    }
+  }
+
+  function refreshAssetList() {
+    const list = document.getElementById("editAssetList");
+    list.innerHTML = draftAssets.length
+      ? draftAssets.map(renderEditAssetCard).join("")
+      : '<div class="asset-empty">Nessun asset. Aggiungine uno qui sotto.</div>';
+  }
+
+  function handleFiles(files) {
+    files.forEach(file => {
+      const tempId = "tmp-" + Date.now() + "-" + Math.random().toString(36).slice(2,8);
+      const type = inferAssetType(file.name);
+      pendingUploads.push({ file, tempId, type });
+      draftAssets.push({
+        type,
+        title: file.name.replace(/\.[^/.]+$/, ""),
+        url: file.name, // placeholder — replaced after upload
+        _pending: true,
+        _tempId: tempId,
+      });
+    });
+    refreshAssetList();
+    markDirty(true);
+  }
+
+  function addAssetByUrl() {
+    const input = document.getElementById("assetUrlInput");
+    const url = input.value.trim();
+    if (!url) return;
+    draftAssets.push({ type: "link", title: url.split("/").pop() || url, url });
+    input.value = "";
+    refreshAssetList();
+    markDirty(true);
+  }
+
+  async function saveTouchpointEdits() {
+    if (!activeTpId || !draftAssets) return;
+    const entry = touchpointIndex.get(activeTpId);
+    if (!entry) return;
+
+    editSaveBtn.disabled = true;
+    editCancelBtn.disabled = true;
+
+    try {
+      // Upload pending files one by one
+      for (let i = 0; i < pendingUploads.length; i++) {
+        const u = pendingUploads[i];
+        setStatus(`Caricamento ${i+1}/${pendingUploads.length}: ${u.file.name}…`, "saving");
+        const phaseN = String(entry.phase.n).padStart(2, "0");
+        const folder = `assets/fase-${phaseN}`;
+        const base = slugify(u.file.name.replace(/\.[^/.]+$/, ""));
+        const ext  = u.file.name.includes(".") ? "." + u.file.name.split(".").pop() : "";
+        const stamp = Date.now().toString(36);
+        const finalName = `${base}-${stamp}${ext}`;
+        const path = `${folder}/${finalName}`;
+        const b64 = await fileToBase64(u.file);
+        await ggPut(path, b64, `cms: upload ${path}`);
+        // Update draftAssets entry that referenced this temp
+        const a = draftAssets.find(x => x._tempId === u.tempId);
+        if (a) {
+          a.url = path;
+          delete a._pending;
+          delete a._tempId;
+        }
+      }
+      pendingUploads = [];
+
+      // Update journey.json
+      setStatus("Salvataggio modifiche…", "saving");
+      // Read fresh journey to get latest SHA
+      const cur = await ggGet("data/journey.json");
+      const journey = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, "")))));
+      // Locate the touchpoint and update its assets
+      const tpRef = findTouchpointInJourney(journey, activeTpId, entry);
+      if (!tpRef) throw new Error("Touchpoint non trovato nel journey JSON");
+      tpRef.assets = draftAssets.map(a => {
+        const { _pending, _tempId, ...rest } = a;
+        return rest;
+      });
+
+      const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(journey, null, 2))));
+      await ggPut("data/journey.json", newContent, `cms: update assets in touchpoint (fase ${entry.phase.n})`);
+
+      // Update local data so UI reflects without a full reload
+      entry.tp.assets = tpRef.assets;
+      markDirty(false);
+      setStatus("Salvato. Netlify ridepoia tra ~30s.", "success");
+      setTimeout(() => setStatus(""), 4500);
+    } catch (err) {
+      console.error(err);
+      setStatus("Errore: " + (err.message || err), "error");
+    } finally {
+      editSaveBtn.disabled = !isDirty;
+      editCancelBtn.disabled = false;
+    }
+  }
+
+  // Find the touchpoint in the journey JSON by re-resolving its position.
+  // We use the same data layout (phase.touchpoints[] or phase.streams[].touchpoints[])
+  // and match by text — assumption: touchpoint text is unique within phase.
+  function findTouchpointInJourney(journey, tpId, entry) {
+    const phase = journey.phases.find(p => p.n === entry.phase.n);
+    if (!phase) return null;
+    const matchText = entry.tp.text;
+    if (phase.touchpoints) {
+      const t = phase.touchpoints.find(x => x.text === matchText);
+      if (t) return t;
+    }
+    if (phase.streams) {
+      for (const s of phase.streams) {
+        const t = (s.touchpoints || []).find(x => x.text === matchText);
+        if (t) return t;
+      }
+    }
+    return null;
+  }
+
+  editSaveBtn.addEventListener("click", saveTouchpointEdits);
+  editCancelBtn.addEventListener("click", () => {
+    if (activeTpId) openPanel(activeTpId, true); // re-init draft = reset
+  });
+
+  // Hook openPanel to render in edit or view mode
+  const originalOpenPanel = openPanel;
+  openPanel = function(tpId, _force) {
+    activeTpId = tpId;
+    if (editMode) {
+      // Render same header/meta + edit body
+      const entry = touchpointIndex.get(tpId);
+      if (!entry) return;
+      const { tp, phase } = entry;
+      panelKicker.textContent = `Fase ${pad(phase.n)} · ${phase.name}`;
+      panelTitle.textContent = tp.text;
+      panelMeta.innerHTML = [
+        actorPill(tp.actor),
+        badgeForSystem(tp.system),
+        timingPill(tp.timing),
+      ].filter(Boolean).join("");
+      renderEditPanel(tp);
+      panel.classList.add("open");
+      backdrop.classList.add("open");
+      panel.setAttribute("aria-hidden", "false");
+    } else {
+      originalOpenPanel(tpId);
+    }
+  };
 
   const colEls = [...document.querySelectorAll(".col")];
   const ratios = new Map();
