@@ -367,8 +367,17 @@ function ConvertForm({
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [projectId, setProjectId] = useState(projects[0]?.id ?? '');
+  const [assigneeIds, setAssigneeIds] = useState<Set<string>>(() => new Set([me.id]));
   const selectedProject = projects.find((p) => p.id === projectId);
   const isBacklog = selectedProject?.isPersonalBacklog ?? false;
+
+  const toggleAssignee = (id: string) =>
+    setAssigneeIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
 
   return (
     <form
@@ -433,22 +442,42 @@ function ConvertForm({
           </select>
         </div>
         <div>
-          <label className="label" htmlFor={`assign-${item.id}`}>Assegnatario</label>
-          <select
-            id={`assign-${item.id}`}
-            name="assigneeId"
-            disabled={isBacklog}
-            defaultValue={me.id}
-            className="select"
-          >
-            <option value="">{isBacklog ? '— Backlog —' : '— Nessuno —'}</option>
-            <option value={me.id}>{me.name} (tu)</option>
-            {collaborators.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
+          <span className="label">Assegnata a</span>
+          {isBacklog ? (
+            <div className="rounded-2xl border border-ink-200 bg-ink-50 px-4 py-2.5 text-sm text-ink-500">
+              Backlog — nessun assegnatario
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-ink-200 bg-white/80 px-3 py-2 space-y-1.5 max-h-40 overflow-y-auto">
+              <label className="flex items-center gap-2 text-sm cursor-pointer hover:bg-cream-50 rounded-xl px-2 py-1.5 transition">
+                <input
+                  type="checkbox"
+                  name="assigneeIds"
+                  value={me.id}
+                  checked={assigneeIds.has(me.id)}
+                  onChange={() => toggleAssignee(me.id)}
+                  className="accent-brand"
+                />
+                <span className="font-medium">{me.name} (tu)</span>
+              </label>
+              {collaborators.map((c) => (
+                <label
+                  key={c.id}
+                  className="flex items-center gap-2 text-sm cursor-pointer hover:bg-cream-50 rounded-xl px-2 py-1.5 transition"
+                >
+                  <input
+                    type="checkbox"
+                    name="assigneeIds"
+                    value={c.id}
+                    checked={assigneeIds.has(c.id)}
+                    onChange={() => toggleAssignee(c.id)}
+                    className="accent-brand"
+                  />
+                  <span>{c.name}</span>
+                </label>
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

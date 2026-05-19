@@ -14,14 +14,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
   const attachment = await prisma.attachment.findUnique({
     where: { id },
-    include: { task: { select: { assigneeId: true } } },
+    include: { task: { select: { assignees: { select: { id: true } } } } },
   });
   if (!attachment) return new NextResponse('Not found', { status: 404 });
 
   if (!admin) {
-    if (attachment.task.assigneeId !== collab!.id) {
-      return new NextResponse('Forbidden', { status: 403 });
-    }
+    const allowed = attachment.task.assignees.some((a) => a.id === collab!.id);
+    if (!allowed) return new NextResponse('Forbidden', { status: 403 });
   }
 
   const blob = await getAttachmentBuffer(attachment.blobKey);

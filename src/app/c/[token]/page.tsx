@@ -14,12 +14,12 @@ export default async function CollaboratorPage({
 
   const [assignedTasks, privateTasks, availableProjects] = await Promise.all([
     prisma.task.findMany({
-      where: { assigneeId: user.id, isPrivate: false },
+      where: { assignees: { some: { id: user.id } }, isPrivate: false },
       include: { project: true, attachments: true },
       orderBy: [{ deadline: 'asc' }, { createdAt: 'desc' }],
     }),
     prisma.task.findMany({
-      where: { assigneeId: user.id, isPrivate: true },
+      where: { assignees: { some: { id: user.id } }, isPrivate: true },
       include: { project: true, attachments: true },
       orderBy: [{ deadline: 'asc' }, { createdAt: 'desc' }],
     }),

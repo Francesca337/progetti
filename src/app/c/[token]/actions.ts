@@ -21,7 +21,7 @@ export async function updateTaskStatus(
 ): Promise<void> {
   const user = await requireCollaboratorByToken(token);
   const task = await prisma.task.findFirst({
-    where: { id: taskId, assigneeId: user.id },
+    where: { id: taskId, assignees: { some: { id: user.id } } },
     select: { id: true },
   });
   if (!task) throw new Error('Task non trovata');
@@ -36,7 +36,7 @@ export async function updateTaskDeadline(
 ): Promise<void> {
   const user = await requireCollaboratorByToken(token);
   const task = await prisma.task.findFirst({
-    where: { id: taskId, assigneeId: user.id },
+    where: { id: taskId, assignees: { some: { id: user.id } } },
     select: { id: true },
   });
   if (!task) throw new Error('Task non trovata');
@@ -66,7 +66,7 @@ export async function uploadAttachmentAction(
   if (!(file instanceof File)) return { error: 'Nessun file fornito' };
 
   const task = await prisma.task.findFirst({
-    where: { id: taskId, assigneeId: user.id },
+    where: { id: taskId, assignees: { some: { id: user.id } } },
     select: { id: true },
   });
   if (!task) return { error: 'Task non trovata' };
@@ -99,7 +99,7 @@ export async function deleteAttachmentAction(
 ): Promise<void> {
   const user = await requireCollaboratorByToken(token);
   const attachment = await prisma.attachment.findFirst({
-    where: { id: attachmentId, task: { assigneeId: user.id } },
+    where: { id: attachmentId, task: { assignees: { some: { id: user.id } } } },
   });
   if (!attachment) throw new Error('Allegato non trovato');
   await deleteAttachment(attachment.blobKey).catch(() => undefined);
@@ -169,7 +169,7 @@ export async function createCollaboratorTask(
       title: data.title,
       description: data.description ?? null,
       projectId: data.projectId,
-      assigneeId: user.id,
+      assignees: { connect: [{ id: user.id }] },
       status: data.status,
       deadline: data.deadline,
       isPrivate: true,
@@ -193,7 +193,7 @@ export async function updateCollaboratorTask(
 
   // Only allow editing tasks the collaborator owns AND that are private.
   const existing = await prisma.task.findFirst({
-    where: { id: taskId, assigneeId: user.id, isPrivate: true },
+    where: { id: taskId, assignees: { some: { id: user.id } }, isPrivate: true },
     select: { id: true },
   });
   if (!existing) return { error: 'Task non modificabile' };
@@ -238,7 +238,7 @@ export async function deleteCollaboratorTask(
 ): Promise<void> {
   const user = await requireCollaboratorByToken(token);
   const task = await prisma.task.findFirst({
-    where: { id: taskId, assigneeId: user.id, isPrivate: true },
+    where: { id: taskId, assignees: { some: { id: user.id } }, isPrivate: true },
     include: { attachments: true },
   });
   if (!task) throw new Error('Task non trovata o non eliminabile');

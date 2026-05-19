@@ -43,7 +43,7 @@ export function NewTaskButton({
         collaborators={collaborators}
         me={me}
         defaultProjectId={defaultProjectId}
-        initial={defaultAssigneeId ? { assigneeId: defaultAssigneeId } : undefined}
+        initial={defaultAssigneeId ? { assigneeIds: [defaultAssigneeId] } : undefined}
         submitLabel="Aggiungi"
         onSubmit={async (fd) => {
           await createTask(fd);

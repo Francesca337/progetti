@@ -158,7 +158,7 @@ const convertSchema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().max(5000).optional().nullable(),
   projectId: z.string().min(1),
-  assigneeId: z.string().optional().nullable(),
+  assigneeIds: z.array(z.string().min(1)).default([]),
   status: z.enum(['TODO', 'IN_PROGRESS', 'IN_REVIEW', 'DONE']).default('TODO'),
   deadline: z
     .string()
@@ -178,7 +178,7 @@ export async function convertInboxItemToTask(
       title: formData.get('title'),
       description: formData.get('description') || null,
       projectId: formData.get('projectId'),
-      assigneeId: formData.get('assigneeId') || null,
+      assigneeIds: formData.getAll('assigneeIds').map(String).filter(Boolean),
       status: formData.get('status') || 'TODO',
       deadline: formData.get('deadline') || null,
     });
@@ -197,7 +197,7 @@ export async function convertInboxItemToTask(
   const project = await prisma.project.findUnique({ where: { id: data.projectId } });
   if (!project) return { error: 'Progetto non trovato' };
 
-  const assigneeId = project.isPersonalBacklog ? null : data.assigneeId || null;
+  const assigneeIds = project.isPersonalBacklog ? [] : data.assigneeIds;
   // Append a back-link to the source message in the description, so the
   // PM can always jump back to the email that started the task.
   const descParts: string[] = [];
@@ -210,12 +210,12 @@ export async function convertInboxItemToTask(
       title: data.title,
       description,
       projectId: data.projectId,
-      assigneeId,
+      assignees: { connect: assigneeIds.map((id) => ({ id })) },
       priority: 'MEDIUM' as Priority,
       status: data.status as TaskStatus,
       deadline: data.deadline,
     },
-    include: { project: true, assignee: true },
+    include: { project: true, assignees: true },
   });
 
   await prisma.inboxItem.update({
@@ -223,19 +223,21 @@ export async function convertInboxItemToTask(
     data: { status: 'CONVERTED', convertedTaskId: task.id },
   });
 
-  if (task.assignee && task.assignee.role === 'COLLABORATOR') {
-    await notifyTaskAssigned({
-      task,
-      project: task.project,
-      assignee: task.assignee,
-    });
+  for (const a of task.assignees) {
+    if (a.role === 'COLLABORATOR') {
+      await notifyTaskAssigned({ task, project: task.project, assignee: a });
+    }
   }
 
   revalidatePath('/admin/inbox');
   revalidatePath('/admin');
   revalidatePath('/admin/projects');
   revalidatePath(`/admin/projects/${data.projectId}`);
-  if (assigneeId) revalidatePath(`/admin/collaborators/${assigneeId}`);
+  for (const a of task.assignees) {
+    if (a.role === 'COLLABORATOR') {
+      revalidatePath(`/admin/collaborators/${a.id}`);
+    }
+  }
 }
 
 // ---------- Integration management ----------

@@ -150,7 +150,7 @@ const taskSchema = z.object({
   title: z.string().min(1, 'Titolo obbligatorio').max(200),
   description: z.string().max(5000).optional().nullable(),
   projectId: z.string().min(1),
-  assigneeId: z.string().optional().nullable(),
+  assigneeIds: z.array(z.string().min(1)).default([]),
   priority: z.enum(['LOW', 'MEDIUM', 'HIGH']),
   status: z.enum(['TODO', 'IN_PROGRESS', 'IN_REVIEW', 'DONE']),
   deadline: z
@@ -169,11 +169,13 @@ const taskSchema = z.object({
 });
 
 function parseTaskForm(formData: FormData) {
+  // assigneeIds arrive as repeated form fields; getAll collects them all.
+  const assigneeIds = formData.getAll('assigneeIds').map(String).filter(Boolean);
   return taskSchema.parse({
     title: formData.get('title'),
     description: formData.get('description') || null,
     projectId: formData.get('projectId'),
-    assigneeId: formData.get('assigneeId') || null,
+    assigneeIds,
     priority: formData.get('priority') || 'MEDIUM',
     status: formData.get('status') || 'TODO',
     deadline: formData.get('deadline') || null,
@@ -188,37 +190,37 @@ export async function createTask(formData: FormData): Promise<{ taskId: string }
   const project = await prisma.project.findUnique({ where: { id: data.projectId } });
   if (!project) throw new Error('Progetto non trovato');
 
-  // Personal backlog tasks must not have an assignee.
-  const assigneeId = project.isPersonalBacklog ? null : data.assigneeId || null;
+  // Personal backlog tasks must have no assignees.
+  const assigneeIds = project.isPersonalBacklog ? [] : data.assigneeIds;
 
   const task = await prisma.task.create({
     data: {
       title: data.title,
       description: data.description ?? null,
       projectId: data.projectId,
-      assigneeId,
+      assignees: { connect: assigneeIds.map((id) => ({ id })) },
       priority: data.priority as Priority,
       status: data.status as TaskStatus,
       deadline: data.deadline,
       driveFolderUrl: data.driveFolderUrl,
     },
-    include: { project: true, assignee: true },
+    include: { project: true, assignees: true },
   });
 
-  if (task.assignee && task.assignee.role === 'COLLABORATOR') {
-    await notifyTaskAssigned({
-      task,
-      project: task.project,
-      assignee: task.assignee,
-    });
+  for (const a of task.assignees) {
+    if (a.role === 'COLLABORATOR') {
+      await notifyTaskAssigned({ task, project: task.project, assignee: a });
+    }
   }
 
   revalidatePath('/admin');
   revalidatePath('/admin/projects');
   revalidatePath('/admin/backlog');
   revalidatePath(`/admin/projects/${data.projectId}`);
-  if (assigneeId && task.assignee?.role === 'COLLABORATOR') {
-    revalidatePath(`/admin/collaborators/${assigneeId}`);
+  for (const a of task.assignees) {
+    if (a.role === 'COLLABORATOR') {
+      revalidatePath(`/admin/collaborators/${a.id}`);
+    }
   }
   return { taskId: task.id };
 }
@@ -227,12 +229,15 @@ export async function updateTask(taskId: string, formData: FormData): Promise<vo
   await requireAdmin();
   const data = parseTaskForm(formData);
 
-  const previous = await prisma.task.findUnique({ where: { id: taskId } });
+  const previous = await prisma.task.findUnique({
+    where: { id: taskId },
+    include: { assignees: { select: { id: true } } },
+  });
   if (!previous) throw new Error('Task non trovata');
 
   const project = await prisma.project.findUnique({ where: { id: data.projectId } });
   if (!project) throw new Error('Progetto non trovato');
-  const assigneeId = project.isPersonalBacklog ? null : data.assigneeId || null;
+  const assigneeIds = project.isPersonalBacklog ? [] : data.assigneeIds;
 
   const task = await prisma.task.update({
     where: { id: taskId },
@@ -240,24 +245,23 @@ export async function updateTask(taskId: string, formData: FormData): Promise<vo
       title: data.title,
       description: data.description ?? null,
       projectId: data.projectId,
-      assigneeId,
+      assignees: { set: assigneeIds.map((id) => ({ id })) },
       priority: data.priority as Priority,
       status: data.status as TaskStatus,
       deadline: data.deadline,
       driveFolderUrl: data.driveFolderUrl,
     },
-    include: { project: true, assignee: true },
+    include: { project: true, assignees: true },
   });
 
-  // Notify only when assignee changed AND new assignee is a collaborator
-  // (don't email the admin when she assigns herself).
-  const assigneeChanged = previous.assigneeId !== task.assigneeId;
-  if (assigneeChanged && task.assignee && task.assignee.role === 'COLLABORATOR') {
-    await notifyTaskAssigned({
-      task,
-      project: task.project,
-      assignee: task.assignee,
-    });
+  // Notify only NEW assignees (previously not on the task) who are
+  // collaborators — don't ping the admin when she assigns herself, and
+  // don't re-ping people who were already on the task.
+  const previousIds = new Set(previous.assignees.map((a) => a.id));
+  for (const a of task.assignees) {
+    if (a.role === 'COLLABORATOR' && !previousIds.has(a.id)) {
+      await notifyTaskAssigned({ task, project: task.project, assignee: a });
+    }
   }
 
   revalidatePath('/admin');
@@ -267,19 +271,19 @@ export async function updateTask(taskId: string, formData: FormData): Promise<vo
   if (previous.projectId !== data.projectId) {
     revalidatePath(`/admin/projects/${previous.projectId}`);
   }
-  if (assigneeId && task.assignee?.role === 'COLLABORATOR') {
-    revalidatePath(`/admin/collaborators/${assigneeId}`);
-  }
-  if (previous.assigneeId && previous.assigneeId !== assigneeId) {
-    revalidatePath(`/admin/collaborators/${previous.assigneeId}`);
-  }
+  // Revalidate every collaborator page touched (old + new) so removals
+  // and additions both refresh.
+  const touched = new Set<string>();
+  for (const a of task.assignees) if (a.role === 'COLLABORATOR') touched.add(a.id);
+  for (const id of previousIds) touched.add(id);
+  for (const id of touched) revalidatePath(`/admin/collaborators/${id}`);
 }
 
 export async function deleteTask(taskId: string): Promise<void> {
   await requireAdmin();
   const task = await prisma.task.findUnique({
     where: { id: taskId },
-    include: { attachments: true },
+    include: { attachments: true, assignees: { select: { id: true } } },
   });
   if (!task) return;
   await Promise.all(
@@ -290,7 +294,7 @@ export async function deleteTask(taskId: string): Promise<void> {
   revalidatePath('/admin/projects');
   revalidatePath('/admin/backlog');
   revalidatePath(`/admin/projects/${task.projectId}`);
-  if (task.assigneeId) revalidatePath(`/admin/collaborators/${task.assigneeId}`);
+  for (const a of task.assignees) revalidatePath(`/admin/collaborators/${a.id}`);
 }
 
 export async function adminUpdateTaskStatus(taskId: string, status: TaskStatus): Promise<void> {
@@ -309,7 +313,10 @@ export async function adminUploadAttachment(
   const taskId = String(formData.get('taskId') ?? '');
   const file = formData.get('file');
   if (!(file instanceof File)) return { error: 'Nessun file fornito' };
-  const task = await prisma.task.findUnique({ where: { id: taskId } });
+  const task = await prisma.task.findUnique({
+    where: { id: taskId },
+    include: { assignees: { select: { id: true } } },
+  });
   if (!task) return { error: 'Task non trovata' };
   if (!isAllowedMime(file.type)) {
     return { error: `Tipo non supportato. Consenti: ${ALLOWED_MIME_TYPES.join(', ')}` };
@@ -331,21 +338,22 @@ export async function adminUploadAttachment(
   });
 
   revalidatePath(`/admin/projects/${task.projectId}`);
-  if (task.assigneeId) revalidatePath(`/admin/collaborators/${task.assigneeId}`);
+  for (const a of task.assignees) revalidatePath(`/admin/collaborators/${a.id}`);
 }
 
 export async function adminDeleteAttachment(attachmentId: string): Promise<void> {
   await requireAdmin();
   const attachment = await prisma.attachment.findUnique({
     where: { id: attachmentId },
-    include: { task: true },
+    include: { task: { include: { assignees: { select: { id: true } } } } },
   });
   if (!attachment) return;
   await deleteAttachment(attachment.blobKey).catch(() => undefined);
   await prisma.attachment.delete({ where: { id: attachmentId } });
   revalidatePath(`/admin/projects/${attachment.task.projectId}`);
-  if (attachment.task.assigneeId)
-    revalidatePath(`/admin/collaborators/${attachment.task.assigneeId}`);
+  for (const a of attachment.task.assignees) {
+    revalidatePath(`/admin/collaborators/${a.id}`);
+  }
 }
 
 // ---------- Project notes (admin-private, per-project) ----------

@@ -9,7 +9,7 @@ type Initial = {
   title?: string;
   description?: string | null;
   projectId?: string;
-  assigneeId?: string | null;
+  assigneeIds?: string[];
   priority?: Priority;
   status?: TaskStatus;
   deadline?: string | null;
@@ -40,9 +40,20 @@ export function TaskForm({
   const [projectId, setProjectId] = useState(
     initial?.projectId ?? defaultProjectId ?? projects[0]?.id ?? '',
   );
+  const [assigneeIds, setAssigneeIds] = useState<Set<string>>(
+    () => new Set(initial?.assigneeIds ?? []),
+  );
 
   const selectedProject = projects.find((p) => p.id === projectId);
   const isBacklog = selectedProject?.isPersonalBacklog ?? false;
+
+  const toggleAssignee = (id: string) =>
+    setAssigneeIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
 
   return (
     <form
@@ -101,26 +112,52 @@ export function TaskForm({
           </select>
         </div>
         <div>
-          <label className="label" htmlFor="assigneeId">Assegnatario</label>
-          <select
-            id="assigneeId"
-            name="assigneeId"
-            className="select"
-            defaultValue={initial?.assigneeId ?? ''}
-            disabled={isBacklog}
-          >
-            <option value="">{isBacklog ? '— Backlog personale —' : '— Nessuno —'}</option>
-            {me && !isBacklog && (
-              <option value={me.id}>
-                {me.name} (tu)
-              </option>
-            )}
-            {collaborators.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
+          <span className="label">Assegnata a</span>
+          {isBacklog ? (
+            <div className="rounded-2xl border border-ink-200 bg-ink-50 px-4 py-2.5 text-sm text-ink-500">
+              Backlog personale — nessun assegnatario
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-ink-200 bg-white/80 px-3 py-2 space-y-1.5 max-h-44 overflow-y-auto">
+              {me && (
+                <label className="flex items-center gap-2 text-sm cursor-pointer hover:bg-cream-50 rounded-xl px-2 py-1.5 transition">
+                  <input
+                    type="checkbox"
+                    name="assigneeIds"
+                    value={me.id}
+                    checked={assigneeIds.has(me.id)}
+                    onChange={() => toggleAssignee(me.id)}
+                    className="accent-brand"
+                  />
+                  <span className="font-medium">{me.name} (tu)</span>
+                </label>
+              )}
+              {collaborators.map((c) => (
+                <label
+                  key={c.id}
+                  className="flex items-center gap-2 text-sm cursor-pointer hover:bg-cream-50 rounded-xl px-2 py-1.5 transition"
+                >
+                  <input
+                    type="checkbox"
+                    name="assigneeIds"
+                    value={c.id}
+                    checked={assigneeIds.has(c.id)}
+                    onChange={() => toggleAssignee(c.id)}
+                    className="accent-brand"
+                  />
+                  <span>{c.name}</span>
+                </label>
+              ))}
+              {collaborators.length === 0 && !me && (
+                <p className="text-xs text-ink-500 px-2 py-1.5">Nessuna persona disponibile.</p>
+              )}
+            </div>
+          )}
+          {!isBacklog && assigneeIds.size > 1 && (
+            <p className="mt-1 text-xs text-ink-500">
+              {assigneeIds.size} persone assegnate. Riceveranno tutte la notifica.
+            </p>
+          )}
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

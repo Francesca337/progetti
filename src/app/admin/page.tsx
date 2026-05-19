@@ -22,7 +22,7 @@ export default async function AdminDashboard() {
         status: { in: ['TODO', 'IN_PROGRESS', 'IN_REVIEW'] },
         deadline: { lt: startOfToday },
       },
-      include: { project: true, assignee: true },
+      include: { project: true, assignees: true },
       orderBy: { deadline: 'asc' },
       take: 50,
     }),
@@ -32,13 +32,13 @@ export default async function AdminDashboard() {
         status: { in: ['TODO', 'IN_PROGRESS', 'IN_REVIEW'] },
         deadline: { gte: startOfToday, lte: in7Days },
       },
-      include: { project: true, assignee: true },
+      include: { project: true, assignees: true },
       orderBy: { deadline: 'asc' },
       take: 50,
     }),
     prisma.task.findMany({
       where: { isPrivate: false, status: 'IN_PROGRESS' },
-      include: { project: true, assignee: true },
+      include: { project: true, assignees: true },
       orderBy: [{ deadline: 'asc' }, { createdAt: 'desc' }],
       take: 50,
     }),
@@ -56,8 +56,8 @@ export default async function AdminDashboard() {
 
   type Task = (typeof overdue)[number];
   const splitByOwner = (tasks: Task[]) => ({
-    mine: tasks.filter((t) => t.assigneeId === admin.id),
-    team: tasks.filter((t) => t.assigneeId !== admin.id),
+    mine: tasks.filter((t) => t.assignees.some((a) => a.id === admin.id)),
+    team: tasks.filter((t) => !t.assignees.some((a) => a.id === admin.id)),
   });
 
   const overdueSplit = splitByOwner(overdue);
@@ -130,7 +130,7 @@ type DashboardTask = {
   status: keyof typeof STATUS_LABELS;
   deadline: Date | null;
   project: { id: string; name: string; color: string };
-  assignee: { id: string; name: string } | null;
+  assignees: { id: string; name: string }[];
 };
 
 function SplitSection({
@@ -231,10 +231,12 @@ function TaskLine({
           <span className="h-2 w-2 rounded-full" style={{ backgroundColor: task.project.color }} />
           {task.project.name}
         </span>
-        {!hideAssignee && task.assignee && (
-          <span className="text-xs text-ink-500">→ {task.assignee.name}</span>
+        {!hideAssignee && task.assignees.length > 0 && (
+          <span className="text-xs text-ink-500">
+            → {task.assignees.map((a) => a.name).join(', ')}
+          </span>
         )}
-        {!hideAssignee && !task.assignee && (
+        {!hideAssignee && task.assignees.length === 0 && (
           <span className="text-xs text-ink-400 italic">senza assegnatario</span>
         )}
         {task.deadline && <span className={deadlineClass}>{formatDate(task.deadline)}</span>}

@@ -22,7 +22,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
   const [tasks, allProjects, collaborators, notes] = await Promise.all([
     prisma.task.findMany({
       where: { projectId: id, isPrivate: false },
-      include: { project: true, assignee: true, attachments: true },
+      include: { project: true, assignees: true, attachments: true },
       orderBy: [{ deadline: 'asc' }, { createdAt: 'desc' }],
     }),
     prisma.project.findMany({

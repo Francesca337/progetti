@@ -22,7 +22,7 @@ import { TaskForm } from './TaskForm';
 
 type FullTask = Task & {
   project: Project;
-  assignee: User | null;
+  assignees: User[];
   attachments: Attachment[];
 };
 
@@ -47,7 +47,7 @@ export function TaskRow({
   const [showAttachments, setShowAttachments] = useState(false);
   const [pending, startTransition] = useTransition();
   const severity = deadlineSeverity(task.deadline, task.status);
-  const mine = !muted && !!me && task.assigneeId === me.id;
+  const mine = !muted && !!me && task.assignees.some((a) => a.id === me.id);
 
   if (editing) {
     return (
@@ -61,7 +61,7 @@ export function TaskRow({
             title: task.title,
             description: task.description,
             projectId: task.projectId,
-            assigneeId: task.assigneeId,
+            assigneeIds: task.assignees.map((a) => a.id),
             priority: task.priority,
             status: task.status,
             deadline: task.deadline ? task.deadline.toISOString().slice(0, 10) : null,
@@ -113,20 +113,33 @@ export function TaskRow({
                 {task.project.name}
               </Link>
             )}
-            {showAssignee && task.assignee && !mine && (
-              task.assignee.role === 'ADMIN' ? (
-                <span className="badge bg-brand-50 text-brand-700">
-                  {task.assignee.name} (tu)
-                </span>
-              ) : (
-                <Link
-                  href={`/admin/collaborators/${task.assignee.id}`}
-                  className="badge bg-cream-100 text-ink-700 hover:bg-cream-200 transition"
-                >
-                  {task.assignee.name}
-                </Link>
-              )
-            )}
+            {showAssignee &&
+              task.assignees.map((a) => {
+                // The current admin's own badge is hidden in 'mine' rows
+                // because the pink background already says so.
+                if (mine && me && a.id === me.id) return null;
+                if (a.role === 'ADMIN') {
+                  return (
+                    <span key={a.id} className="badge bg-brand-50 text-brand-700">
+                      {a.name}
+                      {me && a.id === me.id ? ' (tu)' : ''}
+                    </span>
+                  );
+                }
+                return (
+                  <Link
+                    key={a.id}
+                    href={`/admin/collaborators/${a.id}`}
+                    className={
+                      mine
+                        ? 'badge bg-white/15 text-white hover:bg-white/25 transition'
+                        : 'badge bg-cream-100 text-ink-700 hover:bg-cream-200 transition'
+                    }
+                  >
+                    {a.name}
+                  </Link>
+                );
+              })}
             {task.deadline && (
               <span
                 className={
