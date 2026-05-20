@@ -20,16 +20,6 @@
               "assets": [
                 {
                   "type": "sheet",
-                  "title": "Lista contatti enoteche Nord Italia",
-                  "url": "#"
-                },
-                {
-                  "type": "doc",
-                  "title": "Criteri di selezione e segmentazione",
-                  "url": "#"
-                },
-                {
-                  "type": "sheet",
                   "title": "enoteche_Laura_multiprovincia",
                   "url": "assets/fase-01/enoteche-laura-multiprovincia-mpblcwu3.xlsx"
                 }
