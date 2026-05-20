@@ -443,23 +443,7 @@
             "text": "trigger: ordine confermato in Zoho",
             "icon": "ti-bolt"
           },
-          "assets": [
-            {
-              "type": "doc",
-              "title": "Template mail benvenuto rivenditore",
-              "url": "#"
-            },
-            {
-              "type": "link",
-              "title": "Store locator giotto.it/dove-trovarci",
-              "url": "#"
-            },
-            {
-              "type": "doc",
-              "title": "Schema scontistica primi 6 mesi",
-              "url": "#"
-            }
-          ]
+          "assets": []
         },
         {
           "text": "Spedizione ordine + kit comunicazione campagna Natale nella scatola",
