@@ -132,18 +132,7 @@
               "icon": "ti-phone",
               "actor": "manual",
               "timing": "Avvio immediato",
-              "assets": [
-                {
-                  "type": "doc",
-                  "title": "Script chiamata di validazione",
-                  "url": "#"
-                },
-                {
-                  "type": "doc",
-                  "title": "Domande qualificazione rivenditore",
-                  "url": "#"
-                }
-              ]
+              "assets": []
             },
             {
               "text": "Raccoglie l'email durante la chiamata",
