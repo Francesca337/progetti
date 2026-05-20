@@ -62,7 +62,7 @@
     --top-h: 72px;
     --bot-h: 48px;
     --col-w: 332px;
-    --gap: 152px;
+    --gap: 300px;
 
     --serif: "Gazpacho", Georgia, serif;
     --sans:  "Neue Montreal", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
@@ -885,7 +885,8 @@
     background: var(--gold-pale);
     color: var(--gold-deep);
     padding: 10px 18px 11px;
-    max-width: 230px;
+    max-width: 220px;
+    min-width: 120px;
     text-align: center;
     font-family: var(--serif);
     font-style: italic;
@@ -2439,6 +2440,19 @@
     const minColH = Math.min(...colEls.map(c => c.offsetHeight));
     const baseY = Math.floor(minColH / 2);
 
+    function drawArrowLine(x1, y1, x2, y2) {
+      if (x2 - x1 < 4) return; // too short to bother
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", `M ${x1} ${y1} L ${x2} ${y2}`);
+      path.setAttribute("class", "link");
+      path.setAttribute("fill", "none");
+      path.setAttribute("stroke", "#A89060");
+      path.setAttribute("stroke-width", "1");
+      path.setAttribute("opacity", "0.55");
+      path.setAttribute("marker-end", "url(#arrowhead)");
+      svg.appendChild(path);
+    }
+
     for (let i = 0; i < colEls.length - 1; i++) {
       const a = colEls[i];
       const b = colEls[i + 1];
@@ -2447,21 +2461,14 @@
       const y = a.offsetTop + baseY;
       const midX = (ax + bx) / 2;
 
-      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      const d = `M ${ax + 8} ${y} C ${midX} ${y}, ${midX} ${y}, ${bx - 14} ${y}`;
-      path.setAttribute("d", d);
-      path.setAttribute("class", "link");
-      path.setAttribute("fill", "none");
-      path.setAttribute("stroke", "#A89060");
-      path.setAttribute("stroke-width", "1");
-      path.setAttribute("opacity", "0.6");
-      path.setAttribute("marker-end", "url(#arrowhead)");
-      svg.appendChild(path);
-
-      // Phase outcome label centered on the connector + lead delta
       const phase = phases[i];
       const next = phases[i + 1];
-      if (phase.outcome || (phase.leads != null && next.leads != null)) {
+      const hasChip = !!(phase.outcome || (phase.leads != null && next.leads != null));
+
+      let chipLeftEdge = midX, chipRightEdge = midX;
+
+      if (hasChip) {
+        // Create + position the chip
         const label = document.createElement("div");
         label.className = "phase-outcome";
         label.style.left = midX + "px";
@@ -2472,7 +2479,6 @@
           span.textContent = phase.outcome;
           label.appendChild(span);
         }
-
         if (phase.leads != null && next.leads != null && phase.leads > 0) {
           const delta = next.leads - phase.leads;
           if (delta !== 0) {
@@ -2484,8 +2490,22 @@
             label.appendChild(deltaEl);
           }
         }
-
         track.appendChild(label);
+
+        // Measure the chip (synchronous layout via offsetWidth)
+        const chipW = label.offsetWidth;
+        chipLeftEdge  = midX - chipW / 2;
+        chipRightEdge = midX + chipW / 2;
+      }
+
+      const sideGap = 10; // visual breathing room between line and chip / column edge
+      if (hasChip) {
+        // Two arrows: column → chip, then chip → next column
+        drawArrowLine(ax + sideGap, y, chipLeftEdge - sideGap, y);
+        drawArrowLine(chipRightEdge + sideGap, y, bx - sideGap - 4, y);
+      } else {
+        // Single arrow across the gap
+        drawArrowLine(ax + sideGap, y, bx - sideGap - 4, y);
       }
     }
   }
