@@ -549,6 +549,29 @@
     line-height: 1;
   }
   .stream-caption { display: none; }
+  .stream-leads {
+    display: inline-flex; align-items: baseline; gap: 4px;
+    margin-left: 8px;
+    padding-left: 12px;
+    border-left: 1px solid rgba(168,144,96,0.35);
+    font-family: var(--sans);
+    font-size: 9px;
+    color: var(--ink-muted);
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .stream-leads .num {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: -0.3px;
+    line-height: 1;
+    text-transform: none;
+    margin-right: 1px;
+  }
 
   /* ============================================================
      RAIL (cards stack — no line, no dots)
@@ -1558,10 +1581,14 @@
   }
 
   function renderStream(stream, phase) {
+    const leadsHtml = (stream.leads != null)
+      ? `<span class="stream-leads"><span class="num">${formatLeads(stream.leads)}</span> lead</span>`
+      : "";
     return `
       <div class="stream ${stream.loop ? "loop" : ""}">
         <div class="stream-header">
           <span class="stream-name">${stream.name}</span>
+          ${leadsHtml}
         </div>
         ${renderRail(stream.touchpoints, phase)}
       </div>`;

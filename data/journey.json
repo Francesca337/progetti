@@ -5,7 +5,6 @@
       "name": "Generazione lead",
       "period": "Maggio – Giugno 2026",
       "current": true,
-      "leads": 139,
       "outcome": "Il contatto entra in Zoho",
       "streams": [
         {
@@ -25,7 +24,8 @@
                 }
               ]
             }
-          ]
+          ],
+          "leads": 139
         },
         {
           "name": "Inbound",

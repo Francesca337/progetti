@@ -193,6 +193,12 @@ collections:
                     widget: boolean
                     default: false
                     required: false
+                  - name: leads
+                    label: "Numero lead in questo stream"
+                    widget: number
+                    value_type: int
+                    required: false
+                    hint: "Es. 139 per Outbound. Lascia vuoto se non lo sai ancora."
                   - name: touchpoints
                     label: "Touchpoint dello stream"
                     widget: list
