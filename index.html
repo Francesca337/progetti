@@ -1346,6 +1346,79 @@
   .edit-status.error  { color: #9C4628; }
   .edit-status.success { color: #4F6B2C; }
 
+  /* Touchpoint metadata editor (inline form at top of edit drawer) */
+  .tp-edit-header {
+    display: flex; flex-direction: column;
+    gap: 12px;
+    margin-bottom: 8px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--hairline-soft);
+  }
+  .tp-edit-header .tp-text-input {
+    font-family: var(--serif);
+    font-size: 19px;
+    font-weight: 400;
+    color: var(--ink);
+    border: 1px solid var(--hairline-soft);
+    border-radius: 10px;
+    padding: 11px 13px;
+    background: var(--card);
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 1.3;
+    letter-spacing: -0.2px;
+  }
+  .tp-edit-header .tp-text-input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  .tp-edit-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .tp-edit-fields .field-full { grid-column: 1 / -1; }
+  .tp-edit-field label {
+    display: block;
+    font-family: var(--sans);
+    font-size: 9px;
+    color: var(--ink-muted);
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+  .tp-edit-field input,
+  .tp-edit-field select,
+  .tp-edit-field textarea {
+    width: 100%;
+    font-family: var(--sans);
+    font-size: 13px;
+    padding: 8px 10px;
+    border: 1px solid var(--hairline-soft);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--ink);
+    box-sizing: border-box;
+  }
+  .tp-edit-field textarea {
+    resize: vertical;
+    min-height: 56px;
+    font-family: var(--serif);
+    font-style: italic;
+    line-height: 1.4;
+  }
+  .tp-edit-field input:focus,
+  .tp-edit-field select:focus,
+  .tp-edit-field textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+
+  /* In edit mode, hide read-only title + meta (we render editable versions in the body) */
+  body.editing .asset-panel-header > div > .asset-panel-title,
+  body.editing .asset-panel-meta { display: none; }
+
   /* ============================================================
      ZOOM CONTROLS (bottom bar)
      ============================================================ */
@@ -1899,6 +1972,7 @@
 
   let editMode = false;
   let activeTpId = null;         // currently open touchpoint
+  let draftTp = null;            // working copy of touchpoint metadata (text, system, actor, timing, extra)
   let draftAssets = null;        // working copy of assets being edited
   let pendingUploads = [];       // {file, name, type, title, tempId}
   let isDirty = false;
@@ -2035,12 +2109,63 @@
   }
 
   function renderEditPanel(tp) {
+    draftTp = {
+      text: tp.text || "",
+      system: tp.system || "manuale",
+      actor: tp.actor || "manual",
+      timing: tp.timing || "",
+      extra: tp.extra || "",
+    };
     draftAssets = (tp.assets || []).map(a => ({ ...a }));
     pendingUploads = [];
     markDirty(false);
     setStatus("");
+
+    const SYS_OPTIONS = [
+      ["manuale",  "Manuale (Laura)"],
+      ["email",    "Email"],
+      ["zoho",     "Zoho CRM"],
+      ["whatsapp", "WhatsApp"],
+      ["ads",      "Ads"],
+      ["logistica","Logistica"],
+    ];
+    const ACTOR_OPTIONS = [
+      ["manual", "Laura (manuale)"],
+      ["auto",   "Auto (sistema)"],
+      ["sched",  "Ricorrente"],
+    ];
+    const sysOpts = SYS_OPTIONS.map(([v,l]) =>
+      `<option value="${v}" ${v === draftTp.system ? "selected" : ""}>${l}</option>`).join("");
+    const actorOpts = ACTOR_OPTIONS.map(([v,l]) =>
+      `<option value="${v}" ${v === draftTp.actor ? "selected" : ""}>${l}</option>`).join("");
+
+    const headerHtml = `
+      <div class="tp-edit-header">
+        <input type="text" class="tp-text-input" id="tpText"
+               value="${escapeAttr(draftTp.text)}" placeholder="Cosa succede in questo touchpoint">
+        <div class="tp-edit-fields">
+          <div class="tp-edit-field">
+            <label>Chi lo fa</label>
+            <select id="tpActor">${actorOpts}</select>
+          </div>
+          <div class="tp-edit-field">
+            <label>Sistema</label>
+            <select id="tpSystem">${sysOpts}</select>
+          </div>
+          <div class="tp-edit-field field-full">
+            <label>Quando</label>
+            <input type="text" id="tpTiming" value="${escapeAttr(draftTp.timing)}"
+                   placeholder="Es. '30 Novembre', 'Entro 24h', '+72h dalla mail'">
+          </div>
+          <div class="tp-edit-field field-full">
+            <label>Nota italica (sotto al touchpoint)</label>
+            <textarea id="tpExtra" placeholder="Opzionale">${escapeAttr(draftTp.extra)}</textarea>
+          </div>
+        </div>
+      </div>`;
+
     const assetsHtml = draftAssets.map(renderEditAssetCard).join("");
-    panelBody.innerHTML = `
+    const bodyHtml = `
       <div class="asset-panel-section-title">Asset & materiali</div>
       <div id="editAssetList">${assetsHtml || '<div class="asset-empty">Nessun asset. Aggiungine uno qui sotto.</div>'}</div>
       <label class="asset-dropzone" id="assetDropzone">
@@ -2055,7 +2180,21 @@
       </div>
     `;
 
-    // Hook up handlers
+    panelBody.innerHTML = headerHtml + bodyHtml;
+
+    // Hook up handlers — touchpoint metadata
+    const tpText = document.getElementById("tpText");
+    tpText.addEventListener("input", e => {
+      draftTp.text = e.target.value;
+      panelTitle.textContent = e.target.value; // live update header title
+      markDirty(true);
+    });
+    document.getElementById("tpActor").addEventListener("change", e => { draftTp.actor = e.target.value; markDirty(true); });
+    document.getElementById("tpSystem").addEventListener("change", e => { draftTp.system = e.target.value; markDirty(true); });
+    document.getElementById("tpTiming").addEventListener("input", e => { draftTp.timing = e.target.value; markDirty(true); });
+    document.getElementById("tpExtra").addEventListener("input", e => { draftTp.extra = e.target.value; markDirty(true); });
+
+    // Asset list handlers
     const list = document.getElementById("editAssetList");
     list.addEventListener("input", onAssetInput);
     list.addEventListener("click", onAssetActionClick);
@@ -2174,18 +2313,32 @@
       // Read fresh journey to get latest SHA
       const cur = await ggGet("data/journey.json");
       const journey = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, "")))));
-      // Locate the touchpoint and update its assets
+      // Locate the touchpoint and update its fields + assets
       const tpRef = findTouchpointInJourney(journey, activeTpId, entry);
       if (!tpRef) throw new Error("Touchpoint non trovato nel journey JSON");
+
+      // Metadata
+      tpRef.text = draftTp.text;
+      tpRef.system = draftTp.system;
+      tpRef.actor = draftTp.actor;
+      if (draftTp.timing) tpRef.timing = draftTp.timing; else delete tpRef.timing;
+      if (draftTp.extra)  tpRef.extra  = draftTp.extra;  else delete tpRef.extra;
+
+      // Assets
       tpRef.assets = draftAssets.map(a => {
         const { _pending, _tempId, ...rest } = a;
         return rest;
       });
 
       const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(journey, null, 2))));
-      await ggPut("data/journey.json", newContent, `cms: update assets in touchpoint (fase ${entry.phase.n})`);
+      await ggPut("data/journey.json", newContent, `cms: update touchpoint (fase ${entry.phase.n}) — ${draftTp.text.slice(0, 60)}`);
 
       // Update local data so UI reflects without a full reload
+      entry.tp.text   = draftTp.text;
+      entry.tp.system = draftTp.system;
+      entry.tp.actor  = draftTp.actor;
+      entry.tp.timing = draftTp.timing || undefined;
+      entry.tp.extra  = draftTp.extra  || undefined;
       entry.tp.assets = tpRef.assets;
       markDirty(false);
       setStatus("Salvato. Netlify ridepoia tra ~30s.", "success");
