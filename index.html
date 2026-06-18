@@ -1067,15 +1067,7 @@
     box-shadow: 0 1px 2px rgba(168,144,96,0.10),
                 0 8px 20px -10px rgba(168,144,96,0.32);
   }
-  .phase-outcome::before {
-    content: "→";
-    margin-right: 8px;
-    color: var(--gold-deep);
-    font-style: normal;
-    font-family: var(--sans);
-    font-weight: 400;
-    opacity: 0.8;
-  }
+  /* Arrow prefix removed to reduce visual noise */
   .outcome-delta {
     display: block;
     margin-top: 4px;
@@ -2860,37 +2852,7 @@
         chipRightEdge = midX + chipW / 2;
       }
 
-      const sideGap = 10; // visual breathing room between line and chip / column edge
-      const nextIsFork = b.classList.contains("col-fork");
-
-      if (nextIsFork) {
-        // From column a → outcome chip, then fan-out arrows to each fork sub-column.
-        if (hasChip) drawArrowLine(ax + sideGap, y, chipLeftEdge - sideGap, y);
-
-        const fanFromX = hasChip ? chipRightEdge + sideGap : ax + sideGap;
-        const subs = [...b.querySelectorAll(".col-fork-sub")];
-        subs.forEach(sub => {
-          const subX = sub.offsetLeft;
-          const subY = sub.offsetTop + sub.offsetHeight / 2;
-          // Smooth bezier from (fanFromX, y) to (subX - sideGap, subY)
-          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-          const endX = subX - sideGap;
-          const cx = (fanFromX + endX) / 2;
-          path.setAttribute("d", `M ${fanFromX} ${y} C ${cx} ${y}, ${cx} ${subY}, ${endX} ${subY}`);
-          path.setAttribute("class", "link");
-          path.setAttribute("fill", "none");
-          path.setAttribute("stroke", "#A89060");
-          path.setAttribute("stroke-width", "1");
-          path.setAttribute("opacity", "0.55");
-          path.setAttribute("marker-end", "url(#arrowhead)");
-          svg.appendChild(path);
-        });
-      } else if (hasChip) {
-        drawArrowLine(ax + sideGap, y, chipLeftEdge - sideGap, y);
-        drawArrowLine(chipRightEdge + sideGap, y, bx - sideGap - 4, y);
-      } else {
-        drawArrowLine(ax + sideGap, y, bx - sideGap - 4, y);
-      }
+      // Arrows removed — only the outcome chip stays as the inter-phase signal.
     }
   }
 
