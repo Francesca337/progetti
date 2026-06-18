@@ -109,10 +109,11 @@
             "outcome": "Proposta presentata · decisione del rivenditore",
             "touchpoints": [
               {
-                "text": "Laura propone un incontro (in-person o call)",
+                "text": "Incontro a calendario (in-person o call)",
                 "system": "manuale",
                 "icon": "ti-phone",
-                "actor": "manual"
+                "actor": "manual",
+                "extra": "Utile per incontro:\n• listino\n• materiali di comunicazione\n• campionatura"
               }
             ]
           },
