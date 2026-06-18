@@ -98,18 +98,7 @@
               },
               {
                 "name": "Automation Zoho",
-                "touchpoints": [
-                  {
-                    "text": "Mail con Guida Rivenditori (mittente: Laura)",
-                    "system": "email",
-                    "icon": "ti-mail",
-                    "actor": "auto",
-                    "link": {
-                      "text": "trigger: stato 'Lead verificato' in Bigin",
-                      "icon": "ti-bolt"
-                    }
-                  }
-                ]
+                "touchpoints": []
               }
             ]
           },
