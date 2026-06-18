@@ -78,11 +78,10 @@
                 "name": "Outbound",
                 "touchpoints": [
                   {
-                    "text": "Laura chiama l'enoteca per verificare se in target",
+                    "text": "Laura chiama lead freddi pre-verificati",
                     "system": "manuale",
                     "icon": "ti-phone",
-                    "actor": "manual",
-                    "extra": "Se in target → fase 'Lead verificato' in Bigin"
+                    "actor": "manual"
                   }
                 ]
               },
