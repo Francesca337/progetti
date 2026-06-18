@@ -1081,6 +1081,27 @@
                 0 8px 20px -10px rgba(168,144,96,0.32);
   }
   /* Arrow prefix removed to reduce visual noise */
+  .outcome-text {
+    display: block;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--gold-deep);
+    line-height: 1.3;
+  }
+  .outcome-trigger {
+    display: block;
+    margin-top: 5px;
+    padding-top: 5px;
+    border-top: 1px dashed rgba(168,144,96,0.30);
+    font-family: var(--sans);
+    font-style: normal;
+    font-size: 10px;
+    color: var(--ink-muted);
+    letter-spacing: 0.6px;
+    line-height: 1.4;
+    text-transform: none;
+  }
   .outcome-delta {
     display: block;
     margin-top: 4px;
@@ -2629,10 +2650,18 @@
     if (typeof drawConnectors === "function") drawConnectors();
   }
 
-  // Save an inter-phase outcome chip on blur (or Enter)
+  // Normalize outcome value into the structured shape { text, trigger }
+  function normalizeOutcome(v) {
+    if (!v) return { text: "", trigger: "" };
+    if (typeof v === "string") return { text: v, trigger: "" };
+    return { text: v.text || "", trigger: v.trigger || "" };
+  }
+
+  // Save an inter-phase outcome chip on blur (text or trigger field)
   async function saveOutcomeIfDirty(e) {
     const span = e.target;
     const phaseN = +span.dataset.phaseN;
+    const field  = span.dataset.field || "text"; // "text" or "trigger"
     const original = span.dataset.original || "";
     const current = (span.textContent || "").trim();
     if (current === original) return;
@@ -2642,25 +2671,23 @@
       const journey = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, "")))));
       const phase = journey.channels[currentChannel].operativo.phases.find(p => p.n === phaseN);
       if (!phase) throw new Error("Fase non trovata");
-      if (current) phase.outcome = current;
-      else delete phase.outcome;
+      const oc = normalizeOutcome(phase.outcome);
+      oc[field] = current;
+      if (!oc.text && !oc.trigger) delete phase.outcome;
+      else phase.outcome = oc.trigger ? oc : oc.text;  // keep string if no trigger (legacy-friendly)
+      // Actually always store as object once a trigger could be involved
+      if (oc.text || oc.trigger) phase.outcome = oc;
+
       const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(journey, null, 2))));
       await ggPut("data/journey.json", newContent,
-        `cms: outcome fase ${phaseN} → ${current.slice(0, 60) || "(rimosso)"}`);
-      // Sync local CHANNELS
+        `cms: outcome fase ${phaseN} ${field} → ${current.slice(0, 60) || "(rimosso)"}`);
+      // Sync local CHANNELS + live phases array
       const localPhase = CHANNELS[currentChannel] && CHANNELS[currentChannel].operativo
         && CHANNELS[currentChannel].operativo.phases.find(p => p.n === phaseN);
-      if (localPhase) {
-        if (current) localPhase.outcome = current;
-        else delete localPhase.outcome;
-      }
-      // Also sync the rendered phases array (drawConnectors reads from it)
+      if (localPhase) localPhase.outcome = phase.outcome;
       if (typeof phases !== "undefined") {
         const livePhase = phases.find(p => p.n === phaseN);
-        if (livePhase) {
-          if (current) livePhase.outcome = current;
-          else delete livePhase.outcome;
-        }
+        if (livePhase) livePhase.outcome = phase.outcome;
       }
     } catch (err) {
       span.textContent = original;
@@ -3392,43 +3419,73 @@
     for (let i = 0; i < colEls.length - 1; i++) {
       const a = colEls[i];
       const b = colEls[i + 1];
-      const ax = a.offsetLeft + a.offsetWidth;
-      const bx = b.offsetLeft;
-      const y = a.offsetTop + baseY;
-      const midX = (ax + bx) / 2;
-
       const phase = phases[i];
       const next = phases[i + 1];
-      const hasOutcomeText = !!phase.outcome;
+
+      // When phase has a fork, the connector to next phase originates from the
+      // "continues" branch (kind:yes by convention), not the average of forks.
+      let anchorEl = a;
+      if (a.classList.contains("col-fork") && phase.fork && phase.fork.length) {
+        const continuesIdx = phase.fork.findIndex(f => f.continues || f.kind === "yes");
+        const subs = a.querySelectorAll(".col-fork-sub");
+        if (continuesIdx >= 0 && subs[continuesIdx]) anchorEl = subs[continuesIdx];
+      }
+
+      const ax = anchorEl.offsetLeft + anchorEl.offsetWidth;
+      const bx = b.offsetLeft;
+      const anchorMidY = anchorEl.offsetTop + anchorEl.offsetHeight / 2;
+      const nextMidY   = b.offsetTop + b.offsetHeight / 2;
+      const y = Math.round((anchorMidY + nextMidY) / 2);
+      const midX = (ax + bx) / 2;
+
+      const oc = phase.outcome;
+      const outcomeText    = oc && typeof oc === "object" ? (oc.text || "")    : (oc || "");
+      const outcomeTrigger = oc && typeof oc === "object" ? (oc.trigger || "") : "";
+      const hasOutcomeText = !!(outcomeText || outcomeTrigger);
       const hasLeadDelta   = (phase.leads != null && next.leads != null);
-      // In edit mode we always render an editable chip (even empty, with placeholder)
-      // so users can fill in / change inter-phase outcomes
       const hasChip = hasOutcomeText || hasLeadDelta || editMode;
 
       let chipLeftEdge = midX, chipRightEdge = midX;
 
       if (hasChip) {
-        // Create + position the chip
         const label = document.createElement("div");
         label.className = "phase-outcome" + (editMode ? " editable" : "");
         label.style.left = midX + "px";
         label.style.top = y + "px";
 
-        const span = document.createElement("span");
-        span.textContent = phase.outcome || "";
+        const textSpan = document.createElement("span");
+        textSpan.className = "outcome-text";
+        textSpan.textContent = outcomeText;
         if (editMode) {
-          span.contentEditable = "true";
-          span.dataset.placeholder = "Aggiungi outcome…";
-          span.dataset.phaseN = phase.n;
-          span.dataset.original = phase.outcome || "";
-          span.spellcheck = false;
-          span.addEventListener("blur", saveOutcomeIfDirty);
-          span.addEventListener("keydown", e => {
-            if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); span.blur(); }
-            if (e.key === "Escape") { span.textContent = span.dataset.original; span.blur(); }
-          });
+          textSpan.contentEditable = "true";
+          textSpan.dataset.placeholder = "Aggiungi outcome…";
+          textSpan.dataset.phaseN = phase.n;
+          textSpan.dataset.field = "text";
+          textSpan.dataset.original = outcomeText;
+          textSpan.spellcheck = false;
+          textSpan.addEventListener("blur", saveOutcomeIfDirty);
+          textSpan.addEventListener("keydown", outcomeEditKeydown);
         }
-        label.appendChild(span);
+        label.appendChild(textSpan);
+
+        // Trigger / automation sub-line (shown when present, OR always in edit mode)
+        if (outcomeTrigger || editMode) {
+          const trig = document.createElement("span");
+          trig.className = "outcome-trigger";
+          trig.textContent = outcomeTrigger;
+          if (editMode) {
+            trig.contentEditable = "true";
+            trig.dataset.placeholder = "+ trigger / automation…";
+            trig.dataset.phaseN = phase.n;
+            trig.dataset.field = "trigger";
+            trig.dataset.original = outcomeTrigger;
+            trig.spellcheck = false;
+            trig.addEventListener("blur", saveOutcomeIfDirty);
+            trig.addEventListener("keydown", outcomeEditKeydown);
+          }
+          label.appendChild(trig);
+        }
+
         if (hasLeadDelta && phase.leads > 0) {
           const delta = next.leads - phase.leads;
           if (delta !== 0) {
@@ -3442,7 +3499,6 @@
         }
         track.appendChild(label);
 
-        // Measure the chip (synchronous layout via offsetWidth)
         const chipW = label.offsetWidth;
         chipLeftEdge  = midX - chipW / 2;
         chipRightEdge = midX + chipW / 2;
@@ -3450,6 +3506,11 @@
 
       // Arrows removed — only the outcome chip stays as the inter-phase signal.
     }
+  }
+
+  function outcomeEditKeydown(e) {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); e.target.blur(); }
+    if (e.key === "Escape") { e.target.textContent = e.target.dataset.original || ""; e.target.blur(); }
   }
 
   window.addEventListener("load", drawConnectors);

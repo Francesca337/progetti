@@ -15,7 +15,9 @@
             "name": "Generazione lead",
             "period": "Giugno – Luglio 2026",
             "current": true,
-            "outcome": "Lead validi entrano in Bigin - fase LEAD FREDDI",
+            "outcome": {
+              "text": "Lead validi entrano in Bigin - fase LEAD FREDDI"
+            },
             "streams": [
               {
                 "name": "Outbound",
@@ -72,7 +74,9 @@
             "n": 2,
             "name": "Verifica dei lead",
             "period": "Luglio – Agosto 2026",
-            "outcome": "Passaggio di stato: LEAD VERIFICATI - ricevono Guida Rivenditori tramite automation",
+            "outcome": {
+              "text": "Passaggio di stato: LEAD VERIFICATI - ricevono Guida Rivenditori tramite automation"
+            },
             "streams": [
               {
                 "name": "Outbound",
@@ -106,7 +110,9 @@
             "n": 3,
             "name": "Incontro fissato",
             "period": "Agosto – Settembre 2026",
-            "outcome": "Proposta presentata · decisione del rivenditore",
+            "outcome": {
+              "text": "Proposta presentata · decisione del rivenditore"
+            },
             "touchpoints": [
               {
                 "text": "Incontro a calendario (in-person o call)",
@@ -135,26 +141,9 @@
                     "system": "zoho",
                     "icon": "ti-clipboard-check",
                     "actor": "manual"
-                  },
-                  {
-                    "text": "Automation: importazione in lista MailUp rivenditori",
-                    "system": "zoho",
-                    "icon": "ti-database",
-                    "actor": "manual"
-                  },
-                  {
-                    "text": "Mail di benvenuto Pasticceria Giotto (+24h)",
-                    "system": "email",
-                    "icon": "ti-mail",
-                    "actor": "manual"
-                  },
-                  {
-                    "text": "Flusso continuativo: DEM commerciali + Newsletter «Seconda Occasione»",
-                    "system": "email",
-                    "icon": "ti-newspaper",
-                    "actor": "manual"
                   }
-                ]
+                ],
+                "continues": true
               },
               {
                 "kind": "maybe",
@@ -185,6 +174,46 @@
                     "actor": "manual"
                   }
                 ]
+              }
+            ],
+            "outcome": {
+              "text": "Lead spostato in 'Chiusa vinta'",
+              "trigger": "Manuale · Laura cambia stato in Bigin"
+            }
+          },
+          {
+            "n": 5,
+            "name": "Clienti acquisiti",
+            "period": "Settembre 2026 → continuativo",
+            "outcome": null,
+            "touchpoints": [
+              {
+                "text": "Automation Zoho: importazione in lista MailUp rivenditori",
+                "system": "zoho",
+                "icon": "ti-database",
+                "actor": "auto",
+                "link": {
+                  "text": "trigger: stato Chiusa vinta",
+                  "icon": "ti-bolt"
+                }
+              },
+              {
+                "text": "Mail di benvenuto Pasticceria Giotto",
+                "system": "email",
+                "icon": "ti-mail",
+                "actor": "auto",
+                "timing": "+24h dall'importazione MailUp",
+                "link": {
+                  "text": "+24h",
+                  "icon": "ti-arrow-down"
+                }
+              },
+              {
+                "text": "Flusso continuativo: DEM commerciali + Newsletter «Seconda Occasione»",
+                "system": "email",
+                "icon": "ti-newspaper",
+                "actor": "sched",
+                "extra": "Comunicazione ricorrente verso il rivenditore attivo"
               }
             ]
           }
