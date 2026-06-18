@@ -25,7 +25,13 @@
                     "system": "manuale",
                     "icon": "ti-list-search",
                     "actor": "manual",
-                    "timing": "Avvio campagna"
+                    "timing": "Avvio campagna",
+                    "data": [
+                      {
+                        "label": "Export aprile26",
+                        "value": "139"
+                      }
+                    ]
                   },
                   {
                     "text": "Awareness geo-targeted",
