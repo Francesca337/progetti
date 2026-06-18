@@ -3416,6 +3416,20 @@
       svg.appendChild(path);
     }
 
+    // Resolve a track-relative box (handles CSS zoom by dividing by current zoom)
+    const trackRect = track.getBoundingClientRect();
+    const z = (typeof zoomLevel === "number" && zoomLevel) ? zoomLevel : 1;
+    function trackBox(el) {
+      const r = el.getBoundingClientRect();
+      return {
+        left:  (r.left  - trackRect.left) / z,
+        right: (r.right - trackRect.left) / z,
+        top:   (r.top   - trackRect.top)  / z,
+        bot:   (r.bottom- trackRect.top)  / z,
+        midY:  ((r.top + r.bottom) / 2 - trackRect.top) / z,
+      };
+    }
+
     for (let i = 0; i < colEls.length - 1; i++) {
       const a = colEls[i];
       const b = colEls[i + 1];
@@ -3431,11 +3445,11 @@
         if (continuesIdx >= 0 && subs[continuesIdx]) anchorEl = subs[continuesIdx];
       }
 
-      const ax = anchorEl.offsetLeft + anchorEl.offsetWidth;
-      const bx = b.offsetLeft;
-      const anchorMidY = anchorEl.offsetTop + anchorEl.offsetHeight / 2;
-      const nextMidY   = b.offsetTop + b.offsetHeight / 2;
-      const y = Math.round((anchorMidY + nextMidY) / 2);
+      const aBox = trackBox(anchorEl);
+      const bBox = trackBox(b);
+      const ax = aBox.right;
+      const bx = bBox.left;
+      const y = Math.round((aBox.midY + bBox.midY) / 2);
       const midX = (ax + bx) / 2;
 
       const oc = phase.outcome;
