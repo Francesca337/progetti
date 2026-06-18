@@ -72,7 +72,7 @@
             "n": 2,
             "name": "Verifica dei lead",
             "period": "Luglio – Agosto 2026",
-            "outcome": "Passaggio di stato: LEAD VERIFICATI",
+            "outcome": "Passaggio di stato: LEAD VERIFICATI - ricevono Guida Rivenditori tramite automation",
             "streams": [
               {
                 "name": "Outbound",
