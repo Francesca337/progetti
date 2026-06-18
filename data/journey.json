@@ -113,12 +113,6 @@
                 "system": "manuale",
                 "icon": "ti-phone",
                 "actor": "manual"
-              },
-              {
-                "text": "Incontro tenuto: presentazione campionatura + listino",
-                "system": "manuale",
-                "icon": "ti-presentation",
-                "actor": "manual"
               }
             ]
           },
