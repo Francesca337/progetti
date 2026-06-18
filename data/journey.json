@@ -77,7 +77,7 @@
             "period": "Luglio – Agosto 2026",
             "outcome": {
               "text": "Lead ricevono Guida Rivenditori tramite automation",
-              "trigger": "passaggio di stato LEAD VERIFICATI"
+              "trigger": "Manuale - Laura sposta in LEAD VERIFICATI"
             },
             "streams": [
               {
