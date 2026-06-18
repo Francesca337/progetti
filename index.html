@@ -1153,6 +1153,145 @@
     flex-shrink: 0;
   }
 
+  /* Edit-mode inline form on each touchpoint card */
+  .rail-node.editing .node {
+    border: 1px dashed var(--gold);
+    background: var(--card);
+    box-shadow: 0 1px 2px rgba(20,18,14,0.04),
+                0 8px 22px -14px rgba(168,144,96,0.18);
+  }
+  .node-text-input,
+  .node-extra-input {
+    font-family: var(--sans);
+    font-size: 14px;
+    width: 100%;
+    border: 1px solid transparent;
+    background: var(--card-soft);
+    border-radius: 8px;
+    padding: 8px 10px;
+    color: var(--ink);
+    resize: vertical;
+    line-height: 1.4;
+    box-sizing: border-box;
+  }
+  .node-text-input { font-weight: 500; }
+  .node-extra-input {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--ink-muted);
+    margin-top: 4px;
+  }
+  .node-text-input:focus,
+  .node-extra-input:focus,
+  .node-edit-select:focus,
+  .node-edit-input:focus,
+  .node-data-row.editing input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  .node-edit-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    padding-left: 40px;
+    margin-top: 2px;
+  }
+  .node-edit-fields .node-edit-input { grid-column: 1 / -1; }
+  .node-edit-select,
+  .node-edit-input {
+    font-family: var(--sans);
+    font-size: 11.5px;
+    padding: 6px 8px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: var(--card-soft);
+    color: var(--ink);
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .node-data.editing { padding-left: 40px; gap: 6px; margin-top: 2px; }
+  .node-data-row.editing {
+    background: var(--card-soft);
+    border-radius: 8px;
+    padding: 6px 8px;
+    display: flex; align-items: center;
+    gap: 6px;
+  }
+  .node-data-row.editing input {
+    flex: 1;
+    font-family: var(--sans);
+    font-size: 12px;
+    border: 1px solid transparent;
+    background: var(--card);
+    border-radius: 6px;
+    padding: 6px 8px;
+    color: var(--ink);
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  .node-data-row.editing input[data-field="value"] {
+    flex: 0 0 40%;
+    text-align: right;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+  }
+  .data-row-del {
+    flex-shrink: 0;
+    background: transparent;
+    border: none;
+    color: var(--ink-muted);
+    font-size: 18px;
+    line-height: 1;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .data-row-del:hover { background: rgba(156,70,40,0.08); color: #9C4628; }
+  .data-row-add {
+    margin-left: 0;
+    background: transparent;
+    border: 1px dashed var(--hairline);
+    color: var(--ink-muted);
+    font-family: var(--sans);
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+  }
+  .data-row-add:hover { color: var(--ink); border-color: var(--gold); }
+  .node-actions {
+    display: flex; align-items: center; justify-content: flex-end;
+    gap: 8px;
+    padding-left: 40px;
+    margin-top: 6px;
+  }
+  .node-save-btn {
+    background: var(--ink);
+    color: #F5EBD7;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .node-save-btn:hover:not(:disabled) { background: #1f1c17; }
+  .node-save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .node-save-status {
+    font-family: var(--sans);
+    font-size: 10.5px;
+    color: var(--ink-muted);
+    letter-spacing: 0.4px;
+  }
+  .node-save-status[data-state="saving"] { color: var(--gold-deep); }
+  .node-save-status[data-state="ok"]     { color: var(--branch-yes); }
+  .node-save-status[data-state="error"]  { color: var(--branch-no); }
+
   /* ============================================================
      ASSET PANEL (slide-over from right)
      ============================================================ */
@@ -1935,11 +2074,17 @@
 
   let _tpCounter = 0;
   function renderNode(tp, phase, existingId) {
+    const id = existingId || ("tp-" + (++_tpCounter));
+    if (!existingId) touchpointIndex.set(id, { tp, phase });
+    return (typeof editMode !== "undefined" && editMode)
+      ? renderNodeEditable(tp, phase, id)
+      : renderNodeReadOnly(tp, phase, id);
+  }
+
+  function renderNodeReadOnly(tp, phase, id) {
     const sys = SYS[tp.system];
     const iconCls = sys ? sys.cls : "";
     const actorCls = tp.actor ? `actor-${tp.actor}` : "";
-    const id = existingId || ("tp-" + (++_tpCounter));
-    if (!existingId) touchpointIndex.set(id, { tp, phase });
     return `
       <div class="rail-node ${actorCls}" data-tp-id="${id}" data-system="${tp.system || ''}">
         <div class="node">
@@ -1953,6 +2098,46 @@
           </div>
           ${tp.extra ? `<div class="node-extra">${tp.extra}</div>` : ""}
           ${renderInlineData(tp)}
+        </div>
+      </div>`;
+  }
+
+  function renderNodeEditable(tp, phase, id) {
+    const sys = SYS[tp.system];
+    const iconCls = sys ? sys.cls : "";
+    const actorCls = tp.actor ? `actor-${tp.actor}` : "";
+    const sysOpts = Object.entries(SYS).map(([k, s]) =>
+      `<option value="${k}" ${k === tp.system ? "selected" : ""}>${s.label}</option>`).join("");
+    const actorOpts = Object.entries(ACTOR).map(([k, a]) =>
+      `<option value="${k}" ${k === tp.actor ? "selected" : ""}>${a.label}</option>`).join("");
+    const data = tp.data || [];
+    const dataRowsHtml = data.map((d, i) => `
+      <div class="node-data-row editing" data-row="${i}">
+        <input type="text" data-field="label" value="${escapeAttr(d.label || "")}" placeholder="Etichetta">
+        <input type="text" data-field="value" value="${escapeAttr(d.value || "")}" placeholder="Valore">
+        <button type="button" class="data-row-del" data-action="delete-data" title="Elimina">×</button>
+      </div>`).join("");
+    return `
+      <div class="rail-node ${actorCls} editing" data-tp-id="${id}" data-system="${tp.system || ''}">
+        <div class="node editing">
+          <div class="node-head">
+            <span class="node-icon ${iconCls}"><i class="ti ${tp.icon}"></i></span>
+            <textarea class="node-text-input" data-field="text" rows="2" placeholder="Cosa succede">${escapeAttr(tp.text || "")}</textarea>
+          </div>
+          <div class="node-edit-fields">
+            <select data-field="actor" class="node-edit-select">${actorOpts}</select>
+            <select data-field="system" class="node-edit-select">${sysOpts}</select>
+            <input type="text" data-field="timing" value="${escapeAttr(tp.timing || "")}" placeholder="Quando" class="node-edit-input">
+          </div>
+          <textarea class="node-extra-input" data-field="extra" rows="2" placeholder="Nota extra (opzionale)">${escapeAttr(tp.extra || "")}</textarea>
+          <div class="node-data editing">
+            ${dataRowsHtml}
+            <button type="button" class="data-row-add" data-action="add-data">+ Aggiungi dato</button>
+          </div>
+          <div class="node-actions">
+            <span class="node-save-status" data-status></span>
+            <button type="button" class="node-save-btn" data-action="save-tp" disabled>Salva</button>
+          </div>
         </div>
       </div>`;
   }
@@ -2365,13 +2550,171 @@
   function toggleEditMode(on) {
     editMode = on != null ? on : !editMode;
     document.body.classList.toggle("editing", editMode);
-    editToggleLabel.textContent = editMode ? "Esci dalla modifica" : "Modifica";
+    editToggleLabel.textContent = editMode ? "Esci modifica" : "Modifica";
     editToggleBtn.title = editMode ? "Esci dalla modifica" : "Attiva modifica";
-    if (activeTpId) {
-      // Re-render the panel with new mode
-      openPanel(activeTpId, true);
+    // Re-render every touchpoint card with the new mode
+    [...touchpointIndex.keys()].forEach(tpId => rerenderRailNode(tpId));
+  }
+
+  // ----- Inline editing on touchpoint cards -----
+  // Track per-card pending changes
+  const dirtyTps = new Map(); // tpId → draft object
+
+  function getOrInitDraft(tpId) {
+    const entry = touchpointIndex.get(tpId);
+    if (!entry) return null;
+    let draft = dirtyTps.get(tpId);
+    if (!draft) {
+      draft = {
+        text:   entry.tp.text   || "",
+        actor:  entry.tp.actor  || "manual",
+        system: entry.tp.system || "manuale",
+        timing: entry.tp.timing || "",
+        extra:  entry.tp.extra  || "",
+        data:   (entry.tp.data  || []).map(d => ({ ...d })),
+      };
+      dirtyTps.set(tpId, draft);
+    }
+    return draft;
+  }
+
+  function markCardDirty(card, on) {
+    const btn = card.querySelector(".node-save-btn");
+    if (btn) btn.disabled = !on;
+  }
+
+  function cardOf(el) { return el.closest(".rail-node"); }
+
+  // Delegated input/change handlers on the track
+  function onInlineEdit(e) {
+    const t = e.target;
+    const card = cardOf(t);
+    if (!card || !card.classList.contains("editing")) return;
+    const tpId = card.dataset.tpId;
+    const draft = getOrInitDraft(tpId);
+    if (!draft) return;
+
+    const field = t.dataset.field;
+    if (field) {
+      const row = t.closest(".node-data-row");
+      if (row) {
+        const idx = +row.dataset.row;
+        if (!draft.data[idx]) draft.data[idx] = { label: "", value: "" };
+        draft.data[idx][field] = t.value;
+      } else {
+        draft[field] = t.value;
+      }
+      markCardDirty(card, true);
     }
   }
+
+  function onInlineAction(e) {
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
+    const card = cardOf(btn);
+    if (!card || !card.classList.contains("editing")) return;
+    const action = btn.dataset.action;
+    const tpId = card.dataset.tpId;
+    const draft = getOrInitDraft(tpId);
+
+    if (action === "delete-data") {
+      const row = btn.closest(".node-data-row");
+      const idx = +row.dataset.row;
+      draft.data.splice(idx, 1);
+      // Re-render data section only (simpler: re-render the whole card)
+      rerenderRailNode(tpId);
+      // Restore dirty + draft (rerenderRailNode reads from entry.tp, not draft)
+      dirtyTps.set(tpId, draft);
+      const newCard = document.querySelector(`.rail-node[data-tp-id="${tpId}"]`);
+      // Hydrate inputs from draft after re-render
+      hydrateCardFromDraft(newCard, draft);
+      markCardDirty(newCard, true);
+    } else if (action === "add-data") {
+      draft.data.push({ label: "", value: "" });
+      rerenderRailNode(tpId);
+      dirtyTps.set(tpId, draft);
+      const newCard = document.querySelector(`.rail-node[data-tp-id="${tpId}"]`);
+      hydrateCardFromDraft(newCard, draft);
+      markCardDirty(newCard, true);
+      // Focus the new empty row's label input
+      const rows = newCard.querySelectorAll(".node-data-row.editing input[data-field='label']");
+      const last = rows[rows.length - 1];
+      if (last) last.focus();
+    } else if (action === "save-tp") {
+      saveInlineCard(tpId);
+    }
+  }
+
+  function hydrateCardFromDraft(card, draft) {
+    if (!card) return;
+    const tArea = card.querySelector('.node-text-input'); if (tArea) tArea.value = draft.text;
+    const eArea = card.querySelector('.node-extra-input'); if (eArea) eArea.value = draft.extra;
+    const aSel  = card.querySelector('select[data-field="actor"]'); if (aSel) aSel.value = draft.actor;
+    const sSel  = card.querySelector('select[data-field="system"]'); if (sSel) sSel.value = draft.system;
+    const tIn   = card.querySelector('input[data-field="timing"]');  if (tIn)  tIn.value = draft.timing;
+    card.querySelectorAll(".node-data-row.editing").forEach((row, idx) => {
+      const lab = row.querySelector('input[data-field="label"]');
+      const val = row.querySelector('input[data-field="value"]');
+      if (lab && draft.data[idx]) lab.value = draft.data[idx].label || "";
+      if (val && draft.data[idx]) val.value = draft.data[idx].value || "";
+    });
+  }
+
+  async function saveInlineCard(tpId) {
+    const entry = touchpointIndex.get(tpId);
+    const draft = dirtyTps.get(tpId);
+    if (!entry || !draft) return;
+    const card = document.querySelector(`.rail-node[data-tp-id="${tpId}"]`);
+    const status = card.querySelector(".node-save-status");
+    const btn = card.querySelector(".node-save-btn");
+    btn.disabled = true;
+    if (status) { status.textContent = "Salvataggio…"; status.dataset.state = "saving"; }
+    try {
+      const cur = await ggGet("data/journey.json");
+      const journey = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, "")))));
+      const tpRef = findTouchpointInJourney(journey, tpId, entry);
+      if (!tpRef) throw new Error("Touchpoint non trovato nel JSON");
+
+      tpRef.text   = draft.text;
+      tpRef.actor  = draft.actor;
+      tpRef.system = draft.system;
+      if (draft.timing) tpRef.timing = draft.timing; else delete tpRef.timing;
+      if (draft.extra)  tpRef.extra  = draft.extra;  else delete tpRef.extra;
+      const cleanData = draft.data
+        .map(d => ({ label: (d.label||"").trim(), value: (d.value||"").trim() }))
+        .filter(d => d.label || d.value);
+      if (cleanData.length) tpRef.data = cleanData; else delete tpRef.data;
+
+      const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(journey, null, 2))));
+      await ggPut("data/journey.json", newContent,
+        `cms: update touchpoint (fase ${entry.phase.n}) — ${draft.text.slice(0, 60)}`);
+
+      // Update local + DOM
+      entry.tp.text   = draft.text;
+      entry.tp.actor  = draft.actor;
+      entry.tp.system = draft.system;
+      entry.tp.timing = draft.timing || undefined;
+      entry.tp.extra  = draft.extra  || undefined;
+      entry.tp.data   = cleanData.length ? cleanData : undefined;
+      dirtyTps.delete(tpId);
+      rerenderRailNode(tpId);
+      const fresh = document.querySelector(`.rail-node[data-tp-id="${tpId}"]`);
+      const freshStatus = fresh && fresh.querySelector(".node-save-status");
+      if (freshStatus) {
+        freshStatus.textContent = "Salvato";
+        freshStatus.dataset.state = "ok";
+        setTimeout(() => { freshStatus.textContent = ""; delete freshStatus.dataset.state; }, 2500);
+      }
+    } catch (err) {
+      if (status) { status.textContent = "Errore: " + (err.message || err); status.dataset.state = "error"; }
+      btn.disabled = false;
+    }
+  }
+
+  // Attach delegated handlers once
+  track.addEventListener("input",  onInlineEdit);
+  track.addEventListener("change", onInlineEdit);
+  track.addEventListener("click",  onInlineAction);
 
   editToggleBtn.addEventListener("click", () => {
     // No auth required — commits go through Netlify Function `commit`
