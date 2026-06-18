@@ -86,14 +86,13 @@
      TOP BAR
      ============================================================ */
   .topbar {
-    position: fixed; top: 0; left: 0; right: 0;
     height: var(--top-h);
     background: var(--bg);
     color: var(--ink-soft);
     display: flex; align-items: center;
     padding: 0 28px;
-    z-index: 50;
     border-bottom: 1px solid var(--hairline-soft);
+    flex-shrink: 0;
   }
   .brand { display: flex; align-items: center; gap: 22px; margin-right: 32px; flex-shrink: 0; }
   .wordmark {
@@ -277,14 +276,30 @@
      ============================================================ */
   .scroll-area {
     position: fixed;
-    top: var(--top-h);
-    bottom: var(--bot-h);
-    left: 0; right: 0;
-    overflow-x: auto;
-    overflow-y: auto;
-    padding: 48px 56px 56px 56px;
+    inset: 0;
+    overflow: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+  }
+  .canvas {
+    /* zoom target — includes topbar + track */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-width: max-content;
+  }
+  .canvas .track {
+    padding: 48px 56px 56px 56px;
+  }
+  .zoom-controls-floating {
+    position: fixed;
+    right: 20px; bottom: 20px;
+    z-index: 100;
+    background: var(--card);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 2px;
+    box-shadow: 0 4px 16px -6px rgba(20,18,14,0.12);
   }
   .track {
     display: flex;
@@ -1907,73 +1922,58 @@
 </head>
 <body>
 
-<header class="topbar">
-  <div class="brand">
-    <div class="wordmark">
-      <span class="top">Pasticceria</span>
-      <span class="giotto">G<span class="bar"></span>I<span class="bar"></span>O<span class="bar"></span>T<span class="bar"></span>T<span class="bar"></span>O</span>
-      <span class="bot">Oltre la dolcezza</span>
-    </div>
-    <div class="subtitle">
-      <span class="kicker" id="brandKicker">Journey Retail</span>
-      <span class="title" id="brandTitle">Campagna Natale 2026 — operativo rivenditori</span>
-    </div>
-  </div>
-
-  <div class="topbar-switchers">
-    <div class="switcher" id="channelSwitcher" role="tablist" aria-label="Canale"></div>
-    <div class="switcher" id="viewSwitcher" role="tablist" aria-label="Vista"></div>
-  </div>
-
-  <nav class="nav" id="nav"></nav>
-  <button type="button" class="admin-link" id="editToggle" title="Attiva modifica">
-    <i class="ti ti-pencil"></i><span id="editToggleLabel">Modifica</span>
-  </button>
-</header>
-
 <main class="scroll-area" id="scrollArea">
-  <div class="track" id="track">
-    <svg class="connector" id="connector" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5"
-                markerWidth="9" markerHeight="9" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10" fill="none" stroke="#A89060" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
-        </marker>
-      </defs>
-    </svg>
-  </div>
-  <div class="empty-state" id="emptyState" hidden>
-    <div class="empty-state-inner">
-      <i class="ti ti-tool" id="emptyIcon"></i>
-      <h2 id="emptyTitle">Da configurare</h2>
-      <p id="emptyText">Questa vista non è ancora stata costruita per questo canale.</p>
+  <div class="canvas" id="canvas">
+    <header class="topbar">
+      <div class="brand">
+        <div class="wordmark">
+          <span class="top">Pasticceria</span>
+          <span class="giotto">G<span class="bar"></span>I<span class="bar"></span>O<span class="bar"></span>T<span class="bar"></span>T<span class="bar"></span>O</span>
+          <span class="bot">Oltre la dolcezza</span>
+        </div>
+        <div class="subtitle">
+          <span class="kicker" id="brandKicker">Journey Retail</span>
+          <span class="title" id="brandTitle">Campagna Natale 2026 — operativo rivenditori</span>
+        </div>
+      </div>
+
+      <div class="topbar-switchers">
+        <div class="switcher" id="channelSwitcher" role="tablist" aria-label="Canale"></div>
+        <div class="switcher" id="viewSwitcher" role="tablist" aria-label="Vista"></div>
+      </div>
+
+      <nav class="nav" id="nav" hidden></nav>
+      <button type="button" class="admin-link" id="editToggle" title="Attiva modifica">
+        <i class="ti ti-pencil"></i><span id="editToggleLabel">Modifica</span>
+      </button>
+    </header>
+
+    <div class="track" id="track">
+      <svg class="connector" id="connector" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10" fill="none" stroke="#A89060" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+    <div class="empty-state" id="emptyState" hidden>
+      <div class="empty-state-inner">
+        <i class="ti ti-tool" id="emptyIcon"></i>
+        <h2 id="emptyTitle">Da configurare</h2>
+        <p id="emptyText">Questa vista non è ancora stata costruita per questo canale.</p>
+      </div>
     </div>
   </div>
 </main>
 
-<footer class="botbar">
-  <div class="legend-section">
-    <span class="legend-label">Attore</span>
-    <span class="actor actor-manual">Laura</span>
-    <span class="actor actor-auto">Auto</span>
-    <span class="actor actor-sched">Ricorrente</span>
-  </div>
-  <div class="legend-divider"></div>
-  <div class="legend-section">
-    <span class="legend-label">Sistema</span>
-    <span class="badge bsys-zoho"><i class="ti ti-database"></i>Zoho</span>
-    <span class="badge bsys-whatsapp"><i class="ti ti-brand-whatsapp"></i>WhatsApp</span>
-    <span class="badge bsys-email"><i class="ti ti-mail"></i>Email</span>
-    <span class="badge bsys-manuale"><i class="ti ti-user"></i>Manuale</span>
-    <span class="badge bsys-ads"><i class="ti ti-speakerphone"></i>Ads</span>
-    <span class="badge bsys-logistica"><i class="ti ti-truck"></i>Logistica</span>
-  </div>
-  <div class="zoom-controls">
-    <button class="zoom-btn" type="button" data-zoom="-1" aria-label="Zoom out">−</button>
-    <button class="zoom-btn zoom-pct" type="button" data-zoom="0" aria-label="Reset zoom">100%</button>
-    <button class="zoom-btn" type="button" data-zoom="1" aria-label="Zoom in">+</button>
-  </div>
-</footer>
+<!-- Floating zoom controls (fixed at the corner of the viewport, NOT zoomed) -->
+<div class="zoom-controls zoom-controls-floating">
+  <button class="zoom-btn" type="button" data-zoom="-1" aria-label="Zoom out">−</button>
+  <button class="zoom-btn zoom-pct" type="button" data-zoom="0" aria-label="Reset zoom">100%</button>
+  <button class="zoom-btn" type="button" data-zoom="1" aria-label="Zoom in">+</button>
+</div>
 
 <div class="asset-backdrop" id="assetBackdrop"></div>
 <aside class="asset-panel" id="assetPanel" aria-hidden="true">
@@ -2033,6 +2033,9 @@
 
   // Touchpoint index (built after render): tp-id → { tp, phase }
   const touchpointIndex = new Map();
+
+  // Edit-mode flag (visible to renderNode + all renderers)
+  let editMode = false;
 
   // ============================================================
   // DATA (populated from data/journey.json on boot)
@@ -2386,7 +2389,8 @@
     const beforeContentX = scrollArea.scrollLeft + anchorX;
 
     zoomLevel = clamped;
-    track.style.zoom = clamped;
+    const canvas = document.getElementById("canvas");
+    if (canvas) canvas.style.zoom = clamped;
 
     // Keep the point under the anchor visually stable
     scrollArea.scrollLeft = beforeContentX * ratio - anchorX;
@@ -2529,9 +2533,9 @@
   const editCancelBtn = document.getElementById("editCancel");
   const editStatus = document.getElementById("editStatus");
 
-  let editMode = false;
-  let activeTpId = null;         // currently open touchpoint
-  let draftTp = null;            // working copy of touchpoint metadata (text, system, actor, timing, extra)
+  // editMode declared at script top-level so renderNode can read it
+  let activeTpId = null;         // legacy drawer state (unused now)
+  let draftTp = null;            // legacy drawer state (unused now)
   let draftData = null;          // working copy of structured data entries [{label, value}]
   let draftAssets = null;        // working copy of asset URLs (no more uploads)
   let isDirty = false;
