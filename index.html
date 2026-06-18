@@ -1903,10 +1903,8 @@
 
   track.insertAdjacentHTML("beforeend",
     `<div class="phases-row" id="phasesRow">${phases.map(renderColumn).join("")}</div>`
-    // Lanes (Presidio Laura, DEM MailUp) are wired up but not rendered.
-    // Uncomment to bring them back:
-    // + renderLauraLane()
-    // + renderDemLane()
+    + (laura && laura.segments ? renderLauraLane() : "")
+    // DEM lane stays off for now — re-enable with: + renderDemLane()
   );
 
   nav.innerHTML = phases.map(p => `
