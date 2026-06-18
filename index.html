@@ -2038,6 +2038,11 @@
   // Edit-mode flag (visible to renderNode + all renderers)
   let editMode = false;
 
+  // HTML-attribute escape helper (used by both read-only and editable renderers)
+  function escapeAttr(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+  }
+
   // ============================================================
   // DATA (populated from data/journey.json on boot)
   // ============================================================
