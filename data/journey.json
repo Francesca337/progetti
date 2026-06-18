@@ -142,57 +142,64 @@
               "icon": "ti-arrow-down-right",
               "text": "I clienti già acquisiti (Natale 24 → Pasqua 26) ricevono in parallelo un flusso DEM dedicato al riordino"
             },
-            "branches": [
+            "fork": [
               {
                 "kind": "yes",
                 "label": "Chiusa vinta",
-                "steps": [
+                "touchpoints": [
                   {
                     "text": "Laura sposta il lead in 'Chiusa vinta' in Bigin",
                     "system": "zoho",
-                    "icon": "ti-clipboard-check"
+                    "icon": "ti-clipboard-check",
+                    "actor": "manual"
                   },
                   {
                     "text": "Automation: importazione in lista MailUp rivenditori",
                     "system": "zoho",
-                    "icon": "ti-database"
+                    "icon": "ti-database",
+                    "actor": "manual"
                   },
                   {
                     "text": "Mail di benvenuto Pasticceria Giotto (+24h)",
                     "system": "email",
-                    "icon": "ti-mail"
+                    "icon": "ti-mail",
+                    "actor": "manual"
                   },
                   {
                     "text": "Flusso continuativo: DEM commerciali + Newsletter «Seconda Occasione»",
                     "system": "email",
-                    "icon": "ti-newspaper"
+                    "icon": "ti-newspaper",
+                    "actor": "manual"
                   }
                 ]
               },
               {
                 "kind": "maybe",
                 "label": "Pasqua 27",
-                "steps": [
+                "touchpoints": [
                   {
                     "text": "Laura sposta in 'Chiusa persa' con tag 'Pasqua 27' in Bigin",
                     "system": "zoho",
-                    "icon": "ti-calendar-event"
+                    "icon": "ti-calendar-event",
+                    "actor": "manual"
                   },
                   {
                     "text": "Riattivazione in pipeline Pasqua 27 (Gen 2027)",
                     "system": "manuale",
-                    "icon": "ti-refresh"
+                    "icon": "ti-refresh",
+                    "actor": "manual"
                   }
                 ]
               },
               {
                 "kind": "no",
                 "label": "Chiusa persa",
-                "steps": [
+                "touchpoints": [
                   {
                     "text": "Laura sposta il lead in 'Chiusa persa' in Bigin",
                     "system": "zoho",
-                    "icon": "ti-clipboard-x"
+                    "icon": "ti-clipboard-x",
+                    "actor": "manual"
                   }
                 ]
               }

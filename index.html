@@ -830,7 +830,71 @@
   .rail-node[data-system="logistica"] { --node-fg: var(--sys-log); }
 
   /* ============================================================
-     BRANCHES — rendered as standalone forking boxes
+     FORK CLUSTER — 3 sub-columns stacked at the same slot
+     ============================================================ */
+  .col-fork {
+    width: var(--col-w);
+    flex: 0 0 var(--col-w);
+    display: flex; flex-direction: column;
+    gap: 14px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    position: relative;
+    z-index: 2;
+  }
+  .col-fork-rows {
+    display: flex; flex-direction: column;
+    gap: 22px;
+  }
+  .col-fork-annotation {
+    margin: 0;
+  }
+  .col-fork-sub {
+    /* Inherits .col base — overrides for sub-column visual */
+    flex: 1 1 auto;
+    border-radius: 22px;
+  }
+  .col-fork-sub .col-header {
+    padding: 24px 22px 20px;
+  }
+  .col-fork-sub .col-num {
+    font-size: 56px;
+    margin-bottom: 8px;
+  }
+  .col-fork-sub .col-name {
+    font-size: 22px;
+    line-height: 1.15;
+  }
+  .col-fork-eyebrow {
+    display: block;
+    font-family: var(--sans);
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--ink-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .col-fork-label {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--fork-color, var(--ink));
+    letter-spacing: -0.2px;
+  }
+  .col-fork-sub.kind-yes   { --fork-color: var(--branch-yes); }
+  .col-fork-sub.kind-maybe { --fork-color: var(--branch-maybe); }
+  .col-fork-sub.kind-no    { --fork-color: var(--branch-no); }
+  .col-fork-sub.kind-yes   { border-color: var(--branch-yes); }
+  .col-fork-sub.kind-maybe { border-color: var(--branch-maybe); }
+  .col-fork-sub.kind-no    { border-color: var(--branch-no); }
+  .col-fork-sub.kind-yes   .col-header::after { background: linear-gradient(90deg, var(--branch-yes), transparent); }
+  .col-fork-sub.kind-maybe .col-header::after { background: linear-gradient(90deg, var(--branch-maybe), transparent); }
+  .col-fork-sub.kind-no    .col-header::after { background: linear-gradient(90deg, var(--branch-no), transparent); }
+
+  /* ============================================================
+     BRANCHES — legacy nested branches (kept for backwards compat)
      ============================================================ */
   .branch-block {
     margin-top: 4px;
@@ -1954,6 +2018,7 @@
   }
 
   function renderColumn(p) {
+    if (p.fork && p.fork.length) return renderForkCluster(p);
     const isCurrent = !!p.current;
     let body = "";
     if (p.streams && p.streams.length) {
@@ -1975,6 +2040,36 @@
           ${p.annotation ? `<div class="annotation"><i class="ti ${p.annotation.icon}"></i>${p.annotation.text}</div>` : ""}
           ${body}
           ${renderBranches(p.branches)}
+        </div>
+      </section>`;
+  }
+
+  // Fork cluster — N sub-columns stacked vertically at the same horizontal slot
+  function renderForkCluster(p) {
+    return `
+      <section class="col-fork" id="phase-${p.n}" data-phase="${p.n}">
+        ${p.annotation ? `<div class="annotation col-fork-annotation"><i class="ti ${p.annotation.icon}"></i>${p.annotation.text}</div>` : ""}
+        <div class="col-fork-rows">
+          ${p.fork.map(f => renderForkSub(p, f)).join("")}
+        </div>
+      </section>`;
+  }
+
+  function renderForkSub(p, f) {
+    return `
+      <section class="col col-fork-sub kind-${f.kind}" id="phase-${p.n}-${f.kind}" data-phase="${p.n}" data-fork="${f.kind}">
+        <div class="col-header col-fork-sub-header">
+          <span class="col-num">${pad(p.n)}</span>
+          <h2 class="col-name">
+            <span class="col-fork-eyebrow">${p.name} ·</span>
+            <span class="col-fork-label">${f.label}</span>
+          </h2>
+          <div class="col-period">${p.period}</div>
+        </div>
+        <div class="col-body">
+          ${(f.touchpoints && f.touchpoints.length)
+            ? renderRail(f.touchpoints, p)
+            : ""}
         </div>
       </section>`;
   }
@@ -2684,7 +2779,7 @@
     }
   };
 
-  const colEls = [...document.querySelectorAll(".col")];
+  const colEls = [...document.querySelectorAll("#phasesRow > .col, #phasesRow > .col-fork")];
   const ratios = new Map();
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => ratios.set(entry.target.id, entry.intersectionRatio));
@@ -2766,12 +2861,34 @@
       }
 
       const sideGap = 10; // visual breathing room between line and chip / column edge
-      if (hasChip) {
-        // Two arrows: column → chip, then chip → next column
+      const nextIsFork = b.classList.contains("col-fork");
+
+      if (nextIsFork) {
+        // From column a → outcome chip, then fan-out arrows to each fork sub-column.
+        if (hasChip) drawArrowLine(ax + sideGap, y, chipLeftEdge - sideGap, y);
+
+        const fanFromX = hasChip ? chipRightEdge + sideGap : ax + sideGap;
+        const subs = [...b.querySelectorAll(".col-fork-sub")];
+        subs.forEach(sub => {
+          const subX = sub.offsetLeft;
+          const subY = sub.offsetTop + sub.offsetHeight / 2;
+          // Smooth bezier from (fanFromX, y) to (subX - sideGap, subY)
+          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          const endX = subX - sideGap;
+          const cx = (fanFromX + endX) / 2;
+          path.setAttribute("d", `M ${fanFromX} ${y} C ${cx} ${y}, ${cx} ${subY}, ${endX} ${subY}`);
+          path.setAttribute("class", "link");
+          path.setAttribute("fill", "none");
+          path.setAttribute("stroke", "#A89060");
+          path.setAttribute("stroke-width", "1");
+          path.setAttribute("opacity", "0.55");
+          path.setAttribute("marker-end", "url(#arrowhead)");
+          svg.appendChild(path);
+        });
+      } else if (hasChip) {
         drawArrowLine(ax + sideGap, y, chipLeftEdge - sideGap, y);
         drawArrowLine(chipRightEdge + sideGap, y, bx - sideGap - 4, y);
       } else {
-        // Single arrow across the gap
         drawArrowLine(ax + sideGap, y, bx - sideGap - 4, y);
       }
     }
