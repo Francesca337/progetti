@@ -89,11 +89,10 @@
                 "name": "Inbound",
                 "touchpoints": [
                   {
-                    "text": "Laura chiama il lead dalla landing per validarlo",
+                    "text": "Laura chiama lead dalla landing per validarli",
                     "system": "manuale",
                     "icon": "ti-phone",
-                    "actor": "manual",
-                    "extra": "Se valido → fase 'Lead verificato' in Bigin"
+                    "actor": "manual"
                   }
                 ]
               },
