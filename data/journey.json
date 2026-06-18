@@ -115,12 +115,6 @@
                 "actor": "manual"
               },
               {
-                "text": "Incontro fissato a calendario → fase 'Incontro fissato' in Bigin",
-                "system": "zoho",
-                "icon": "ti-calendar",
-                "actor": "manual"
-              },
-              {
                 "text": "Incontro tenuto: presentazione campionatura + listino",
                 "system": "manuale",
                 "icon": "ti-presentation",
