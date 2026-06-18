@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Journey Retail — Pasticceria Giotto · Natale 2026</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <style>
   /* ---------- BRAND TYPEFACES ---------- */
   @font-face { font-family:"Gazpacho"; src:url("fonts/Gazpacho-Light.woff2") format("woff2");        font-weight:300; font-style:normal; font-display:swap; }
@@ -2106,52 +2105,25 @@
     }
   }
 
-  editToggleBtn.addEventListener("click", async () => {
-    // Require login before entering edit mode
-    if (!editMode) {
-      const user = window.netlifyIdentity && netlifyIdentity.currentUser();
-      if (!user) {
-        netlifyIdentity.open();
-        netlifyIdentity.on("login", () => {
-          netlifyIdentity.close();
-          toggleEditMode(true);
-        });
-        return;
-      }
-    }
+  editToggleBtn.addEventListener("click", () => {
+    // No auth required — commits go through Netlify Function `commit`
+    // which holds a GitHub PAT server-side. Anyone with the URL can edit.
     toggleEditMode();
   });
 
-  // ---- Git Gateway helpers ------------------------------------
-  async function ggAuth() {
-    const user = window.netlifyIdentity && netlifyIdentity.currentUser();
-    if (!user) throw new Error("Login richiesto");
-    const token = await user.jwt();
-    return { Authorization: `Bearer ${token}` };
-  }
-
+  // ---- Commit helpers (via Netlify Function /.netlify/functions/commit) ----
   async function ggGet(path) {
-    const auth = await ggAuth();
-    const url = `/.netlify/git/github/contents/${path}?ref=${encodeURIComponent(CMS_BRANCH)}`;
-    const res = await fetch(url, { headers: auth });
+    const res = await fetch(`/.netlify/functions/commit?path=${encodeURIComponent(path)}`);
     if (res.status === 404) return null;
     if (!res.ok) throw new Error(`GET ${path}: ${res.status}`);
     return res.json();
   }
 
   async function ggPut(path, base64Content, message) {
-    const auth = await ggAuth();
-    const existing = await ggGet(path);
-    const body = {
-      message,
-      content: base64Content,
-      branch: CMS_BRANCH,
-    };
-    if (existing && existing.sha) body.sha = existing.sha;
-    const res = await fetch(`/.netlify/git/github/contents/${path}`, {
-      method: "PUT",
-      headers: { ...auth, "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+    const res = await fetch(`/.netlify/functions/commit`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ path, content: base64Content, message }),
     });
     if (!res.ok) {
       const txt = await res.text();
