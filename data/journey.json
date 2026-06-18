@@ -112,10 +112,7 @@
             "n": 3,
             "name": "Incontro fissato",
             "period": "Agosto – Settembre 2026",
-            "annotation": {
-              "icon": "ti-arrow-down-right",
-              "text": "I clienti già acquisiti (Natale 24 → Pasqua 26) ricevono in parallelo un flusso DEM dedicato al riordino"
-            },
+            "outcome": "Proposta presentata · decisione del rivenditore",
             "touchpoints": [
               {
                 "text": "Laura propone un incontro (in-person o call)",
@@ -135,7 +132,16 @@
                 "icon": "ti-presentation",
                 "actor": "manual"
               }
-            ],
+            ]
+          },
+          {
+            "n": 4,
+            "name": "Esito",
+            "period": "Settembre 2026 →",
+            "annotation": {
+              "icon": "ti-arrow-down-right",
+              "text": "I clienti già acquisiti (Natale 24 → Pasqua 26) ricevono in parallelo un flusso DEM dedicato al riordino"
+            },
             "branches": [
               {
                 "kind": "yes",
