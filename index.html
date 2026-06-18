@@ -1838,12 +1838,12 @@
   }
 
   let _tpCounter = 0;
-  function renderNode(tp, phase) {
+  function renderNode(tp, phase, existingId) {
     const sys = SYS[tp.system];
     const iconCls = sys ? sys.cls : "";
     const actorCls = tp.actor ? `actor-${tp.actor}` : "";
-    const id = "tp-" + (++_tpCounter);
-    touchpointIndex.set(id, { tp, phase });
+    const id = existingId || ("tp-" + (++_tpCounter));
+    if (!existingId) touchpointIndex.set(id, { tp, phase });
     return `
       <div class="rail-node ${actorCls}" data-tp-id="${id}" data-system="${tp.system || ''}" tabindex="0" role="button" aria-label="Vedi asset">
         <div class="node">
@@ -1859,6 +1859,19 @@
           ${tp.extra ? `<div class="node-extra">${tp.extra}</div>` : ""}
         </div>
       </div>`;
+  }
+
+  // Replace the rail-node DOM in place with a freshly rendered version
+  // (used after an edit save so the dashboard reflects without a reload)
+  function rerenderRailNode(tpId) {
+    const entry = touchpointIndex.get(tpId);
+    if (!entry) return;
+    const old = document.querySelector(`.rail-node[data-tp-id="${tpId}"]`);
+    if (!old) return;
+    const tmp = document.createElement("div");
+    tmp.innerHTML = renderNode(entry.tp, entry.phase, tpId);
+    const fresh = tmp.firstElementChild;
+    old.replaceWith(fresh);
   }
 
   function renderRail(touchpoints, phase) {
@@ -2578,6 +2591,11 @@
       entry.tp.extra  = draftTp.extra  || undefined;
       entry.tp.data   = cleanData.length ? cleanData : undefined;
       entry.tp.assets = cleanAssets.length ? cleanAssets : undefined;
+
+      // Re-render the affected card in place + redraw connectors
+      // so the dashboard reflects the change without a browser refresh
+      rerenderRailNode(activeTpId);
+      if (typeof drawConnectors === "function") drawConnectors();
       markDirty(false);
       setStatus("Salvato. Netlify ridepoia tra ~30s.", "success");
       setTimeout(() => setStatus(""), 4500);
