@@ -75,7 +75,8 @@
             "name": "Verifica dei lead",
             "period": "Luglio – Agosto 2026",
             "outcome": {
-              "text": "Passaggio di stato: LEAD VERIFICATI - ricevono Guida Rivenditori tramite automation"
+              "text": "Passaggio di stato: LEAD VERIFICATI - ricevono Guida Rivenditori tramite automation",
+              "trigger": "passaggio di stato LEAD VERIFICATI"
             },
             "streams": [
               {
