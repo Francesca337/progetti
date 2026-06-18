@@ -1096,6 +1096,26 @@
   .outcome-delta.positive { color: var(--branch-yes); opacity: 0.9; }
   .outcome-delta.negative { color: var(--ink-muted); opacity: 0.85; }
 
+  /* Edit mode — outcome chip becomes contenteditable */
+  .phase-outcome.editable {
+    pointer-events: auto;
+    border: 1px dashed var(--gold);
+    background: var(--card);
+  }
+  .phase-outcome.editable [contenteditable="true"] {
+    outline: none;
+    min-width: 60px;
+    display: inline-block;
+  }
+  .phase-outcome.editable [contenteditable="true"]:empty::before {
+    content: attr(data-placeholder);
+    opacity: 0.45;
+    font-style: italic;
+  }
+  .phase-outcome.editable [contenteditable="true"]:focus {
+    outline: none;
+  }
+
   /* ============================================================
      LEAD COUNT (stat card in column header)
      ============================================================ */
@@ -2604,8 +2624,49 @@
     document.body.classList.toggle("editing", editMode);
     editToggleLabel.textContent = editMode ? "Esci modifica" : "Modifica";
     editToggleBtn.title = editMode ? "Esci dalla modifica" : "Attiva modifica";
-    // Re-render every touchpoint card with the new mode
+    // Re-render every touchpoint card + redraw outcome chips
     [...touchpointIndex.keys()].forEach(tpId => rerenderRailNode(tpId));
+    if (typeof drawConnectors === "function") drawConnectors();
+  }
+
+  // Save an inter-phase outcome chip on blur (or Enter)
+  async function saveOutcomeIfDirty(e) {
+    const span = e.target;
+    const phaseN = +span.dataset.phaseN;
+    const original = span.dataset.original || "";
+    const current = (span.textContent || "").trim();
+    if (current === original) return;
+    span.dataset.original = current;
+    try {
+      const cur = await ggGet("data/journey.json");
+      const journey = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, "")))));
+      const phase = journey.channels[currentChannel].operativo.phases.find(p => p.n === phaseN);
+      if (!phase) throw new Error("Fase non trovata");
+      if (current) phase.outcome = current;
+      else delete phase.outcome;
+      const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(journey, null, 2))));
+      await ggPut("data/journey.json", newContent,
+        `cms: outcome fase ${phaseN} → ${current.slice(0, 60) || "(rimosso)"}`);
+      // Sync local CHANNELS
+      const localPhase = CHANNELS[currentChannel] && CHANNELS[currentChannel].operativo
+        && CHANNELS[currentChannel].operativo.phases.find(p => p.n === phaseN);
+      if (localPhase) {
+        if (current) localPhase.outcome = current;
+        else delete localPhase.outcome;
+      }
+      // Also sync the rendered phases array (drawConnectors reads from it)
+      if (typeof phases !== "undefined") {
+        const livePhase = phases.find(p => p.n === phaseN);
+        if (livePhase) {
+          if (current) livePhase.outcome = current;
+          else delete livePhase.outcome;
+        }
+      }
+    } catch (err) {
+      span.textContent = original;
+      span.dataset.original = original;
+      alert("Errore salvataggio outcome: " + (err.message || err));
+    }
   }
 
   // ----- Inline editing on touchpoint cards -----
@@ -3338,23 +3399,37 @@
 
       const phase = phases[i];
       const next = phases[i + 1];
-      const hasChip = !!(phase.outcome || (phase.leads != null && next.leads != null));
+      const hasOutcomeText = !!phase.outcome;
+      const hasLeadDelta   = (phase.leads != null && next.leads != null);
+      // In edit mode we always render an editable chip (even empty, with placeholder)
+      // so users can fill in / change inter-phase outcomes
+      const hasChip = hasOutcomeText || hasLeadDelta || editMode;
 
       let chipLeftEdge = midX, chipRightEdge = midX;
 
       if (hasChip) {
         // Create + position the chip
         const label = document.createElement("div");
-        label.className = "phase-outcome";
+        label.className = "phase-outcome" + (editMode ? " editable" : "");
         label.style.left = midX + "px";
         label.style.top = y + "px";
 
-        if (phase.outcome) {
-          const span = document.createElement("span");
-          span.textContent = phase.outcome;
-          label.appendChild(span);
+        const span = document.createElement("span");
+        span.textContent = phase.outcome || "";
+        if (editMode) {
+          span.contentEditable = "true";
+          span.dataset.placeholder = "Aggiungi outcome…";
+          span.dataset.phaseN = phase.n;
+          span.dataset.original = phase.outcome || "";
+          span.spellcheck = false;
+          span.addEventListener("blur", saveOutcomeIfDirty);
+          span.addEventListener("keydown", e => {
+            if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); span.blur(); }
+            if (e.key === "Escape") { span.textContent = span.dataset.original; span.blur(); }
+          });
         }
-        if (phase.leads != null && next.leads != null && phase.leads > 0) {
+        label.appendChild(span);
+        if (hasLeadDelta && phase.leads > 0) {
           const delta = next.leads - phase.leads;
           if (delta !== 0) {
             const pct = Math.round((delta / phase.leads) * 100);
