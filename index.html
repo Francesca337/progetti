@@ -830,53 +830,77 @@
   .rail-node[data-system="logistica"] { --node-fg: var(--sys-log); }
 
   /* ============================================================
-     BRANCHES
+     BRANCHES — rendered as standalone forking boxes
      ============================================================ */
   .branch-block {
-    margin-top: 8px;
-    padding-top: 18px;
-    border-top: 1px solid var(--rule);
+    margin-top: 4px;
+    padding-top: 0;
+    border-top: none;
     display: flex; flex-direction: column;
     gap: 18px;
-  }
-  .branch-title {
-    font-family: var(--sans);
-    font-size: 10.5px;
-    font-weight: 600;
-    color: var(--ink-muted);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-  .branch {
-    background: var(--bbg, var(--card-soft));
-    padding: 14px 16px;
-    border-radius: 14px;
-    display: flex; flex-direction: column; gap: 10px;
     position: relative;
   }
+  /* Vertical fork rail running through all branches on the left side */
+  .branch-block::before {
+    content: "";
+    position: absolute;
+    left: -12px;
+    top: 28px;
+    bottom: 28px;
+    width: 1px;
+    background: var(--hairline);
+  }
+  .branch-title { display: none; }
+
+  .branch {
+    background: var(--card);
+    padding: 16px 18px 18px;
+    border-radius: 16px;
+    border: 1px solid var(--hairline-soft);
+    display: flex; flex-direction: column; gap: 12px;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(20,18,14,0.04),
+                0 6px 18px -12px rgba(20,18,14,0.10);
+  }
+  /* Small horizontal connector from the fork rail into each branch */
   .branch::before {
     content: "";
     position: absolute;
-    left: 0; top: 14px; bottom: 14px;
-    width: 3px;
-    border-radius: 0 3px 3px 0;
+    left: -12px; top: 28px;
+    width: 12px; height: 1px;
+    background: var(--hairline);
+  }
+  .branch::after {
+    content: "";
+    position: absolute;
+    left: -14px; top: 25px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
     background: var(--bc);
+    border: 2px solid var(--card);
+    box-shadow: 0 0 0 1px var(--bc);
   }
-  .branch.yes   { --bbg: var(--branch-yes-bg); }
-  .branch.maybe { --bbg: var(--branch-maybe-bg); }
-  .branch.no    { --bbg: var(--branch-no-bg); }
-  .branch-head {
-    font-family: var(--serif);
-    font-size: 19px;
-    font-weight: 400;
-    font-style: italic;
-    color: var(--bc);
-    line-height: 1;
-    padding-left: 8px;
-  }
+
   .branch.yes   { --bc: var(--branch-yes); }
   .branch.maybe { --bc: var(--branch-maybe); }
   .branch.no    { --bc: var(--branch-no); }
+
+  .branch-head {
+    font-family: var(--sans);
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--bc);
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    line-height: 1;
+    align-self: flex-start;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: var(--bbg, var(--card-soft));
+  }
+  .branch.yes   .branch-head { background: var(--branch-yes-bg); }
+  .branch.maybe .branch-head { background: var(--branch-maybe-bg); }
+  .branch.no    .branch-head { background: var(--branch-no-bg); }
   .b-step {
     display: flex; align-items: flex-start; gap: 10px;
     padding: 2px 0;
