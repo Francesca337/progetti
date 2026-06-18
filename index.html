@@ -2243,7 +2243,10 @@
   async function ggGet(path) {
     const res = await fetch(`/.netlify/functions/commit?path=${encodeURIComponent(path)}`);
     if (res.status === 404) return null;
-    if (!res.ok) throw new Error(`GET ${path}: ${res.status}`);
+    if (!res.ok) {
+      const detail = await ggReadErr(res);
+      throw new Error(`GET ${path}: ${res.status} ${detail}`);
+    }
     return res.json();
   }
 
@@ -2254,10 +2257,18 @@
       body: JSON.stringify({ path, content: base64Content, message }),
     });
     if (!res.ok) {
-      const txt = await res.text();
-      throw new Error(`PUT ${path}: ${res.status} ${txt}`);
+      const detail = await ggReadErr(res);
+      throw new Error(`PUT ${path}: ${res.status} ${detail}`);
     }
     return res.json();
+  }
+
+  async function ggReadErr(res) {
+    try {
+      const t = await res.text();
+      // Try to extract { error: "..." } JSON, fall back to raw text
+      try { return JSON.parse(t).error || t; } catch { return t; }
+    } catch { return ""; }
   }
 
   function fileToBase64(file) {
