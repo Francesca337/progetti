@@ -86,13 +86,14 @@
      TOP BAR
      ============================================================ */
   .topbar {
+    position: fixed; top: 0; left: 0; right: 0;
     height: var(--top-h);
     background: var(--bg);
     color: var(--ink-soft);
     display: flex; align-items: center;
     padding: 0 28px;
     border-bottom: 1px solid var(--hairline-soft);
-    flex-shrink: 0;
+    z-index: 50;
   }
   .brand { display: flex; align-items: center; gap: 22px; margin-right: 32px; flex-shrink: 0; }
   .wordmark {
@@ -276,7 +277,8 @@
      ============================================================ */
   .scroll-area {
     position: fixed;
-    inset: 0;
+    top: var(--top-h);
+    left: 0; right: 0; bottom: 0;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
@@ -1922,32 +1924,31 @@
 </head>
 <body>
 
+<header class="topbar">
+  <div class="brand">
+    <div class="wordmark">
+      <span class="top">Pasticceria</span>
+      <span class="giotto">G<span class="bar"></span>I<span class="bar"></span>O<span class="bar"></span>T<span class="bar"></span>T<span class="bar"></span>O</span>
+      <span class="bot">Oltre la dolcezza</span>
+    </div>
+    <div class="subtitle">
+      <span class="kicker" id="brandKicker">Journey Retail</span>
+      <span class="title" id="brandTitle">Campagna Natale 2026 — operativo rivenditori</span>
+    </div>
+  </div>
+
+  <div class="topbar-switchers">
+    <div class="switcher" id="channelSwitcher" role="tablist" aria-label="Canale"></div>
+    <div class="switcher" id="viewSwitcher" role="tablist" aria-label="Vista"></div>
+  </div>
+
+  <button type="button" class="admin-link" id="editToggle" title="Attiva modifica">
+    <i class="ti ti-pencil"></i><span id="editToggleLabel">Modifica</span>
+  </button>
+</header>
+
 <main class="scroll-area" id="scrollArea">
   <div class="canvas" id="canvas">
-    <header class="topbar">
-      <div class="brand">
-        <div class="wordmark">
-          <span class="top">Pasticceria</span>
-          <span class="giotto">G<span class="bar"></span>I<span class="bar"></span>O<span class="bar"></span>T<span class="bar"></span>T<span class="bar"></span>O</span>
-          <span class="bot">Oltre la dolcezza</span>
-        </div>
-        <div class="subtitle">
-          <span class="kicker" id="brandKicker">Journey Retail</span>
-          <span class="title" id="brandTitle">Campagna Natale 2026 — operativo rivenditori</span>
-        </div>
-      </div>
-
-      <div class="topbar-switchers">
-        <div class="switcher" id="channelSwitcher" role="tablist" aria-label="Canale"></div>
-        <div class="switcher" id="viewSwitcher" role="tablist" aria-label="Vista"></div>
-      </div>
-
-      <nav class="nav" id="nav" hidden></nav>
-      <button type="button" class="admin-link" id="editToggle" title="Attiva modifica">
-        <i class="ti ti-pencil"></i><span id="editToggleLabel">Modifica</span>
-      </button>
-    </header>
-
     <div class="track" id="track">
       <svg class="connector" id="connector" xmlns="http://www.w3.org/2000/svg">
         <defs>
