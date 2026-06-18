@@ -16,7 +16,8 @@
             "period": "Giugno – Luglio 2026",
             "current": true,
             "outcome": {
-              "text": "Lead validi entrano in Bigin - fase LEAD FREDDI"
+              "text": "Lead validi entrano in Bigin in LEAD FREDDI",
+              "trigger": ""
             },
             "streams": [
               {
