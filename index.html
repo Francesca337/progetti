@@ -1903,8 +1903,10 @@
 
   track.insertAdjacentHTML("beforeend",
     `<div class="phases-row" id="phasesRow">${phases.map(renderColumn).join("")}</div>`
-    + (laura && laura.segments ? renderLauraLane() : "")
-    // DEM lane stays off for now — re-enable with: + renderDemLane()
+    // Swim lanes ('Presidio Laura', 'DEM MailUp') wired up but hidden for now.
+    // Re-enable with:
+    //   + (laura && laura.segments ? renderLauraLane() : "")
+    //   + renderDemLane()
   );
 
   nav.innerHTML = phases.map(p => `
