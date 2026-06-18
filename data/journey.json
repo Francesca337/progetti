@@ -19,7 +19,6 @@
             "streams": [
               {
                 "name": "Outbound",
-                "leads": 139,
                 "touchpoints": [
                   {
                     "text": "Lista enoteche geo-targeted",
@@ -113,7 +112,10 @@
             "n": 3,
             "name": "Incontro fissato",
             "period": "Agosto – Settembre 2026",
-            "outcome": "Proposta presentata al rivenditore",
+            "annotation": {
+              "icon": "ti-arrow-down-right",
+              "text": "I clienti già acquisiti (Natale 24 → Pasqua 26) ricevono in parallelo un flusso DEM dedicato al riordino"
+            },
             "touchpoints": [
               {
                 "text": "Laura propone un incontro (in-person o call)",
@@ -133,86 +135,60 @@
                 "icon": "ti-presentation",
                 "actor": "manual"
               }
-            ]
-          },
-          {
-            "n": 4,
-            "name": "Chiusa vinta",
-            "period": "Settembre – Dicembre 2026",
-            "outcome": "Rivenditore attivo nel flusso continuativo",
-            "annotation": {
-              "icon": "ti-arrow-down-right",
-              "text": "Clienti già acquisiti (Natale 24 → Pasqua 26): ricevono in parallelo un flusso DEM dedicato al riordino"
-            },
-            "touchpoints": [
+            ],
+            "branches": [
               {
-                "text": "Laura sposta il lead in 'Chiusa vinta' in Bigin",
-                "system": "zoho",
-                "icon": "ti-clipboard-check",
-                "actor": "manual"
+                "kind": "yes",
+                "label": "Chiusa vinta",
+                "steps": [
+                  {
+                    "text": "Laura sposta il lead in 'Chiusa vinta' in Bigin",
+                    "system": "zoho",
+                    "icon": "ti-clipboard-check"
+                  },
+                  {
+                    "text": "Automation: importazione in lista MailUp rivenditori",
+                    "system": "zoho",
+                    "icon": "ti-database"
+                  },
+                  {
+                    "text": "Mail di benvenuto Pasticceria Giotto (+24h)",
+                    "system": "email",
+                    "icon": "ti-mail"
+                  },
+                  {
+                    "text": "Flusso continuativo: DEM commerciali + Newsletter «Seconda Occasione»",
+                    "system": "email",
+                    "icon": "ti-newspaper"
+                  }
+                ]
               },
               {
-                "text": "Automation Zoho: importazione in lista MailUp rivenditori",
-                "system": "zoho",
-                "icon": "ti-database",
-                "actor": "auto",
-                "link": {
-                  "text": "trigger: stato Chiusa vinta",
-                  "icon": "ti-bolt"
-                }
+                "kind": "maybe",
+                "label": "Pasqua 27",
+                "steps": [
+                  {
+                    "text": "Laura sposta in 'Chiusa persa' con tag 'Pasqua 27' in Bigin",
+                    "system": "zoho",
+                    "icon": "ti-calendar-event"
+                  },
+                  {
+                    "text": "Riattivazione in pipeline Pasqua 27 (Gen 2027)",
+                    "system": "manuale",
+                    "icon": "ti-refresh"
+                  }
+                ]
               },
               {
-                "text": "Mail di benvenuto Pasticceria Giotto",
-                "system": "email",
-                "icon": "ti-mail",
-                "actor": "auto",
-                "timing": "+24h dall'importazione MailUp",
-                "link": {
-                  "text": "+24h",
-                  "icon": "ti-arrow-down"
-                }
-              },
-              {
-                "text": "Flusso continuativo: DEM commerciali + Newsletter «Seconda Occasione»",
-                "system": "email",
-                "icon": "ti-newspaper",
-                "actor": "sched",
-                "extra": "Comunicazione ricorrente verso il rivenditore attivo"
-              }
-            ]
-          },
-          {
-            "n": 5,
-            "name": "Chiusa persa",
-            "period": "In qualsiasi momento",
-            "touchpoints": [
-              {
-                "text": "Laura sposta il lead in 'Chiusa persa' in Bigin",
-                "system": "zoho",
-                "icon": "ti-clipboard-x",
-                "actor": "manual",
-                "extra": "Lead che non intendono proseguire in alcun modo"
-              }
-            ]
-          },
-          {
-            "n": 6,
-            "name": "Chiusa persa → Pasqua 27",
-            "period": "In qualsiasi momento · riattivazione Gen 2027",
-            "touchpoints": [
-              {
-                "text": "Laura sposta il lead in 'Chiusa persa' con tag 'Pasqua 27'",
-                "system": "zoho",
-                "icon": "ti-calendar-event",
-                "actor": "manual",
-                "extra": "Non interessanti per Natale, ma potenziali per Pasqua"
-              },
-              {
-                "text": "Riattivazione lead in pipeline Pasqua 27",
-                "system": "manuale",
-                "icon": "ti-refresh",
-                "actor": "sched",
-                "timing": "Inizio campagna Pasqua 27"
+                "kind": "no",
+                "label": "Chiusa persa",
+                "steps": [
+                  {
+                    "text": "Laura sposta il lead in 'Chiusa persa' in Bigin",
+                    "system": "zoho",
+                    "icon": "ti-clipboard-x"
+                  }
+                ]
               }
             ]
           }
