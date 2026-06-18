@@ -167,6 +167,85 @@
   }
   .pill.active .num { color: var(--gold-deep); opacity: 1; }
 
+  .topbar-switchers {
+    display: flex; align-items: center; gap: 12px;
+    margin-right: 18px;
+    flex-shrink: 0;
+  }
+  .switcher {
+    display: inline-flex; align-items: center;
+    gap: 2px;
+    padding: 3px;
+    background: var(--card-soft);
+    border-radius: 999px;
+  }
+  .switcher button {
+    background: transparent;
+    border: none;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    color: var(--ink-muted);
+    padding: 6px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 5px;
+    transition: background 0.18s, color 0.18s;
+    white-space: nowrap;
+  }
+  .switcher button i.ti { font-size: 13px; }
+  .switcher button:hover { color: var(--ink); }
+  .switcher button.active {
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: 0 1px 2px rgba(20,18,14,0.06),
+                0 1px 0 var(--hairline-soft) inset;
+  }
+  .switcher button[disabled] {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .switcher button[disabled]:hover { color: var(--ink-muted); }
+
+  /* Empty state — for non-configured channels/views */
+  .empty-state {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .empty-state-inner {
+    text-align: center;
+    max-width: 460px;
+    padding: 48px 32px;
+    pointer-events: auto;
+  }
+  .empty-state-inner i.ti {
+    font-size: 36px;
+    color: var(--gold);
+    opacity: 0.6;
+    display: block;
+    margin-bottom: 18px;
+  }
+  .empty-state-inner h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--ink);
+    margin: 0 0 10px;
+    letter-spacing: -0.4px;
+  }
+  .empty-state-inner p {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--ink-muted);
+    line-height: 1.5;
+    margin: 0;
+  }
+
   .admin-link {
     flex-shrink: 0;
     margin-left: 16px;
@@ -1490,10 +1569,16 @@
       <span class="bot">Oltre la dolcezza</span>
     </div>
     <div class="subtitle">
-      <span class="kicker">Journey Retail</span>
-      <span class="title">Campagna Natale 2026 — operativo rivenditori</span>
+      <span class="kicker" id="brandKicker">Journey Retail</span>
+      <span class="title" id="brandTitle">Campagna Natale 2026 — operativo rivenditori</span>
     </div>
   </div>
+
+  <div class="topbar-switchers">
+    <div class="switcher" id="channelSwitcher" role="tablist" aria-label="Canale"></div>
+    <div class="switcher" id="viewSwitcher" role="tablist" aria-label="Vista"></div>
+  </div>
+
   <nav class="nav" id="nav"></nav>
   <button type="button" class="admin-link" id="editToggle" title="Attiva modifica">
     <i class="ti ti-pencil"></i><span id="editToggleLabel">Modifica</span>
@@ -1510,6 +1595,13 @@
         </marker>
       </defs>
     </svg>
+  </div>
+  <div class="empty-state" id="emptyState" hidden>
+    <div class="empty-state-inner">
+      <i class="ti ti-tool" id="emptyIcon"></i>
+      <h2 id="emptyTitle">Da configurare</h2>
+      <p id="emptyText">Questa vista non è ancora stata costruita per questo canale.</p>
+    </div>
   </div>
 </main>
 
@@ -2368,10 +2460,12 @@
   }
 
   // Find the touchpoint in the journey JSON by re-resolving its position.
-  // We use the same data layout (phase.touchpoints[] or phase.streams[].touchpoints[])
-  // and match by text — assumption: touchpoint text is unique within phase.
+  // Multi-channel data: phases live under channels[currentChannel].operational.phases
+  // (falls back to legacy single-channel layout if journey.phases exists.)
   function findTouchpointInJourney(journey, tpId, entry) {
-    const phase = journey.phases.find(p => p.n === entry.phase.n);
+    const op = journey.channels && journey.channels[currentChannel] && journey.channels[currentChannel].operational;
+    const phases = (op && op.phases) || journey.phases || [];
+    const phase = phases.find(p => p.n === entry.phase.n);
     if (!phase) return null;
     const matchText = entry.tp.text;
     if (phase.touchpoints) {
@@ -2527,6 +2621,145 @@
   } // end bootDashboard
 
   // ============================================================
+  // MULTI-CHANNEL DATA LOADER + ROUTING
+  // ============================================================
+  let CHANNELS = {};               // populated from journey.json
+  let currentChannel = "retail";
+  let currentView    = "operativo";
+
+  const VIEWS = [
+    { key: "operativo", label: "Operativo", icon: "ti-list-tree" },
+    { key: "customer",  label: "Customer",  icon: "ti-user-heart" },
+    { key: "timeline",  label: "Timeline",  icon: "ti-calendar-time" },
+  ];
+
+  function renderChannelSwitcher() {
+    const el = document.getElementById("channelSwitcher");
+    el.innerHTML = Object.entries(CHANNELS).map(([key, ch]) => `
+      <button type="button" role="tab" data-channel="${key}"
+              class="${key === currentChannel ? "active" : ""}"
+              ${ch.active ? "" : 'title="Da configurare"'}>
+        <i class="ti ${ch.icon || "ti-circle"}"></i>${ch.label}
+      </button>
+    `).join("");
+    el.querySelectorAll("button").forEach(b => {
+      b.addEventListener("click", () => navigateTo(b.dataset.channel, currentView));
+    });
+  }
+
+  function renderViewSwitcher() {
+    const ch = CHANNELS[currentChannel];
+    const el = document.getElementById("viewSwitcher");
+    el.innerHTML = VIEWS.map(v => {
+      const has = ch && ch[v.key];
+      return `<button type="button" role="tab" data-view="${v.key}"
+                ${has ? "" : "disabled"}
+                title="${has ? "" : "Da costruire"}"
+                class="${v.key === currentView ? "active" : ""}">
+        <i class="ti ${v.icon}"></i>${v.label}
+      </button>`;
+    }).join("");
+    el.querySelectorAll("button").forEach(b => {
+      b.addEventListener("click", () => {
+        if (b.disabled) return;
+        navigateTo(currentChannel, b.dataset.view);
+      });
+    });
+  }
+
+  function parseHash() {
+    const m = (location.hash || "").match(/^#\/([^/]+)(?:\/([^/]+))?/);
+    return {
+      channel: m && CHANNELS[m[1]] ? m[1] : "retail",
+      view:    m && VIEWS.find(v => v.key === m[2]) ? m[2] : "operativo",
+    };
+  }
+
+  function navigateTo(channel, view) {
+    const newHash = `#/${channel}/${view}`;
+    if (location.hash === newHash) return;
+    location.hash = newHash;
+    // Full reload — keeps bootDashboard idempotent without a big refactor.
+    // Iterate to SPA-style navigation later if needed.
+    location.reload();
+  }
+
+  function applyRoute() {
+    const { channel, view } = parseHash();
+    currentChannel = channel;
+    currentView    = view;
+    renderChannelSwitcher();
+    renderViewSwitcher();
+    showCurrentView();
+  }
+
+  // Updates brand subtitle ("Journey Retail · Operativo Natale 2026")
+  function updateBrandSubtitle() {
+    const ch = CHANNELS[currentChannel];
+    if (!ch) return;
+    const view = VIEWS.find(v => v.key === currentView);
+    document.getElementById("brandKicker").textContent = `Journey ${ch.label}`;
+    document.getElementById("brandTitle").textContent =
+      `${view ? view.label : ""} · ${ch.campaign || ""}`.trim().replace(/^· /, "");
+  }
+
+  function clearTrack() {
+    const track = document.getElementById("track");
+    // Keep the SVG defs
+    [...track.querySelectorAll(".phases-row, .lane, .phase-outcome")].forEach(n => n.remove());
+    const svg = document.getElementById("connector");
+    if (svg) [...svg.querySelectorAll("path.link")].forEach(n => n.remove());
+  }
+
+  function showCurrentView() {
+    updateBrandSubtitle();
+    const ch = CHANNELS[currentChannel];
+    const viewData = ch && ch[currentView];
+
+    const emptyEl    = document.getElementById("emptyState");
+    const scrollArea = document.getElementById("scrollArea");
+    const track      = document.getElementById("track");
+
+    if (!viewData) {
+      // Empty state
+      clearTrack();
+      track.style.display = "none";
+      emptyEl.hidden = false;
+      const isActive = ch && ch.active;
+      const view = VIEWS.find(v => v.key === currentView);
+      document.getElementById("emptyIcon").className =
+        "ti " + (isActive ? "ti-tool" : (ch && ch.icon) || "ti-circle");
+      document.getElementById("emptyTitle").textContent = isActive
+        ? `Vista "${view ? view.label : currentView}" da costruire`
+        : `${ch ? ch.label : "Canale"} · da configurare`;
+      document.getElementById("emptyText").textContent = isActive
+        ? "Questa vista non è ancora stata sviluppata per questo canale."
+        : `Il canale ${ch ? ch.label : ""} sarà attivato quando avremo i contenuti.`;
+      return;
+    }
+
+    // Has data → render
+    emptyEl.hidden = true;
+    track.style.display = "";
+
+    if (currentView === "operativo") {
+      // Reuse the existing dashboard pipeline
+      phases = viewData.phases || [];
+      laura  = viewData.laura  || {};
+      dems   = viewData.dems   || {};
+      bootDashboard();
+    } else {
+      // Customer / Timeline — placeholder until commits 2 & 3
+      clearTrack();
+      emptyEl.hidden = false;
+      const view = VIEWS.find(v => v.key === currentView);
+      document.getElementById("emptyIcon").className = "ti ti-tool";
+      document.getElementById("emptyTitle").textContent = `Vista "${view.label}" in arrivo`;
+      document.getElementById("emptyText").textContent = "La sto costruendo. Per ora resta solo l'Operativo.";
+    }
+  }
+
+  // ============================================================
   // LOAD JOURNEY DATA (data/journey.json), THEN BOOT
   // ============================================================
   fetch("data/journey.json", { cache: "no-store" })
@@ -2535,10 +2768,9 @@
       return r.json();
     })
     .then(data => {
-      phases = data.phases || [];
-      laura  = data.laura  || {};
-      dems   = data.dems   || {};
-      bootDashboard();
+      CHANNELS = data.channels || {};
+      window.addEventListener("hashchange", applyRoute);
+      applyRoute();
     })
     .catch(err => {
       console.error("Failed to load data/journey.json:", err);

@@ -1,873 +1,916 @@
 {
-  "phases": [
-    {
-      "n": 1,
-      "name": "Generazione lead",
-      "period": "Maggio – Giugno 2026",
-      "current": true,
-      "outcome": "Il contatto entra in Zoho",
-      "streams": [
-        {
-          "name": "Outbound",
-          "touchpoints": [
-            {
-              "text": "Estrapolazione contatti enoteche per area geografica",
-              "system": "manuale",
-              "icon": "ti-search",
-              "actor": "manual",
-              "timing": "Avvio immediato",
-              "assets": [
-                {
-                  "type": "sheet",
-                  "title": "enoteche_Laura_multiprovincia",
-                  "url": "assets/fase-01/enoteche-laura-multiprovincia-mpblcwu3.xlsx"
-                }
-              ]
-            }
-          ],
-          "leads": 139
-        },
-        {
-          "name": "Inbound",
-          "touchpoints": [
-            {
-              "text": "Campagna awareness geo-targeted",
-              "system": "ads",
-              "icon": "ti-speakerphone",
-              "actor": "auto",
-              "timing": "Mag 2026",
-              "assets": [
-                {
-                  "type": "folder",
-                  "title": "Creatività ad awareness (Meta + Google)",
-                  "url": "#"
-                },
-                {
-                  "type": "doc",
-                  "title": "Brief campagna awareness",
-                  "url": "#"
-                },
-                {
-                  "type": "image",
-                  "title": "Visual chiave Natale 2026",
-                  "url": "#"
-                }
-              ]
-            },
-            {
-              "text": "Campagna lead gen Nord Italia → landing con form",
-              "system": "ads",
-              "icon": "ti-target",
-              "actor": "auto",
-              "timing": "Mag 2026",
-              "link": {
-                "text": "in parallelo all'awareness",
-                "icon": "ti-arrow-right"
+  "channels": {
+    "retail": {
+      "label": "Retail",
+      "persona": "Rivenditore",
+      "icon": "ti-building-store",
+      "campaign": "Natale 2026",
+      "active": true,
+      "operational": {
+        "phases": [
+          {
+            "n": 1,
+            "name": "Generazione lead",
+            "period": "Maggio – Giugno 2026",
+            "current": true,
+            "outcome": "Il contatto entra in Zoho",
+            "streams": [
+              {
+                "name": "Outbound",
+                "touchpoints": [
+                  {
+                    "text": "Estrapolazione contatti enoteche per area geografica",
+                    "system": "manuale",
+                    "icon": "ti-search",
+                    "actor": "manual",
+                    "timing": "Avvio immediato",
+                    "assets": [
+                      {
+                        "type": "sheet",
+                        "title": "enoteche_Laura_multiprovincia",
+                        "url": "assets/fase-01/enoteche-laura-multiprovincia-mpblcwu3.xlsx"
+                      }
+                    ]
+                  }
+                ],
+                "leads": 139
               },
-              "extra": "Compilando il form ricevono la guida rivenditori (stesso doc dell'outbound)",
-              "assets": [
-                {
-                  "type": "link",
-                  "title": "Landing rivenditori giotto.it/diventa-rivenditore",
-                  "url": "#"
-                },
-                {
-                  "type": "folder",
-                  "title": "Creatività ad lead gen",
-                  "url": "#"
-                },
-                {
-                  "type": "pdf",
-                  "title": "Guida rivenditori 2026 (delivered via form)",
-                  "url": "#"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "Storici",
-          "touchpoints": [
-            {
-              "text": "Serie DEM preorder (DEM + 2 recall)",
-              "system": "email",
-              "icon": "ti-mail",
-              "actor": "auto",
-              "timing": "Fine Maggio → metà Giugno",
-              "extra": "Preorder → Onboarding (Fase 07). Niente preorder → Proposta appuntamento (Fase 03).",
-              "assets": [
-                {
-                  "type": "doc",
-                  "title": "DEM #1 — Preorder con listino + sconto · Fine Maggio",
-                  "url": "#"
-                },
-                {
-                  "type": "doc",
-                  "title": "DEM #2 — Recall preorder · +1 settimana",
-                  "url": "#"
-                },
-                {
-                  "type": "doc",
-                  "title": "DEM #3 — Recall finale ai non-preorder · +2 settimane",
-                  "url": "#"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "n": 2,
-      "name": "Esplorazione",
-      "period": "Maggio – Giugno 2026",
-      "outcome": "Contatto validato e informato",
-      "streams": [
-        {
-          "name": "Outbound",
-          "touchpoints": [
-            {
-              "text": "Laura chiama per validare il contatto",
-              "system": "manuale",
-              "icon": "ti-phone",
-              "actor": "manual",
-              "timing": "Avvio immediato",
-              "assets": []
-            },
-            {
-              "text": "Raccoglie l'email durante la chiamata",
-              "system": "manuale",
-              "icon": "ti-at",
-              "actor": "manual",
-              "link": {
-                "text": "a fine chiamata",
-                "icon": "ti-arrow-down"
+              {
+                "name": "Inbound",
+                "touchpoints": [
+                  {
+                    "text": "Campagna awareness geo-targeted",
+                    "system": "ads",
+                    "icon": "ti-speakerphone",
+                    "actor": "auto",
+                    "timing": "Mag 2026",
+                    "assets": [
+                      {
+                        "type": "folder",
+                        "title": "Creatività ad awareness (Meta + Google)",
+                        "url": "#"
+                      },
+                      {
+                        "type": "doc",
+                        "title": "Brief campagna awareness",
+                        "url": "#"
+                      },
+                      {
+                        "type": "image",
+                        "title": "Visual chiave Natale 2026",
+                        "url": "#"
+                      }
+                    ]
+                  },
+                  {
+                    "text": "Campagna lead gen Nord Italia → landing con form",
+                    "system": "ads",
+                    "icon": "ti-target",
+                    "actor": "auto",
+                    "timing": "Mag 2026",
+                    "link": {
+                      "text": "in parallelo all'awareness",
+                      "icon": "ti-arrow-right"
+                    },
+                    "extra": "Compilando il form ricevono la guida rivenditori (stesso doc dell'outbound)",
+                    "assets": [
+                      {
+                        "type": "link",
+                        "title": "Landing rivenditori giotto.it/diventa-rivenditore",
+                        "url": "#"
+                      },
+                      {
+                        "type": "folder",
+                        "title": "Creatività ad lead gen",
+                        "url": "#"
+                      },
+                      {
+                        "type": "pdf",
+                        "title": "Guida rivenditori 2026 (delivered via form)",
+                        "url": "#"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Storici",
+                "touchpoints": [
+                  {
+                    "text": "Serie DEM preorder (DEM + 2 recall)",
+                    "system": "email",
+                    "icon": "ti-mail",
+                    "actor": "auto",
+                    "timing": "Fine Maggio → metà Giugno",
+                    "extra": "Preorder → Onboarding (Fase 07). Niente preorder → Proposta appuntamento (Fase 03).",
+                    "assets": [
+                      {
+                        "type": "doc",
+                        "title": "DEM #1 — Preorder con listino + sconto · Fine Maggio",
+                        "url": "#"
+                      },
+                      {
+                        "type": "doc",
+                        "title": "DEM #2 — Recall preorder · +1 settimana",
+                        "url": "#"
+                      },
+                      {
+                        "type": "doc",
+                        "title": "DEM #3 — Recall finale ai non-preorder · +2 settimane",
+                        "url": "#"
+                      }
+                    ]
+                  }
+                ]
               }
-            },
-            {
-              "text": "Mail automatica con guida rivenditori (benefit Giotto)",
-              "system": "email",
-              "icon": "ti-mail",
-              "actor": "auto",
-              "timing": "Entro 24h",
-              "link": {
-                "text": "trigger: email salvata in Zoho",
-                "icon": "ti-bolt"
+            ]
+          },
+          {
+            "n": 2,
+            "name": "Esplorazione",
+            "period": "Maggio – Giugno 2026",
+            "outcome": "Contatto validato e informato",
+            "streams": [
+              {
+                "name": "Outbound",
+                "touchpoints": [
+                  {
+                    "text": "Laura chiama per validare il contatto",
+                    "system": "manuale",
+                    "icon": "ti-phone",
+                    "actor": "manual",
+                    "timing": "Avvio immediato",
+                    "assets": []
+                  },
+                  {
+                    "text": "Raccoglie l'email durante la chiamata",
+                    "system": "manuale",
+                    "icon": "ti-at",
+                    "actor": "manual",
+                    "link": {
+                      "text": "a fine chiamata",
+                      "icon": "ti-arrow-down"
+                    }
+                  },
+                  {
+                    "text": "Mail automatica con guida rivenditori (benefit Giotto)",
+                    "system": "email",
+                    "icon": "ti-mail",
+                    "actor": "auto",
+                    "timing": "Entro 24h",
+                    "link": {
+                      "text": "trigger: email salvata in Zoho",
+                      "icon": "ti-bolt"
+                    },
+                    "assets": [
+                      {
+                        "type": "pdf",
+                        "title": "Guida rivenditori Giotto 2026",
+                        "url": "#"
+                      },
+                      {
+                        "type": "doc",
+                        "title": "Template mail automatica (Zoho)",
+                        "url": "#"
+                      }
+                    ]
+                  }
+                ]
               },
-              "assets": [
-                {
-                  "type": "pdf",
-                  "title": "Guida rivenditori Giotto 2026",
-                  "url": "#"
+              {
+                "name": "Inbound",
+                "touchpoints": [
+                  {
+                    "text": "Laura chiama per validare il contatto",
+                    "system": "manuale",
+                    "icon": "ti-phone",
+                    "actor": "manual",
+                    "timing": "Avvio immediato",
+                    "extra": "Guida rivenditori già consegnata via form della landing",
+                    "assets": [
+                      {
+                        "type": "doc",
+                        "title": "Script chiamata di validazione",
+                        "url": "#"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "n": 3,
+            "name": "Proposta appuntamento",
+            "period": "Giugno 2026",
+            "outcome": "Appuntamento fissato a calendario",
+            "annotation": {
+              "icon": "ti-arrow-down-right",
+              "text": "Storici che non hanno preordinato: rientrano qui da Fase 01 (Laura propone call o incontro)"
+            },
+            "touchpoints": [
+              {
+                "text": "Task Zoho: chiama per proporre l'incontro",
+                "system": "zoho",
+                "icon": "ti-bell",
+                "actor": "auto",
+                "timing": "+72h dalla mail"
+              },
+              {
+                "text": "Laura propone l'incontro per far assaggiare la campionatura",
+                "system": "manuale",
+                "icon": "ti-phone",
+                "actor": "manual",
+                "timing": "Giu 2026",
+                "link": {
+                  "text": "Laura prende il task",
+                  "icon": "ti-arrow-down"
                 },
-                {
-                  "type": "doc",
-                  "title": "Template mail automatica (Zoho)",
-                  "url": "#"
-                }
-              ]
-            }
-          ]
+                "assets": [
+                  {
+                    "type": "doc",
+                    "title": "Script proposta appuntamento",
+                    "url": "#"
+                  },
+                  {
+                    "type": "doc",
+                    "title": "Calendario disponibilità Laura (giugno)",
+                    "url": "#"
+                  }
+                ]
+              }
+            ],
+            "branches": [
+              {
+                "kind": "yes",
+                "label": "Sì",
+                "steps": [
+                  {
+                    "text": "Appuntamento fissato a calendario in Zoho",
+                    "system": "zoho",
+                    "icon": "ti-calendar"
+                  }
+                ]
+              },
+              {
+                "kind": "maybe",
+                "label": "Forse",
+                "steps": [
+                  {
+                    "text": "Task automatico: richiama tra 1 settimana",
+                    "system": "zoho",
+                    "icon": "ti-clock"
+                  }
+                ]
+              },
+              {
+                "kind": "no",
+                "label": "No",
+                "steps": [
+                  {
+                    "text": "Reminder manuale — data scelta da Laura",
+                    "system": "zoho",
+                    "icon": "ti-calendar-off"
+                  },
+                  {
+                    "text": "Inserito in lista newsletter awareness",
+                    "system": "email",
+                    "icon": "ti-mail"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "n": 4,
+            "name": "Incontro",
+            "period": "Giugno – Luglio 2026",
+            "outcome": "Campionatura e listino in mano al rivenditore",
+            "touchpoints": [
+              {
+                "text": "Laura porta la campionatura prodotti Natale 2026",
+                "system": "manuale",
+                "icon": "ti-gift",
+                "actor": "manual",
+                "timing": "Giu–Lug 2026",
+                "assets": [
+                  {
+                    "type": "doc",
+                    "title": "Pack list campionatura Natale 2026",
+                    "url": "#"
+                  },
+                  {
+                    "type": "image",
+                    "title": "Foto prodotti campionatura",
+                    "url": "#"
+                  }
+                ]
+              },
+              {
+                "text": "Mostra materiali di comunicazione da tablet",
+                "system": "manuale",
+                "icon": "ti-device-tablet",
+                "actor": "manual",
+                "link": {
+                  "text": "durante l'incontro",
+                  "icon": "ti-arrow-down"
+                },
+                "assets": [
+                  {
+                    "type": "video",
+                    "title": "Video racconto progetto Giotto",
+                    "url": "#"
+                  },
+                  {
+                    "type": "pdf",
+                    "title": "Presentazione campagna Natale 2026",
+                    "url": "#"
+                  },
+                  {
+                    "type": "folder",
+                    "title": "Materiali POP per il punto vendita",
+                    "url": "#"
+                  }
+                ]
+              },
+              {
+                "text": "Presenta e lascia il listino",
+                "system": "manuale",
+                "icon": "ti-file-text",
+                "actor": "manual",
+                "link": {
+                  "text": "a fine incontro",
+                  "icon": "ti-arrow-down"
+                },
+                "assets": [
+                  {
+                    "type": "pdf",
+                    "title": "Listino prodotti retail Natale 2026",
+                    "url": "#"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "n": 5,
+            "name": "Ragionamento",
+            "period": "Luglio 2026",
+            "outcome": "Il rivenditore è pronto a rispondere",
+            "touchpoints": [
+              {
+                "text": "Reminder Zoho con data di richiamo personalizzata",
+                "system": "zoho",
+                "icon": "ti-bell",
+                "actor": "auto",
+                "timing": "Inizio fase"
+              },
+              {
+                "text": "WhatsApp di Laura: «Com'è andata con la campionatura?»",
+                "system": "whatsapp",
+                "icon": "ti-brand-whatsapp",
+                "actor": "manual",
+                "timing": "A metà del periodo",
+                "link": {
+                  "text": "Laura usa il reminder come innesco",
+                  "icon": "ti-arrow-down"
+                },
+                "assets": [
+                  {
+                    "type": "doc",
+                    "title": "Template messaggio WhatsApp follow-up",
+                    "url": "#"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "n": 6,
+            "name": "Risposta",
+            "period": "Luglio – Agosto 2026",
+            "outcome": "Ordine raccolto",
+            "branches": [
+              {
+                "kind": "yes",
+                "label": "Sì",
+                "steps": [
+                  {
+                    "text": "Laura prende l'ordine",
+                    "system": "manuale",
+                    "icon": "ti-clipboard-check"
+                  }
+                ]
+              },
+              {
+                "kind": "maybe",
+                "label": "Forse",
+                "steps": [
+                  {
+                    "text": "Reminder ping automatico in Zoho",
+                    "system": "zoho",
+                    "icon": "ti-bell"
+                  }
+                ]
+              },
+              {
+                "kind": "no",
+                "label": "No",
+                "steps": [
+                  {
+                    "text": "Reminder a mesi in Zoho",
+                    "system": "zoho",
+                    "icon": "ti-calendar-off"
+                  },
+                  {
+                    "text": "Inserito in lista newsletter awareness",
+                    "system": "email",
+                    "icon": "ti-mail"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "n": 7,
+            "name": "Onboarding",
+            "period": "Agosto – Settembre 2026",
+            "outcome": "Rivenditore attivato con kit campagna",
+            "annotation": {
+              "icon": "ti-arrow-down-right",
+              "text": "Storici che hanno preordinato (Fase 01): ingresso diretto in questa fase"
+            },
+            "touchpoints": [
+              {
+                "text": "Mail automatica: store locator + scontistica dedicata per i primi 6 mesi",
+                "system": "email",
+                "icon": "ti-mail",
+                "actor": "auto",
+                "timing": "Entro 24h dalla conferma ordine",
+                "link": {
+                  "text": "trigger: ordine confermato in Zoho",
+                  "icon": "ti-bolt"
+                },
+                "assets": []
+              },
+              {
+                "text": "Spedizione ordine + kit comunicazione campagna Natale nella scatola",
+                "system": "logistica",
+                "icon": "ti-truck",
+                "actor": "auto",
+                "timing": "Set 2026",
+                "link": {
+                  "text": "dopo conferma pagamento",
+                  "icon": "ti-arrow-down"
+                },
+                "assets": [
+                  {
+                    "type": "doc",
+                    "title": "Checklist kit comunicazione Natale",
+                    "url": "#"
+                  },
+                  {
+                    "type": "doc",
+                    "title": "Brief packaging dedicato rivenditori",
+                    "url": "#"
+                  },
+                  {
+                    "type": "image",
+                    "title": "Lookbook materiali POP nella scatola",
+                    "url": "#"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "n": 8,
+            "name": "Campagna attiva",
+            "period": "Ottobre – Dicembre 2026",
+            "outcome": "Pronti per il recall di fine novembre",
+            "streams": [
+              {
+                "name": "Ricorrenti",
+                "loop": true,
+                "touchpoints": [
+                  {
+                    "text": "Scheda prodotto mensile (approfondimento campagna Natale)",
+                    "system": "email",
+                    "icon": "ti-mail",
+                    "actor": "sched",
+                    "timing": "1× al mese — Ott / Nov / Dic",
+                    "assets": [
+                      {
+                        "type": "doc",
+                        "title": "Template scheda prodotto mensile",
+                        "url": "#"
+                      },
+                      {
+                        "type": "doc",
+                        "title": "Edizione Ottobre 2026",
+                        "url": "#"
+                      },
+                      {
+                        "type": "doc",
+                        "title": "Edizione Novembre 2026",
+                        "url": "#"
+                      },
+                      {
+                        "type": "doc",
+                        "title": "Edizione Dicembre 2026",
+                        "url": "#"
+                      }
+                    ]
+                  },
+                  {
+                    "text": "WhatsApp: contenuti social selezionati da Laura",
+                    "system": "whatsapp",
+                    "icon": "ti-brand-whatsapp",
+                    "actor": "manual",
+                    "timing": "Ogni venerdì",
+                    "assets": [
+                      {
+                        "type": "doc",
+                        "title": "Calendario editoriale ottobre–dicembre",
+                        "url": "#"
+                      },
+                      {
+                        "type": "doc",
+                        "title": "Template messaggio settimanale WhatsApp",
+                        "url": "#"
+                      },
+                      {
+                        "type": "folder",
+                        "title": "Library contenuti social (drive condiviso)",
+                        "url": "#"
+                      }
+                    ]
+                  },
+                  {
+                    "text": "Newsletter editoriale «Seconda occasione»",
+                    "system": "email",
+                    "icon": "ti-newspaper",
+                    "actor": "sched",
+                    "timing": "Ogni 2 del mese — Ott / Nov / Dic",
+                    "assets": [
+                      {
+                        "type": "doc",
+                        "title": "Template newsletter Seconda occasione",
+                        "url": "#"
+                      },
+                      {
+                        "type": "doc",
+                        "title": "Edizione 2 Ottobre",
+                        "url": "#"
+                      },
+                      {
+                        "type": "doc",
+                        "title": "Edizione 2 Novembre",
+                        "url": "#"
+                      },
+                      {
+                        "type": "doc",
+                        "title": "Edizione 2 Dicembre",
+                        "url": "#"
+                      },
+                      {
+                        "type": "folder",
+                        "title": "Library articoli & immagini editoriali",
+                        "url": "#"
+                      }
+                    ]
+                  },
+                  {
+                    "text": "Mail numeri salienti + anteprima campagna successiva",
+                    "system": "email",
+                    "icon": "ti-chart-bar",
+                    "actor": "auto",
+                    "timing": "Fine campagna — Dic 2026",
+                    "extra": "Introduce la prossima campagna (Colomba / Pasqua 2027)",
+                    "assets": [
+                      {
+                        "type": "doc",
+                        "title": "Template mail wrap-up campagna",
+                        "url": "#"
+                      },
+                      {
+                        "type": "doc",
+                        "title": "Brief teaser Colomba / Pasqua 2027",
+                        "url": "#"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "n": 9,
+            "name": "Recall riordino",
+            "period": "Fine Novembre 2026",
+            "outcome": "Riordini consolidati prima della chiusura",
+            "touchpoints": [
+              {
+                "text": "Mail automatica: «Vuoi riordinare prima di fine campagna?» + form rapido",
+                "system": "email",
+                "icon": "ti-mail",
+                "actor": "auto",
+                "timing": "30 Novembre",
+                "assets": [
+                  {
+                    "type": "doc",
+                    "title": "Template mail recall riordino",
+                    "url": "#"
+                  },
+                  {
+                    "type": "link",
+                    "title": "Form rapido di riordino",
+                    "url": "#"
+                  }
+                ]
+              },
+              {
+                "text": "WhatsApp di Laura ai rivenditori che non hanno risposto alla mail",
+                "system": "whatsapp",
+                "icon": "ti-brand-whatsapp",
+                "actor": "manual",
+                "timing": "Pochi giorni dopo la mail",
+                "link": {
+                  "text": "su chi non ha risposto",
+                  "icon": "ti-arrow-down"
+                },
+                "assets": [
+                  {
+                    "type": "doc",
+                    "title": "Template messaggio WhatsApp recall",
+                    "url": "#"
+                  },
+                  {
+                    "type": "doc",
+                    "title": "Lista non-rispondenti (filtro Zoho)",
+                    "url": "#"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "n": 10,
+            "name": "Fine campagna",
+            "period": "Gennaio 2027",
+            "touchpoints": [
+              {
+                "text": "Mail automatica di feedback sulla campagna",
+                "system": "email",
+                "icon": "ti-mail",
+                "actor": "auto",
+                "timing": "Gen 2027",
+                "assets": [
+                  {
+                    "type": "doc",
+                    "title": "Template mail feedback campagna",
+                    "url": "#"
+                  },
+                  {
+                    "type": "link",
+                    "title": "Form feedback rivenditori",
+                    "url": "#"
+                  }
+                ]
+              },
+              {
+                "text": "Laura propone la campagna successiva (Colomba / Pasqua 2027)",
+                "system": "manuale",
+                "icon": "ti-arrow-right",
+                "actor": "manual",
+                "timing": "Gen 2027",
+                "link": {
+                  "text": "subito dopo il feedback",
+                  "icon": "ti-arrow-down"
+                },
+                "extra": "Momento di massimo calore — non lasciarlo raffreddare",
+                "assets": [
+                  {
+                    "type": "doc",
+                    "title": "Brief campagna Colomba / Pasqua 2027",
+                    "url": "#"
+                  },
+                  {
+                    "type": "doc",
+                    "title": "Script proposta nuova campagna",
+                    "url": "#"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "laura": {
+          "label": "Presidio Laura",
+          "icon": "ti-user",
+          "storiciFromPhase": 7,
+          "storiciNote": "Check-in 1:1 storici",
+          "segments": {
+            "1": "Costruisce la lista enoteche e fa il primo contatto manuale.",
+            "2": "Telefonate di validazione, raccolta email per gli outbound.",
+            "3": "Telefonata di proposta dell'appuntamento.",
+            "4": "Conduce l'incontro: ascolto, presentazione, listino.",
+            "5": "Follow-up WhatsApp a metà periodo per non perdere il filo.",
+            "6": "Chiude l'ordine, cura i No verso la newsletter.",
+            "7": "Onboarding personale del nuovo rivenditore.",
+            "8": "Cura WhatsApp settimanale + presidio personale storici.",
+            "9": "Raccoglie feedback e propone la campagna successiva."
+          }
         },
-        {
-          "name": "Inbound",
-          "touchpoints": [
-            {
-              "text": "Laura chiama per validare il contatto",
-              "system": "manuale",
-              "icon": "ti-phone",
-              "actor": "manual",
-              "timing": "Avvio immediato",
-              "extra": "Guida rivenditori già consegnata via form della landing",
-              "assets": [
-                {
-                  "type": "doc",
-                  "title": "Script chiamata di validazione",
-                  "url": "#"
-                }
-              ]
-            }
-          ]
+        "dems": {
+          "label": "DEM MailUp",
+          "icon": "ti-mail",
+          "startPhase": 2,
+          "items": {
+            "2": [
+              {
+                "id": "dem-1",
+                "title": "DEM Benvenuto progetto Giotto",
+                "timing": "Settimana dopo l'iscrizione",
+                "system": "email",
+                "icon": "ti-mail",
+                "actor": "auto",
+                "assets": [
+                  {
+                    "type": "doc",
+                    "title": "Brief DEM Benvenuto",
+                    "url": "#"
+                  },
+                  {
+                    "type": "image",
+                    "title": "Visual header DEM",
+                    "url": "#"
+                  }
+                ]
+              }
+            ],
+            "3": [
+              {
+                "id": "dem-2",
+                "title": "DEM Storia del progetto sociale",
+                "timing": "+2 settimane",
+                "system": "email",
+                "icon": "ti-newspaper",
+                "actor": "auto",
+                "assets": [
+                  {
+                    "type": "doc",
+                    "title": "Copy DEM editoriale",
+                    "url": "#"
+                  },
+                  {
+                    "type": "image",
+                    "title": "Foto laboratorio",
+                    "url": "#"
+                  }
+                ]
+              }
+            ],
+            "4": [
+              {
+                "id": "dem-3",
+                "title": "DEM Linea Natale e plus retail",
+                "timing": "Pre-incontro",
+                "system": "email",
+                "icon": "ti-mail",
+                "actor": "auto",
+                "assets": [
+                  {
+                    "type": "pdf",
+                    "title": "Schede prodotti Natale 2026",
+                    "url": "#"
+                  }
+                ]
+              }
+            ],
+            "5": [
+              {
+                "id": "dem-4",
+                "title": "DEM Reminder commerciale soft",
+                "timing": "Metà fase",
+                "system": "email",
+                "icon": "ti-mail",
+                "actor": "auto",
+                "assets": [
+                  {
+                    "type": "doc",
+                    "title": "Copy DEM follow-up",
+                    "url": "#"
+                  }
+                ]
+              }
+            ],
+            "7": [
+              {
+                "id": "dem-5",
+                "title": "DEM Welcome rivenditore",
+                "timing": "Subito dopo conferma ordine",
+                "system": "email",
+                "icon": "ti-mail",
+                "actor": "auto",
+                "assets": [
+                  {
+                    "type": "doc",
+                    "title": "Template DEM benvenuto rivenditore",
+                    "url": "#"
+                  }
+                ]
+              }
+            ],
+            "8": [
+              {
+                "id": "dem-6",
+                "title": "DEM Lancio campagna Natale",
+                "timing": "Inizio Ottobre",
+                "system": "email",
+                "icon": "ti-mail",
+                "actor": "auto",
+                "assets": [
+                  {
+                    "type": "image",
+                    "title": "Visual lancio Natale",
+                    "url": "#"
+                  },
+                  {
+                    "type": "doc",
+                    "title": "Copy DEM lancio",
+                    "url": "#"
+                  }
+                ]
+              },
+              {
+                "id": "dem-7",
+                "title": "DEM Push commerciale fine campagna",
+                "timing": "Metà Novembre",
+                "system": "email",
+                "icon": "ti-chart-bar",
+                "actor": "auto",
+                "assets": [
+                  {
+                    "type": "doc",
+                    "title": "Brief DEM push",
+                    "url": "#"
+                  }
+                ]
+              }
+            ],
+            "9": [
+              {
+                "id": "dem-8",
+                "title": "DEM Wrap-up + teaser nuova campagna",
+                "timing": "Inizio Gennaio",
+                "system": "email",
+                "icon": "ti-arrow-right",
+                "actor": "auto",
+                "assets": [
+                  {
+                    "type": "doc",
+                    "title": "Brief teaser Colomba/Pasqua 2027",
+                    "url": "#"
+                  }
+                ]
+              }
+            ]
+          }
         }
-      ]
-    },
-    {
-      "n": 3,
-      "name": "Proposta appuntamento",
-      "period": "Giugno 2026",
-      "outcome": "Appuntamento fissato a calendario",
-      "annotation": {
-        "icon": "ti-arrow-down-right",
-        "text": "Storici che non hanno preordinato: rientrano qui da Fase 01 (Laura propone call o incontro)"
       },
-      "touchpoints": [
-        {
-          "text": "Task Zoho: chiama per proporre l'incontro",
-          "system": "zoho",
-          "icon": "ti-bell",
-          "actor": "auto",
-          "timing": "+72h dalla mail"
-        },
-        {
-          "text": "Laura propone l'incontro per far assaggiare la campionatura",
-          "system": "manuale",
-          "icon": "ti-phone",
-          "actor": "manual",
-          "timing": "Giu 2026",
-          "link": {
-            "text": "Laura prende il task",
-            "icon": "ti-arrow-down"
-          },
-          "assets": [
-            {
-              "type": "doc",
-              "title": "Script proposta appuntamento",
-              "url": "#"
-            },
-            {
-              "type": "doc",
-              "title": "Calendario disponibilità Laura (giugno)",
-              "url": "#"
-            }
-          ]
-        }
-      ],
-      "branches": [
-        {
-          "kind": "yes",
-          "label": "Sì",
-          "steps": [
-            {
-              "text": "Appuntamento fissato a calendario in Zoho",
-              "system": "zoho",
-              "icon": "ti-calendar"
-            }
-          ]
-        },
-        {
-          "kind": "maybe",
-          "label": "Forse",
-          "steps": [
-            {
-              "text": "Task automatico: richiama tra 1 settimana",
-              "system": "zoho",
-              "icon": "ti-clock"
-            }
-          ]
-        },
-        {
-          "kind": "no",
-          "label": "No",
-          "steps": [
-            {
-              "text": "Reminder manuale — data scelta da Laura",
-              "system": "zoho",
-              "icon": "ti-calendar-off"
-            },
-            {
-              "text": "Inserito in lista newsletter awareness",
-              "system": "email",
-              "icon": "ti-mail"
-            }
-          ]
-        }
-      ]
+      "customer": null,
+      "timeline": null
     },
-    {
-      "n": 4,
-      "name": "Incontro",
-      "period": "Giugno – Luglio 2026",
-      "outcome": "Campionatura e listino in mano al rivenditore",
-      "touchpoints": [
-        {
-          "text": "Laura porta la campionatura prodotti Natale 2026",
-          "system": "manuale",
-          "icon": "ti-gift",
-          "actor": "manual",
-          "timing": "Giu–Lug 2026",
-          "assets": [
-            {
-              "type": "doc",
-              "title": "Pack list campionatura Natale 2026",
-              "url": "#"
-            },
-            {
-              "type": "image",
-              "title": "Foto prodotti campionatura",
-              "url": "#"
-            }
-          ]
-        },
-        {
-          "text": "Mostra materiali di comunicazione da tablet",
-          "system": "manuale",
-          "icon": "ti-device-tablet",
-          "actor": "manual",
-          "link": {
-            "text": "durante l'incontro",
-            "icon": "ti-arrow-down"
-          },
-          "assets": [
-            {
-              "type": "video",
-              "title": "Video racconto progetto Giotto",
-              "url": "#"
-            },
-            {
-              "type": "pdf",
-              "title": "Presentazione campagna Natale 2026",
-              "url": "#"
-            },
-            {
-              "type": "folder",
-              "title": "Materiali POP per il punto vendita",
-              "url": "#"
-            }
-          ]
-        },
-        {
-          "text": "Presenta e lascia il listino",
-          "system": "manuale",
-          "icon": "ti-file-text",
-          "actor": "manual",
-          "link": {
-            "text": "a fine incontro",
-            "icon": "ti-arrow-down"
-          },
-          "assets": [
-            {
-              "type": "pdf",
-              "title": "Listino prodotti retail Natale 2026",
-              "url": "#"
-            }
-          ]
-        }
-      ]
+    "b2b": {
+      "label": "B2B",
+      "persona": "Cliente B2B",
+      "icon": "ti-briefcase",
+      "campaign": "—",
+      "active": false,
+      "operational": null,
+      "customer": null,
+      "timeline": null
     },
-    {
-      "n": 5,
-      "name": "Ragionamento",
-      "period": "Luglio 2026",
-      "outcome": "Il rivenditore è pronto a rispondere",
-      "touchpoints": [
-        {
-          "text": "Reminder Zoho con data di richiamo personalizzata",
-          "system": "zoho",
-          "icon": "ti-bell",
-          "actor": "auto",
-          "timing": "Inizio fase"
-        },
-        {
-          "text": "WhatsApp di Laura: «Com'è andata con la campionatura?»",
-          "system": "whatsapp",
-          "icon": "ti-brand-whatsapp",
-          "actor": "manual",
-          "timing": "A metà del periodo",
-          "link": {
-            "text": "Laura usa il reminder come innesco",
-            "icon": "ti-arrow-down"
-          },
-          "assets": [
-            {
-              "type": "doc",
-              "title": "Template messaggio WhatsApp follow-up",
-              "url": "#"
-            }
-          ]
-        }
-      ]
+    "ecommerce": {
+      "label": "E-commerce",
+      "persona": "Consumatore",
+      "icon": "ti-shopping-cart",
+      "campaign": "—",
+      "active": false,
+      "operational": null,
+      "customer": null,
+      "timeline": null
     },
-    {
-      "n": 6,
-      "name": "Risposta",
-      "period": "Luglio – Agosto 2026",
-      "outcome": "Ordine raccolto",
-      "branches": [
-        {
-          "kind": "yes",
-          "label": "Sì",
-          "steps": [
-            {
-              "text": "Laura prende l'ordine",
-              "system": "manuale",
-              "icon": "ti-clipboard-check"
-            }
-          ]
-        },
-        {
-          "kind": "maybe",
-          "label": "Forse",
-          "steps": [
-            {
-              "text": "Reminder ping automatico in Zoho",
-              "system": "zoho",
-              "icon": "ti-bell"
-            }
-          ]
-        },
-        {
-          "kind": "no",
-          "label": "No",
-          "steps": [
-            {
-              "text": "Reminder a mesi in Zoho",
-              "system": "zoho",
-              "icon": "ti-calendar-off"
-            },
-            {
-              "text": "Inserito in lista newsletter awareness",
-              "system": "email",
-              "icon": "ti-mail"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "n": 7,
-      "name": "Onboarding",
-      "period": "Agosto – Settembre 2026",
-      "outcome": "Rivenditore attivato con kit campagna",
-      "annotation": {
-        "icon": "ti-arrow-down-right",
-        "text": "Storici che hanno preordinato (Fase 01): ingresso diretto in questa fase"
-      },
-      "touchpoints": [
-        {
-          "text": "Mail automatica: store locator + scontistica dedicata per i primi 6 mesi",
-          "system": "email",
-          "icon": "ti-mail",
-          "actor": "auto",
-          "timing": "Entro 24h dalla conferma ordine",
-          "link": {
-            "text": "trigger: ordine confermato in Zoho",
-            "icon": "ti-bolt"
-          },
-          "assets": []
-        },
-        {
-          "text": "Spedizione ordine + kit comunicazione campagna Natale nella scatola",
-          "system": "logistica",
-          "icon": "ti-truck",
-          "actor": "auto",
-          "timing": "Set 2026",
-          "link": {
-            "text": "dopo conferma pagamento",
-            "icon": "ti-arrow-down"
-          },
-          "assets": [
-            {
-              "type": "doc",
-              "title": "Checklist kit comunicazione Natale",
-              "url": "#"
-            },
-            {
-              "type": "doc",
-              "title": "Brief packaging dedicato rivenditori",
-              "url": "#"
-            },
-            {
-              "type": "image",
-              "title": "Lookbook materiali POP nella scatola",
-              "url": "#"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "n": 8,
-      "name": "Campagna attiva",
-      "period": "Ottobre – Dicembre 2026",
-      "outcome": "Pronti per il recall di fine novembre",
-      "streams": [
-        {
-          "name": "Ricorrenti",
-          "loop": true,
-          "touchpoints": [
-            {
-              "text": "Scheda prodotto mensile (approfondimento campagna Natale)",
-              "system": "email",
-              "icon": "ti-mail",
-              "actor": "sched",
-              "timing": "1× al mese — Ott / Nov / Dic",
-              "assets": [
-                {
-                  "type": "doc",
-                  "title": "Template scheda prodotto mensile",
-                  "url": "#"
-                },
-                {
-                  "type": "doc",
-                  "title": "Edizione Ottobre 2026",
-                  "url": "#"
-                },
-                {
-                  "type": "doc",
-                  "title": "Edizione Novembre 2026",
-                  "url": "#"
-                },
-                {
-                  "type": "doc",
-                  "title": "Edizione Dicembre 2026",
-                  "url": "#"
-                }
-              ]
-            },
-            {
-              "text": "WhatsApp: contenuti social selezionati da Laura",
-              "system": "whatsapp",
-              "icon": "ti-brand-whatsapp",
-              "actor": "manual",
-              "timing": "Ogni venerdì",
-              "assets": [
-                {
-                  "type": "doc",
-                  "title": "Calendario editoriale ottobre–dicembre",
-                  "url": "#"
-                },
-                {
-                  "type": "doc",
-                  "title": "Template messaggio settimanale WhatsApp",
-                  "url": "#"
-                },
-                {
-                  "type": "folder",
-                  "title": "Library contenuti social (drive condiviso)",
-                  "url": "#"
-                }
-              ]
-            },
-            {
-              "text": "Newsletter editoriale «Seconda occasione»",
-              "system": "email",
-              "icon": "ti-newspaper",
-              "actor": "sched",
-              "timing": "Ogni 2 del mese — Ott / Nov / Dic",
-              "assets": [
-                {
-                  "type": "doc",
-                  "title": "Template newsletter Seconda occasione",
-                  "url": "#"
-                },
-                {
-                  "type": "doc",
-                  "title": "Edizione 2 Ottobre",
-                  "url": "#"
-                },
-                {
-                  "type": "doc",
-                  "title": "Edizione 2 Novembre",
-                  "url": "#"
-                },
-                {
-                  "type": "doc",
-                  "title": "Edizione 2 Dicembre",
-                  "url": "#"
-                },
-                {
-                  "type": "folder",
-                  "title": "Library articoli & immagini editoriali",
-                  "url": "#"
-                }
-              ]
-            },
-            {
-              "text": "Mail numeri salienti + anteprima campagna successiva",
-              "system": "email",
-              "icon": "ti-chart-bar",
-              "actor": "auto",
-              "timing": "Fine campagna — Dic 2026",
-              "extra": "Introduce la prossima campagna (Colomba / Pasqua 2027)",
-              "assets": [
-                {
-                  "type": "doc",
-                  "title": "Template mail wrap-up campagna",
-                  "url": "#"
-                },
-                {
-                  "type": "doc",
-                  "title": "Brief teaser Colomba / Pasqua 2027",
-                  "url": "#"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "n": 9,
-      "name": "Recall riordino",
-      "period": "Fine Novembre 2026",
-      "outcome": "Riordini consolidati prima della chiusura",
-      "touchpoints": [
-        {
-          "text": "Mail automatica: «Vuoi riordinare prima di fine campagna?» + form rapido",
-          "system": "email",
-          "icon": "ti-mail",
-          "actor": "auto",
-          "timing": "30 Novembre",
-          "assets": [
-            {
-              "type": "doc",
-              "title": "Template mail recall riordino",
-              "url": "#"
-            },
-            {
-              "type": "link",
-              "title": "Form rapido di riordino",
-              "url": "#"
-            }
-          ]
-        },
-        {
-          "text": "WhatsApp di Laura ai rivenditori che non hanno risposto alla mail",
-          "system": "whatsapp",
-          "icon": "ti-brand-whatsapp",
-          "actor": "manual",
-          "timing": "Pochi giorni dopo la mail",
-          "link": {
-            "text": "su chi non ha risposto",
-            "icon": "ti-arrow-down"
-          },
-          "assets": [
-            {
-              "type": "doc",
-              "title": "Template messaggio WhatsApp recall",
-              "url": "#"
-            },
-            {
-              "type": "doc",
-              "title": "Lista non-rispondenti (filtro Zoho)",
-              "url": "#"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "n": 10,
-      "name": "Fine campagna",
-      "period": "Gennaio 2027",
-      "touchpoints": [
-        {
-          "text": "Mail automatica di feedback sulla campagna",
-          "system": "email",
-          "icon": "ti-mail",
-          "actor": "auto",
-          "timing": "Gen 2027",
-          "assets": [
-            {
-              "type": "doc",
-              "title": "Template mail feedback campagna",
-              "url": "#"
-            },
-            {
-              "type": "link",
-              "title": "Form feedback rivenditori",
-              "url": "#"
-            }
-          ]
-        },
-        {
-          "text": "Laura propone la campagna successiva (Colomba / Pasqua 2027)",
-          "system": "manuale",
-          "icon": "ti-arrow-right",
-          "actor": "manual",
-          "timing": "Gen 2027",
-          "link": {
-            "text": "subito dopo il feedback",
-            "icon": "ti-arrow-down"
-          },
-          "extra": "Momento di massimo calore — non lasciarlo raffreddare",
-          "assets": [
-            {
-              "type": "doc",
-              "title": "Brief campagna Colomba / Pasqua 2027",
-              "url": "#"
-            },
-            {
-              "type": "doc",
-              "title": "Script proposta nuova campagna",
-              "url": "#"
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  "laura": {
-    "label": "Presidio Laura",
-    "icon": "ti-user",
-    "storiciFromPhase": 7,
-    "storiciNote": "Check-in 1:1 storici",
-    "segments": {
-      "1": "Costruisce la lista enoteche e fa il primo contatto manuale.",
-      "2": "Telefonate di validazione, raccolta email per gli outbound.",
-      "3": "Telefonata di proposta dell'appuntamento.",
-      "4": "Conduce l'incontro: ascolto, presentazione, listino.",
-      "5": "Follow-up WhatsApp a metà periodo per non perdere il filo.",
-      "6": "Chiude l'ordine, cura i No verso la newsletter.",
-      "7": "Onboarding personale del nuovo rivenditore.",
-      "8": "Cura WhatsApp settimanale + presidio personale storici.",
-      "9": "Raccoglie feedback e propone la campagna successiva."
-    }
-  },
-  "dems": {
-    "label": "DEM MailUp",
-    "icon": "ti-mail",
-    "startPhase": 2,
-    "items": {
-      "2": [
-        {
-          "id": "dem-1",
-          "title": "DEM Benvenuto progetto Giotto",
-          "timing": "Settimana dopo l'iscrizione",
-          "system": "email",
-          "icon": "ti-mail",
-          "actor": "auto",
-          "assets": [
-            {
-              "type": "doc",
-              "title": "Brief DEM Benvenuto",
-              "url": "#"
-            },
-            {
-              "type": "image",
-              "title": "Visual header DEM",
-              "url": "#"
-            }
-          ]
-        }
-      ],
-      "3": [
-        {
-          "id": "dem-2",
-          "title": "DEM Storia del progetto sociale",
-          "timing": "+2 settimane",
-          "system": "email",
-          "icon": "ti-newspaper",
-          "actor": "auto",
-          "assets": [
-            {
-              "type": "doc",
-              "title": "Copy DEM editoriale",
-              "url": "#"
-            },
-            {
-              "type": "image",
-              "title": "Foto laboratorio",
-              "url": "#"
-            }
-          ]
-        }
-      ],
-      "4": [
-        {
-          "id": "dem-3",
-          "title": "DEM Linea Natale e plus retail",
-          "timing": "Pre-incontro",
-          "system": "email",
-          "icon": "ti-mail",
-          "actor": "auto",
-          "assets": [
-            {
-              "type": "pdf",
-              "title": "Schede prodotti Natale 2026",
-              "url": "#"
-            }
-          ]
-        }
-      ],
-      "5": [
-        {
-          "id": "dem-4",
-          "title": "DEM Reminder commerciale soft",
-          "timing": "Metà fase",
-          "system": "email",
-          "icon": "ti-mail",
-          "actor": "auto",
-          "assets": [
-            {
-              "type": "doc",
-              "title": "Copy DEM follow-up",
-              "url": "#"
-            }
-          ]
-        }
-      ],
-      "7": [
-        {
-          "id": "dem-5",
-          "title": "DEM Welcome rivenditore",
-          "timing": "Subito dopo conferma ordine",
-          "system": "email",
-          "icon": "ti-mail",
-          "actor": "auto",
-          "assets": [
-            {
-              "type": "doc",
-              "title": "Template DEM benvenuto rivenditore",
-              "url": "#"
-            }
-          ]
-        }
-      ],
-      "8": [
-        {
-          "id": "dem-6",
-          "title": "DEM Lancio campagna Natale",
-          "timing": "Inizio Ottobre",
-          "system": "email",
-          "icon": "ti-mail",
-          "actor": "auto",
-          "assets": [
-            {
-              "type": "image",
-              "title": "Visual lancio Natale",
-              "url": "#"
-            },
-            {
-              "type": "doc",
-              "title": "Copy DEM lancio",
-              "url": "#"
-            }
-          ]
-        },
-        {
-          "id": "dem-7",
-          "title": "DEM Push commerciale fine campagna",
-          "timing": "Metà Novembre",
-          "system": "email",
-          "icon": "ti-chart-bar",
-          "actor": "auto",
-          "assets": [
-            {
-              "type": "doc",
-              "title": "Brief DEM push",
-              "url": "#"
-            }
-          ]
-        }
-      ],
-      "9": [
-        {
-          "id": "dem-8",
-          "title": "DEM Wrap-up + teaser nuova campagna",
-          "timing": "Inizio Gennaio",
-          "system": "email",
-          "icon": "ti-arrow-right",
-          "actor": "auto",
-          "assets": [
-            {
-              "type": "doc",
-              "title": "Brief teaser Colomba/Pasqua 2027",
-              "url": "#"
-            }
-          ]
-        }
-      ]
+    "store": {
+      "label": "Store",
+      "persona": "Visitatore store",
+      "icon": "ti-map-pin",
+      "campaign": "—",
+      "active": false,
+      "operational": null,
+      "customer": null,
+      "timeline": null
     }
   }
 }
