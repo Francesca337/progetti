@@ -6,7 +6,9 @@
       "icon": "ti-building-store",
       "campaign": "Natale 2026",
       "active": true,
-      "operational": {
+      "customer": null,
+      "timeline": null,
+      "operativo": {
         "phases": [
           {
             "n": 1,
@@ -878,9 +880,7 @@
             ]
           }
         }
-      },
-      "customer": null,
-      "timeline": null
+      }
     },
     "b2b": {
       "label": "B2B",
@@ -888,9 +888,9 @@
       "icon": "ti-briefcase",
       "campaign": "—",
       "active": false,
-      "operational": null,
       "customer": null,
-      "timeline": null
+      "timeline": null,
+      "operativo": null
     },
     "ecommerce": {
       "label": "E-commerce",
@@ -898,9 +898,9 @@
       "icon": "ti-shopping-cart",
       "campaign": "—",
       "active": false,
-      "operational": null,
       "customer": null,
-      "timeline": null
+      "timeline": null,
+      "operativo": null
     },
     "store": {
       "label": "Store",
@@ -908,9 +908,9 @@
       "icon": "ti-map-pin",
       "campaign": "—",
       "active": false,
-      "operational": null,
       "customer": null,
-      "timeline": null
+      "timeline": null,
+      "operativo": null
     }
   }
 }

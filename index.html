@@ -2458,10 +2458,10 @@
   }
 
   // Find the touchpoint in the journey JSON by re-resolving its position.
-  // Multi-channel data: phases live under channels[currentChannel].operational.phases
+  // Multi-channel data: phases live under channels[currentChannel].operativo.phases
   // (falls back to legacy single-channel layout if journey.phases exists.)
   function findTouchpointInJourney(journey, tpId, entry) {
-    const op = journey.channels && journey.channels[currentChannel] && journey.channels[currentChannel].operational;
+    const op = journey.channels && journey.channels[currentChannel] && journey.channels[currentChannel].operativo;
     const phases = (op && op.phases) || journey.phases || [];
     const phase = phases.find(p => p.n === entry.phase.n);
     if (!phase) return null;
