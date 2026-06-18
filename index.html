@@ -2362,14 +2362,17 @@
     //   + renderDemLane()
   );
 
-  nav.innerHTML = phases.map(p => `
-    <button class="pill" data-target="phase-${p.n}">
-      <span class="num">${pad(p.n)}</span>${p.name}
-    </button>
-  `).join("");
+  // Phase pills nav removed from the markup — guard against missing element
+  if (nav) {
+    nav.innerHTML = phases.map(p => `
+      <button class="pill" data-target="phase-${p.n}">
+        <span class="num">${pad(p.n)}</span>${p.name}
+      </button>
+    `).join("");
+  }
 
   const scrollArea = document.getElementById("scrollArea");
-  const pills = [...nav.querySelectorAll(".pill")];
+  const pills = nav ? [...nav.querySelectorAll(".pill")] : [];
 
   // ----- Zoom (Cmd/Ctrl+wheel, pinch trackpad, keyboard, controls) -----
   const ZOOM_MIN = 0.5;
