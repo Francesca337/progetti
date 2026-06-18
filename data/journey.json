@@ -100,12 +100,12 @@
                 "name": "Storici",
                 "touchpoints": [
                   {
-                    "text": "Serie DEM preorder (DEM + 2 recall)",
+                    "text": "Prospect inattivi (prima di N24)",
                     "system": "email",
                     "icon": "ti-mail",
                     "actor": "auto",
-                    "timing": "Fine Maggio → metà Giugno",
-                    "extra": "Preorder → Onboarding (Fase 07). Niente preorder → Proposta appuntamento (Fase 03).",
+                    "timing": "Luglio 2026",
+                    "extra": "Tracking dei clic sulla CTA",
                     "assets": [
                       {
                         "type": "doc",
