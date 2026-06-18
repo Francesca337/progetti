@@ -1406,6 +1406,117 @@
     opacity: 0.75;
   }
 
+  /* ============================================================
+     DATA SECTION (touchpoint structured metrics)
+     ============================================================ */
+  /* View mode — clean list */
+  .data-view-list {
+    display: flex; flex-direction: column;
+    gap: 8px;
+  }
+  .data-view-row {
+    display: flex; align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--card-soft);
+    border-radius: 10px;
+  }
+  .data-view-label {
+    font-family: var(--sans);
+    font-size: 12.5px;
+    color: var(--ink-muted);
+    line-height: 1.3;
+    flex: 1;
+  }
+  .data-view-value {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  /* Edit mode — inline form rows */
+  .data-row {
+    display: flex; align-items: stretch;
+    gap: 6px;
+    padding: 8px 10px;
+    background: var(--card-soft);
+    border-radius: 10px;
+    margin-bottom: 6px;
+  }
+  .data-row input {
+    flex: 1;
+    font-family: var(--sans);
+    font-size: 13px;
+    padding: 7px 10px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: var(--card);
+    color: var(--ink);
+    box-sizing: border-box;
+    min-width: 0;
+  }
+  .data-row input[data-field="value"] {
+    flex: 0 0 38%;
+    text-align: right;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+  }
+  .data-row input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  .data-add-row {
+    display: flex; gap: 6px;
+    margin-top: 10px;
+    align-items: stretch;
+  }
+  .data-add-row input {
+    font-family: var(--sans);
+    font-size: 12.5px;
+    padding: 8px 10px;
+    border: 1px solid var(--hairline-soft);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--ink);
+    box-sizing: border-box;
+    min-width: 0;
+  }
+  .data-add-row input:first-child { flex: 1; }
+  .data-add-row input:nth-child(2) {
+    flex: 0 0 32%;
+    font-family: var(--serif);
+    font-style: italic;
+  }
+  .data-add-row input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  .data-add-row .edit-btn { flex-shrink: 0; }
+  .data-hint {
+    display: flex; align-items: flex-start;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: var(--gold-pale);
+    border-radius: 10px;
+    font-family: var(--sans);
+    font-style: italic;
+    font-size: 11.5px;
+    color: var(--gold-deep);
+    line-height: 1.4;
+  }
+  .data-hint i.ti {
+    font-size: 14px;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
   .asset-add-row {
     display: flex; gap: 6px;
     margin-top: 10px;
@@ -2011,14 +2122,31 @@
       timingPill(tp.timing),
     ].filter(Boolean).join("");
 
-    if (tp.assets && tp.assets.length) {
-      panelBody.innerHTML = `
-        <div class="asset-panel-section-title">Asset & materiali</div>
-        ${tp.assets.map(renderAssetCard).join("")}
-      `;
-    } else {
-      panelBody.innerHTML = `<div class="asset-empty">Nessun asset associato a questo touchpoint.</div>`;
+    const hasData   = tp.data   && tp.data.length;
+    const hasAssets = tp.assets && tp.assets.length;
+    const sections = [];
+    if (hasData) {
+      sections.push(`
+        <div class="asset-panel-section-title">Dati</div>
+        <div class="data-view-list">
+          ${tp.data.map(d => `
+            <div class="data-view-row">
+              <span class="data-view-label">${escapeAttr(d.label || "")}</span>
+              <span class="data-view-value">${escapeAttr(d.value || "")}</span>
+            </div>
+          `).join("")}
+        </div>
+      `);
     }
+    if (hasAssets) {
+      sections.push(`
+        <div class="asset-panel-section-title" style="margin-top:18px">Link & risorse</div>
+        ${tp.assets.map(renderAssetCard).join("")}
+      `);
+    }
+    panelBody.innerHTML = sections.length
+      ? sections.join("")
+      : `<div class="asset-empty">Nessun dato o link associato a questo touchpoint.</div>`;
 
     panel.classList.add("open");
     backdrop.classList.add("open");
@@ -2079,8 +2207,8 @@
   let editMode = false;
   let activeTpId = null;         // currently open touchpoint
   let draftTp = null;            // working copy of touchpoint metadata (text, system, actor, timing, extra)
-  let draftAssets = null;        // working copy of assets being edited
-  let pendingUploads = [];       // {file, name, type, title, tempId}
+  let draftData = null;          // working copy of structured data entries [{label, value}]
+  let draftAssets = null;        // working copy of asset URLs (no more uploads)
   let isDirty = false;
 
   function setStatus(msg, kind) {
@@ -2195,8 +2323,8 @@
       timing: tp.timing || "",
       extra: tp.extra || "",
     };
+    draftData   = (tp.data   || []).map(d => ({ ...d }));
     draftAssets = (tp.assets || []).map(a => ({ ...a }));
-    pendingUploads = [];
     markDirty(false);
     setStatus("");
 
@@ -2243,18 +2371,25 @@
         </div>
       </div>`;
 
+    const dataHtml = draftData.map(renderEditDataRow).join("");
     const assetsHtml = draftAssets.map(renderEditAssetCard).join("");
     const bodyHtml = `
-      <div class="asset-panel-section-title">Asset & materiali</div>
-      <div id="editAssetList">${assetsHtml || '<div class="asset-empty">Nessun asset. Aggiungine uno qui sotto.</div>'}</div>
-      <label class="asset-dropzone" id="assetDropzone">
-        <i class="ti ti-upload"></i>
-        <div><strong>Trascina un file qui</strong> o clicca per scegliere</div>
-        <div class="small">PDF · immagini · video · doc — finisce in <code>assets/</code></div>
-        <input type="file" id="assetFileInput" hidden multiple>
-      </label>
+      <div class="asset-panel-section-title">Dati del touchpoint</div>
+      <div id="editDataList">${dataHtml || '<div class="asset-empty">Nessun dato. Aggiungine uno qui sotto.</div>'}</div>
+      <div class="data-add-row">
+        <input type="text" id="dataLabelInput" placeholder="Etichetta (es. 'Lead freddi di partenza')">
+        <input type="text" id="dataValueInput" placeholder="Valore (es. '1.500')">
+        <button type="button" class="edit-btn primary" id="dataAdd"><i class="ti ti-plus"></i>Aggiungi</button>
+      </div>
+      <div class="data-hint">
+        <i class="ti ti-info-circle"></i>
+        In futuro questo campo potrà popolarsi da un Google Sheet o direttamente dal CRM.
+      </div>
+
+      <div class="asset-panel-section-title" style="margin-top:18px">Link & risorse</div>
+      <div id="editAssetList">${assetsHtml || '<div class="asset-empty">Nessun link. Aggiungine uno qui sotto.</div>'}</div>
       <div class="asset-add-row">
-        <input type="text" id="assetUrlInput" placeholder="Oppure incolla un URL (Drive, YouTube, ecc.)">
+        <input type="text" id="assetUrlInput" placeholder="URL (Drive, YouTube, sito, ecc.)">
         <button type="button" class="edit-btn primary" id="assetUrlAdd"><i class="ti ti-plus"></i>Aggiungi</button>
       </div>
     `;
@@ -2274,24 +2409,73 @@
     document.getElementById("tpExtra").addEventListener("input", e => { draftTp.extra = e.target.value; markDirty(true); });
 
     // Asset list handlers
+    // Data section handlers
+    const dataList = document.getElementById("editDataList");
+    dataList.addEventListener("input", onDataInput);
+    dataList.addEventListener("click", onDataActionClick);
+    document.getElementById("dataAdd").addEventListener("click", addDataEntry);
+    // Enter key in either data input also adds
+    const dataInputs = ["dataLabelInput", "dataValueInput"];
+    dataInputs.forEach(id => {
+      document.getElementById(id).addEventListener("keydown", e => {
+        if (e.key === "Enter") { e.preventDefault(); addDataEntry(); }
+      });
+    });
+
+    // Asset link section handlers
     const list = document.getElementById("editAssetList");
     list.addEventListener("input", onAssetInput);
     list.addEventListener("click", onAssetActionClick);
 
-    const dz = document.getElementById("assetDropzone");
-    const fi = document.getElementById("assetFileInput");
-    dz.addEventListener("click", () => fi.click());
-    dz.addEventListener("dragover", (e) => { e.preventDefault(); dz.classList.add("dragover"); });
-    dz.addEventListener("dragleave", () => dz.classList.remove("dragover"));
-    dz.addEventListener("drop", (e) => {
-      e.preventDefault();
-      dz.classList.remove("dragover");
-      handleFiles([...e.dataTransfer.files]);
-    });
-    fi.addEventListener("change", () => handleFiles([...fi.files]));
-
     const urlBtn = document.getElementById("assetUrlAdd");
     urlBtn.addEventListener("click", addAssetByUrl);
+  }
+
+  // ---- Data section render + handlers ----
+  function renderEditDataRow(d, idx) {
+    return `
+      <div class="data-row" data-data-idx="${idx}">
+        <input type="text" data-field="label" value="${escapeAttr(d.label || "")}" placeholder="Etichetta">
+        <input type="text" data-field="value" value="${escapeAttr(d.value || "")}" placeholder="Valore">
+        <button type="button" class="asset-icon-btn danger" data-action="delete" title="Elimina"><i class="ti ti-trash"></i></button>
+      </div>`;
+  }
+  function refreshDataList() {
+    const el = document.getElementById("editDataList");
+    el.innerHTML = draftData.length
+      ? draftData.map(renderEditDataRow).join("")
+      : '<div class="asset-empty">Nessun dato. Aggiungine uno qui sotto.</div>';
+  }
+  function onDataInput(e) {
+    const row = e.target.closest(".data-row");
+    if (!row) return;
+    const idx = +row.dataset.dataIdx;
+    const field = e.target.dataset.field;
+    if (!field || draftData[idx] == null) return;
+    draftData[idx][field] = e.target.value;
+    markDirty(true);
+  }
+  function onDataActionClick(e) {
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
+    const row = btn.closest(".data-row");
+    const idx = +row.dataset.dataIdx;
+    if (btn.dataset.action === "delete") {
+      draftData.splice(idx, 1);
+      refreshDataList();
+      markDirty(true);
+    }
+  }
+  function addDataEntry() {
+    const label = document.getElementById("dataLabelInput").value.trim();
+    const value = document.getElementById("dataValueInput").value.trim();
+    if (!label && !value) return;
+    draftData.push({ label, value });
+    document.getElementById("dataLabelInput").value = "";
+    document.getElementById("dataValueInput").value = "";
+    document.getElementById("dataLabelInput").focus();
+    refreshDataList();
+    markDirty(true);
   }
 
   function onAssetInput(e) {
@@ -2310,11 +2494,6 @@
     const card = btn.closest(".asset-card");
     const idx = +card.dataset.assetIdx;
     if (btn.dataset.action === "delete") {
-      // If the asset was a pending upload, also drop the pendingUpload
-      const a = draftAssets[idx];
-      if (a && a._pending && a._tempId) {
-        pendingUploads = pendingUploads.filter(u => u.tempId !== a._tempId);
-      }
       draftAssets.splice(idx, 1);
       refreshAssetList();
       markDirty(true);
@@ -2326,23 +2505,6 @@
     list.innerHTML = draftAssets.length
       ? draftAssets.map(renderEditAssetCard).join("")
       : '<div class="asset-empty">Nessun asset. Aggiungine uno qui sotto.</div>';
-  }
-
-  function handleFiles(files) {
-    files.forEach(file => {
-      const tempId = "tmp-" + Date.now() + "-" + Math.random().toString(36).slice(2,8);
-      const type = inferAssetType(file.name);
-      pendingUploads.push({ file, tempId, type });
-      draftAssets.push({
-        type,
-        title: file.name.replace(/\.[^/.]+$/, ""),
-        url: file.name, // placeholder — replaced after upload
-        _pending: true,
-        _tempId: tempId,
-      });
-    });
-    refreshAssetList();
-    markDirty(true);
   }
 
   function addAssetByUrl() {
@@ -2364,35 +2526,12 @@
     editCancelBtn.disabled = true;
 
     try {
-      // Upload pending files one by one
-      for (let i = 0; i < pendingUploads.length; i++) {
-        const u = pendingUploads[i];
-        setStatus(`Caricamento ${i+1}/${pendingUploads.length}: ${u.file.name}…`, "saving");
-        const phaseN = String(entry.phase.n).padStart(2, "0");
-        const folder = `assets/fase-${phaseN}`;
-        const base = slugify(u.file.name.replace(/\.[^/.]+$/, ""));
-        const ext  = u.file.name.includes(".") ? "." + u.file.name.split(".").pop() : "";
-        const stamp = Date.now().toString(36);
-        const finalName = `${base}-${stamp}${ext}`;
-        const path = `${folder}/${finalName}`;
-        const b64 = await fileToBase64(u.file);
-        await ggPut(path, b64, `cms: upload ${path}`);
-        // Update draftAssets entry that referenced this temp
-        const a = draftAssets.find(x => x._tempId === u.tempId);
-        if (a) {
-          a.url = path;
-          delete a._pending;
-          delete a._tempId;
-        }
-      }
-      pendingUploads = [];
-
       // Update journey.json
       setStatus("Salvataggio modifiche…", "saving");
       // Read fresh journey to get latest SHA
       const cur = await ggGet("data/journey.json");
       const journey = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, "")))));
-      // Locate the touchpoint and update its fields + assets
+      // Locate the touchpoint and update its fields
       const tpRef = findTouchpointInJourney(journey, activeTpId, entry);
       if (!tpRef) throw new Error("Touchpoint non trovato nel journey JSON");
 
@@ -2403,11 +2542,18 @@
       if (draftTp.timing) tpRef.timing = draftTp.timing; else delete tpRef.timing;
       if (draftTp.extra)  tpRef.extra  = draftTp.extra;  else delete tpRef.extra;
 
-      // Assets
-      tpRef.assets = draftAssets.map(a => {
+      // Structured data
+      const cleanData = draftData
+        .map(d => ({ label: (d.label || "").trim(), value: (d.value || "").trim() }))
+        .filter(d => d.label || d.value);
+      if (cleanData.length) tpRef.data = cleanData; else delete tpRef.data;
+
+      // Asset links (external URLs)
+      const cleanAssets = draftAssets.map(a => {
         const { _pending, _tempId, ...rest } = a;
         return rest;
       });
+      if (cleanAssets.length) tpRef.assets = cleanAssets; else delete tpRef.assets;
 
       const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(journey, null, 2))));
       await ggPut("data/journey.json", newContent, `cms: update touchpoint (fase ${entry.phase.n}) — ${draftTp.text.slice(0, 60)}`);
@@ -2418,7 +2564,8 @@
       entry.tp.actor  = draftTp.actor;
       entry.tp.timing = draftTp.timing || undefined;
       entry.tp.extra  = draftTp.extra  || undefined;
-      entry.tp.assets = tpRef.assets;
+      entry.tp.data   = cleanData.length ? cleanData : undefined;
+      entry.tp.assets = cleanAssets.length ? cleanAssets : undefined;
       markDirty(false);
       setStatus("Salvato. Netlify ridepoia tra ~30s.", "success");
       setTimeout(() => setStatus(""), 4500);
