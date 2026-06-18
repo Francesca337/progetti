@@ -1309,6 +1309,45 @@
   .node-save-status[data-state="ok"]     { color: var(--branch-yes); }
   .node-save-status[data-state="error"]  { color: var(--branch-no); }
 
+  .node-del-btn {
+    background: transparent;
+    color: var(--branch-no);
+    border: 1px solid transparent;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    margin-right: auto;
+  }
+  .node-del-btn:hover { background: rgba(156,70,40,0.08); border-color: var(--branch-no); }
+
+  .add-tp-btn { display: none; }
+  body.editing .add-tp-btn {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    background: transparent;
+    color: var(--ink-muted);
+    border: 1px dashed var(--hairline);
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    cursor: pointer;
+    margin-top: 6px;
+    align-self: stretch;
+    text-align: center;
+  }
+  body.editing .add-tp-btn:hover {
+    color: var(--ink);
+    border-color: var(--gold);
+    background: var(--card-soft);
+  }
+
   /* ============================================================
      ASSET PANEL (slide-over from right)
      ============================================================ */
@@ -2144,6 +2183,7 @@
             <button type="button" class="data-row-add" data-action="add-data">+ Aggiungi dato</button>
           </div>
           <div class="node-actions">
+            <button type="button" class="node-del-btn" data-action="delete-tp" title="Elimina questo touchpoint">Elimina</button>
             <span class="node-save-status" data-status></span>
             <button type="button" class="node-save-btn" data-action="save-tp" disabled>Salva</button>
           </div>
@@ -2178,13 +2218,12 @@
   }
 
   function renderRail(touchpoints, phase) {
-    if (!touchpoints || !touchpoints.length) return "";
-    return `<div class="rail">
-      ${touchpoints.map((tp, i) => `
-        ${i > 0 ? renderLink(tp.link) : ""}
-        ${renderNode(tp, phase)}
-      `).join("")}
-    </div>`;
+    const items = (touchpoints || []).map((tp, i) => `
+      ${i > 0 ? renderLink(tp.link) : ""}
+      ${renderNode(tp, phase)}
+    `).join("");
+    const addBtn = `<button type="button" class="add-tp-btn" data-action="add-tp">+ Aggiungi touchpoint</button>`;
+    return `<div class="rail">${items}${addBtn}</div>`;
   }
 
   function renderStream(stream, phase) {
@@ -2584,7 +2623,7 @@
         system: entry.tp.system || "manuale",
         timing: entry.tp.timing || "",
         extra:  entry.tp.extra  || "",
-        data:   (entry.tp.data  || []).map(d => ({ ...d })),
+        // data lives in the DOM rows directly (read at save time)
       };
       dirtyTps.set(tpId, draft);
     }
@@ -2598,6 +2637,28 @@
 
   function cardOf(el) { return el.closest(".rail-node"); }
 
+  // Resolve which phase / stream / fork an element belongs to (DOM ancestry)
+  function findContainerInfo(el) {
+    let streamName = null;
+    const stream = el.closest(".stream");
+    if (stream) {
+      const nameEl = stream.querySelector(".stream-name");
+      if (nameEl) streamName = nameEl.textContent.trim();
+    }
+    const phaseSection = el.closest("[data-phase]");
+    const phaseN = phaseSection ? +phaseSection.dataset.phase : null;
+    const forkKind = phaseSection?.dataset.fork || null;
+    return { phaseN, streamName, forkKind };
+  }
+
+  function gatherCardData(card) {
+    return [...card.querySelectorAll(".node-data-row.editing")].map(row => {
+      const lab = row.querySelector("input[data-field='label']");
+      const val = row.querySelector("input[data-field='value']");
+      return { label: (lab && lab.value) || "", value: (val && val.value) || "" };
+    });
+  }
+
   // Delegated input/change handlers on the track
   function onInlineEdit(e) {
     const t = e.target;
@@ -2608,69 +2669,97 @@
     if (!draft) return;
 
     const field = t.dataset.field;
-    if (field) {
-      const row = t.closest(".node-data-row");
-      if (row) {
-        const idx = +row.dataset.row;
-        if (!draft.data[idx]) draft.data[idx] = { label: "", value: "" };
-        draft.data[idx][field] = t.value;
-      } else {
-        draft[field] = t.value;
-      }
-      markCardDirty(card, true);
-    }
+    if (!field) return;
+    const isDataRow = !!t.closest(".node-data-row");
+    if (!isDataRow) draft[field] = t.value;
+    // (data row values are read straight from the DOM at save time)
+    markCardDirty(card, true);
   }
 
   function onInlineAction(e) {
     const btn = e.target.closest("[data-action]");
     if (!btn) return;
+    const action = btn.dataset.action;
+    // "+ Aggiungi touchpoint" lives at rail level, not inside any card
+    if (action === "add-tp") {
+      if (!editMode) return;
+      onAddTouchpoint(btn);
+      return;
+    }
     const card = cardOf(btn);
     if (!card || !card.classList.contains("editing")) return;
-    const action = btn.dataset.action;
     const tpId = card.dataset.tpId;
-    const draft = getOrInitDraft(tpId);
 
     if (action === "delete-data") {
       const row = btn.closest(".node-data-row");
-      const idx = +row.dataset.row;
-      draft.data.splice(idx, 1);
-      // Re-render data section only (simpler: re-render the whole card)
-      rerenderRailNode(tpId);
-      // Restore dirty + draft (rerenderRailNode reads from entry.tp, not draft)
-      dirtyTps.set(tpId, draft);
-      const newCard = document.querySelector(`.rail-node[data-tp-id="${tpId}"]`);
-      // Hydrate inputs from draft after re-render
-      hydrateCardFromDraft(newCard, draft);
-      markCardDirty(newCard, true);
+      if (row) row.remove();
+      getOrInitDraft(tpId); // ensure draft exists
+      markCardDirty(card, true);
     } else if (action === "add-data") {
-      draft.data.push({ label: "", value: "" });
-      rerenderRailNode(tpId);
-      dirtyTps.set(tpId, draft);
-      const newCard = document.querySelector(`.rail-node[data-tp-id="${tpId}"]`);
-      hydrateCardFromDraft(newCard, draft);
-      markCardDirty(newCard, true);
-      // Focus the new empty row's label input
-      const rows = newCard.querySelectorAll(".node-data-row.editing input[data-field='label']");
-      const last = rows[rows.length - 1];
-      if (last) last.focus();
+      const addBtn = card.querySelector(".data-row-add");
+      const dataSection = card.querySelector(".node-data.editing");
+      if (!dataSection || !addBtn) return;
+      const row = document.createElement("div");
+      row.className = "node-data-row editing";
+      row.innerHTML = `
+        <input type="text" data-field="label" placeholder="Etichetta">
+        <input type="text" data-field="value" placeholder="Valore">
+        <button type="button" class="data-row-del" data-action="delete-data" title="Elimina">×</button>`;
+      dataSection.insertBefore(row, addBtn);
+      getOrInitDraft(tpId);
+      markCardDirty(card, true);
+      const labelInput = row.querySelector("input[data-field='label']");
+      if (labelInput) labelInput.focus();
     } else if (action === "save-tp") {
       saveInlineCard(tpId);
+    } else if (action === "delete-tp") {
+      if (!confirm("Eliminare questo touchpoint?")) return;
+      deleteInlineCard(tpId);
     }
   }
 
-  function hydrateCardFromDraft(card, draft) {
-    if (!card) return;
-    const tArea = card.querySelector('.node-text-input'); if (tArea) tArea.value = draft.text;
-    const eArea = card.querySelector('.node-extra-input'); if (eArea) eArea.value = draft.extra;
-    const aSel  = card.querySelector('select[data-field="actor"]'); if (aSel) aSel.value = draft.actor;
-    const sSel  = card.querySelector('select[data-field="system"]'); if (sSel) sSel.value = draft.system;
-    const tIn   = card.querySelector('input[data-field="timing"]');  if (tIn)  tIn.value = draft.timing;
-    card.querySelectorAll(".node-data-row.editing").forEach((row, idx) => {
-      const lab = row.querySelector('input[data-field="label"]');
-      const val = row.querySelector('input[data-field="value"]');
-      if (lab && draft.data[idx]) lab.value = draft.data[idx].label || "";
-      if (val && draft.data[idx]) val.value = draft.data[idx].value || "";
+  // Top-level (not inside the touchpoint card) action handler: "+ Aggiungi touchpoint"
+  function onAddTouchpoint(railBtn) {
+    const rail = railBtn.closest(".rail");
+    if (!rail) return;
+    const ctx = findContainerInfo(rail);
+    const newTp = {
+      text: "", system: "manuale", icon: "ti-mail",
+      actor: "manual", timing: "", extra: "",
+    };
+    const id = "tp-new-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6);
+    const phaseStub = { n: ctx.phaseN };
+    touchpointIndex.set(id, { tp: newTp, phase: phaseStub, isNew: true, ctx });
+    dirtyTps.set(id, {
+      text: "", actor: "manual", system: "manuale", timing: "", extra: "",
     });
+    const tmp = document.createElement("div");
+    tmp.innerHTML = renderNodeEditable(newTp, phaseStub, id);
+    const card = tmp.firstElementChild;
+    rail.insertBefore(card, railBtn);
+    markCardDirty(card, true);
+    const txt = card.querySelector(".node-text-input");
+    if (txt) txt.focus();
+  }
+
+  function findTargetArray(journey, ctx) {
+    const op = journey.channels[currentChannel].operativo;
+    const phase = (op.phases || []).find(p => p.n === ctx.phaseN);
+    if (!phase) return null;
+    if (ctx.forkKind && phase.fork) {
+      const f = phase.fork.find(f => f.kind === ctx.forkKind);
+      if (!f) return null;
+      if (!f.touchpoints) f.touchpoints = [];
+      return f.touchpoints;
+    }
+    if (ctx.streamName && phase.streams) {
+      const s = phase.streams.find(s => s.name === ctx.streamName);
+      if (!s) return null;
+      if (!s.touchpoints) s.touchpoints = [];
+      return s.touchpoints;
+    }
+    if (!phase.touchpoints) phase.touchpoints = [];
+    return phase.touchpoints;
   }
 
   async function saveInlineCard(tpId) {
@@ -2685,30 +2774,48 @@
     try {
       const cur = await ggGet("data/journey.json");
       const journey = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, "")))));
-      const tpRef = findTouchpointInJourney(journey, tpId, entry);
-      if (!tpRef) throw new Error("Touchpoint non trovato nel JSON");
 
-      tpRef.text   = draft.text;
-      tpRef.actor  = draft.actor;
-      tpRef.system = draft.system;
-      if (draft.timing) tpRef.timing = draft.timing; else delete tpRef.timing;
-      if (draft.extra)  tpRef.extra  = draft.extra;  else delete tpRef.extra;
-      const cleanData = draft.data
-        .map(d => ({ label: (d.label||"").trim(), value: (d.value||"").trim() }))
+      // Pull the current data rows directly from the DOM (source of truth during edit)
+      const cleanData = gatherCardData(card)
+        .map(d => ({ label: d.label.trim(), value: d.value.trim() }))
         .filter(d => d.label || d.value);
-      if (cleanData.length) tpRef.data = cleanData; else delete tpRef.data;
+
+      let tpRef;
+      if (entry.isNew) {
+        const target = findTargetArray(journey, entry.ctx);
+        if (!target) throw new Error("Posizione di destinazione non trovata");
+        const newTp = { text: draft.text, system: draft.system, icon: "ti-mail", actor: draft.actor };
+        if (draft.timing) newTp.timing = draft.timing;
+        if (draft.extra)  newTp.extra  = draft.extra;
+        if (cleanData.length) newTp.data = cleanData;
+        target.push(newTp);
+        tpRef = newTp;
+      } else {
+        tpRef = findTouchpointInJourney(journey, tpId, entry);
+        if (!tpRef) throw new Error("Touchpoint non trovato nel JSON");
+        tpRef.text   = draft.text;
+        tpRef.actor  = draft.actor;
+        tpRef.system = draft.system;
+        if (draft.timing) tpRef.timing = draft.timing; else delete tpRef.timing;
+        if (draft.extra)  tpRef.extra  = draft.extra;  else delete tpRef.extra;
+        if (cleanData.length) tpRef.data = cleanData; else delete tpRef.data;
+      }
 
       const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(journey, null, 2))));
+      const msgPrefix = entry.isNew ? "cms: add touchpoint" : "cms: update touchpoint";
       await ggPut("data/journey.json", newContent,
-        `cms: update touchpoint (fase ${entry.phase.n}) — ${draft.text.slice(0, 60)}`);
+        `${msgPrefix} (fase ${entry.ctx ? entry.ctx.phaseN : entry.phase.n}) — ${draft.text.slice(0, 60)}`);
 
       // Update local + DOM
-      entry.tp.text   = draft.text;
-      entry.tp.actor  = draft.actor;
-      entry.tp.system = draft.system;
-      entry.tp.timing = draft.timing || undefined;
-      entry.tp.extra  = draft.extra  || undefined;
-      entry.tp.data   = cleanData.length ? cleanData : undefined;
+      entry.tp = tpRef;
+      if (entry.isNew) {
+        entry.isNew = false;
+        // Promote to a normal phase reference
+        const op = (CHANNELS[currentChannel] && CHANNELS[currentChannel].operativo) || {};
+        const phaseObj = (op.phases || []).find(p => p.n === entry.ctx.phaseN);
+        if (phaseObj) entry.phase = phaseObj;
+        delete entry.ctx;
+      }
       dirtyTps.delete(tpId);
       rerenderRailNode(tpId);
       const fresh = document.querySelector(`.rail-node[data-tp-id="${tpId}"]`);
@@ -2721,6 +2828,49 @@
     } catch (err) {
       if (status) { status.textContent = "Errore: " + (err.message || err); status.dataset.state = "error"; }
       btn.disabled = false;
+    }
+  }
+
+  async function deleteInlineCard(tpId) {
+    const entry = touchpointIndex.get(tpId);
+    if (!entry) return;
+    const card = document.querySelector(`.rail-node[data-tp-id="${tpId}"]`);
+    // New (un-saved) tp → just drop from local state + DOM
+    if (entry.isNew) {
+      touchpointIndex.delete(tpId);
+      dirtyTps.delete(tpId);
+      if (card) card.remove();
+      return;
+    }
+    const status = card && card.querySelector(".node-save-status");
+    if (status) { status.textContent = "Eliminazione…"; status.dataset.state = "saving"; }
+    try {
+      const cur = await ggGet("data/journey.json");
+      const journey = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, "")))));
+      const op = journey.channels[currentChannel].operativo;
+      const phase = (op.phases || []).find(p => p.n === entry.phase.n);
+      if (!phase) throw new Error("Fase non trovata");
+      const arrays = [];
+      if (phase.touchpoints) arrays.push(phase.touchpoints);
+      if (phase.streams) phase.streams.forEach(s => { if (s.touchpoints) arrays.push(s.touchpoints); });
+      if (phase.fork)    phase.fork.forEach(f    => { if (f.touchpoints) arrays.push(f.touchpoints); });
+      const matchText = entry.tp.text;
+      let removed = false;
+      for (const arr of arrays) {
+        const idx = arr.findIndex(t => t.text === matchText);
+        if (idx >= 0) { arr.splice(idx, 1); removed = true; break; }
+      }
+      if (!removed) throw new Error("Touchpoint non trovato nel JSON");
+
+      const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(journey, null, 2))));
+      await ggPut("data/journey.json", newContent,
+        `cms: delete touchpoint (fase ${entry.phase.n}) — ${matchText.slice(0, 60)}`);
+
+      touchpointIndex.delete(tpId);
+      dirtyTps.delete(tpId);
+      if (card) card.remove();
+    } catch (err) {
+      if (status) { status.textContent = "Errore: " + (err.message || err); status.dataset.state = "error"; }
     }
   }
 
