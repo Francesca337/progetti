@@ -52,8 +52,8 @@
             "id": "n6",
             "type": "touchpoint",
             "label": "Risponde alla chiamata, ascolta la proposta",
-            "x": 600,
-            "y": 360,
+            "x": 568,
+            "y": 867,
             "ops_phase": 2,
             "ops_text": "Verifica lead"
           },
@@ -61,8 +61,8 @@
             "id": "n7",
             "type": "touchpoint",
             "label": "Clicca il link nella DEM e arriva sulla guida",
-            "x": 600,
-            "y": 560,
+            "x": 587,
+            "y": 1049,
             "ops_phase": 1,
             "ops_text": "DEM con tracking"
           },
