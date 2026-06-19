@@ -595,13 +595,6 @@
             "y": 537
           },
           {
-            "id": "n12",
-            "type": "touchpoint",
-            "label": "Riceve campionatura assaggio",
-            "x": 1640,
-            "y": 700
-          },
-          {
             "id": "n13",
             "type": "decision",
             "label": "L'azienda conferma l'ordine?",
@@ -711,20 +704,8 @@
             "label": "QUALIFICATO"
           },
           {
-            "id": "e11",
-            "from": "n11",
-            "to": "n12",
-            "label": "richiede assaggio"
-          },
-          {
             "id": "e12",
             "from": "n11",
-            "to": "n13",
-            "label": ""
-          },
-          {
-            "id": "e13",
-            "from": "n12",
             "to": "n13",
             "label": ""
           },
