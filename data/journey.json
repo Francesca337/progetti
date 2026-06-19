@@ -570,8 +570,8 @@
             "id": "n8",
             "type": "touchpoint",
             "label": "Compila form",
-            "x": 873,
-            "y": 439
+            "x": 1064,
+            "y": 332
           },
           {
             "id": "n9",
@@ -642,8 +642,8 @@
             "id": "n14",
             "type": "touchpoint",
             "label": "Vede ads Meta di remarketing",
-            "x": 858,
-            "y": 344
+            "x": 801,
+            "y": 341
           },
           {
             "id": "n20",
