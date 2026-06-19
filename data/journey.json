@@ -108,8 +108,8 @@
             "id": "n19",
             "type": "decision",
             "label": "Ha incontrato Laura. Valuta la proposta",
-            "x": 1747,
-            "y": 819,
+            "x": 1749,
+            "y": 840,
             "ops_phase": 3,
             "ops_text": "Incontro fissato"
           },
@@ -134,7 +134,7 @@
             "type": "end",
             "label": "Entra in pipeline Pasqua 27",
             "x": 2110,
-            "y": 772,
+            "y": 1009,
             "outcome": "maybe"
           },
           {
