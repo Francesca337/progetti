@@ -42,7 +42,7 @@
           {
             "id": "n5",
             "type": "touchpoint",
-            "label": "Atterra sulla landing rivenditori e compila il form",
+            "label": "Atterra sulla landing rivenditori",
             "x": 600,
             "y": 160,
             "ops_phase": 1,
