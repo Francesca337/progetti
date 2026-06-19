@@ -4219,7 +4219,7 @@
             <i class="ti ${t.key === "entry" ? "ti-flag" : t.key === "touchpoint" ? "ti-point" : t.key === "decision" ? "ti-arrows-split-2" : "ti-flag-check"}"></i>${t.label}
           </button>
         `).join("")}
-        <span class="hint">Trascina i nodi · click <b>＋</b> sul nodo per connettere · doppio click sulla freccia per nominarla · click sulla freccia per eliminarla</span>
+        <span class="hint">Trascina i nodi · click <b>→</b> sul nodo per connettere · click sulla freccia per nominarla · click-destro sulla freccia per eliminarla</span>
       </div>
       <div class="cust-canvas" id="custCanvas">
         <svg class="cust-edges" id="custEdges" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1100" preserveAspectRatio="none">
@@ -4373,6 +4373,7 @@
     // Delegated handlers on the canvas
     canvas.addEventListener("click", onCustomerCanvasClick);
     canvas.addEventListener("dblclick", onCustomerCanvasDblClick);
+    canvas.addEventListener("contextmenu", onCustomerCanvasContextMenu);
     canvas.addEventListener("mousedown", onCustomerCanvasMouseDown);
     canvas.addEventListener("change", onCustomerCanvasChange);
     canvas.addEventListener("focusout", onCustomerCanvasFocusOut, true);
@@ -4461,29 +4462,38 @@
       completeCustomerConnect(node.dataset.id);
       return;
     }
-    // Click on edge → delete (with confirm)
+    // Click on edge → prompt for label (empty = clear label, but keep edge)
     const edgePath = e.target.closest("path.cust-edge");
     if (edgePath) {
-      deleteCustomerEdge(edgePath.dataset.id);
+      editCustomerEdgeLabel(edgePath.dataset.id);
       return;
     }
     // Click on empty canvas → cancel connect
     if (custConnectSourceId && !node) cancelCustomerConnect();
   }
 
-  function onCustomerCanvasDblClick(e) {
+  function onCustomerCanvasContextMenu(e) {
     if (!editMode) return;
     const edgePath = e.target.closest("path.cust-edge");
-    if (edgePath) {
-      const data = getCustData();
-      const edge = (data.edges || []).find(ed => ed.id === edgePath.dataset.id);
-      if (!edge) return;
-      const cur = prompt("Etichetta della freccia (lascia vuoto per rimuovere):", edge.label || "");
-      if (cur === null) return;
-      edge.label = cur.trim() || "";
-      renderCustomerEdges();
-      scheduleCustomerSave(`cms: customer ${currentChannel} · etichetta freccia`);
-    }
+    if (!edgePath) return;
+    e.preventDefault();
+    deleteCustomerEdge(edgePath.dataset.id);
+  }
+
+  function editCustomerEdgeLabel(edgeId) {
+    const data = getCustData();
+    if (!data) return;
+    const edge = (data.edges || []).find(ed => ed.id === edgeId);
+    if (!edge) return;
+    const cur = prompt("Etichetta della freccia (lascia vuoto per togliere il testo · click-destro sulla freccia per eliminarla):", edge.label || "");
+    if (cur === null) return;
+    edge.label = cur.trim();
+    renderCustomerEdges();
+    scheduleCustomerSave(`cms: customer ${currentChannel} · etichetta freccia`);
+  }
+
+  function onCustomerCanvasDblClick(e) {
+    // Reserved for future use; single-click handles edge labels now.
   }
 
   function onCustomerCanvasMouseDown(e) {
