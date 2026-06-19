@@ -591,15 +591,15 @@
             "id": "n11",
             "type": "touchpoint",
             "label": "Riceve proposta personalizzata (preventivo, mockup confezione)",
-            "x": 1547,
+            "x": 1535,
             "y": 901
           },
           {
             "id": "n13",
             "type": "decision",
             "label": "L'azienda conferma l'ordine?",
-            "x": 2121,
-            "y": 534
+            "x": 2030,
+            "y": 620
           },
           {
             "id": "n15",
