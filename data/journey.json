@@ -162,10 +162,11 @@
           },
           {
             "id": "n19",
-            "type": "touchpoint",
+            "type": "end",
             "label": "Nuovo touchpoint",
             "x": 1634,
-            "y": 155
+            "y": 155,
+            "outcome": "yes"
           }
         ],
         "edges": [
