@@ -98,7 +98,7 @@
           {
             "id": "n17",
             "type": "touchpoint",
-            "label": "Riceve telefonata da Laura per fissare incontro/call",
+            "label": "Riceve follow-up da Laura per fissare incontro/call",
             "x": 1410,
             "y": 692,
             "ops_phase": 2,
