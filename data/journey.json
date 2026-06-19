@@ -30,14 +30,14 @@
             "type": "entry",
             "label": "Riceve DEM riattivazione (lead pre-Natale 24)",
             "x": 240,
-            "y": 560
+            "y": 912
           },
           {
             "id": "n4",
             "type": "entry",
             "label": "Passaparola: cerca «Pasticceria Giotto» su Google",
-            "x": 240,
-            "y": 760
+            "x": 233,
+            "y": 1060
           },
           {
             "id": "n5",
