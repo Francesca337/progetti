@@ -23,7 +23,9 @@
             "type": "entry",
             "label": "Riceve telefonata a freddo da Laura",
             "x": 170,
-            "y": 487
+            "y": 487,
+            "ops_phase": 1,
+            "ops_text": "Generazione lead"
           },
           {
             "id": "n3",
