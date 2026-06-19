@@ -255,6 +255,12 @@
             "from": "n7",
             "to": "n17",
             "label": "ENTRA IN BIGIN"
+          },
+          {
+            "id": "e8",
+            "from": "n4",
+            "to": "n8",
+            "label": ""
           }
         ]
       },
