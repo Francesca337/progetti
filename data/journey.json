@@ -117,8 +117,8 @@
             "id": "n20",
             "type": "end",
             "label": "Entra il lista Mailup \"nuovi rivenditori\" e in lista Mailup \"rivenditori\"",
-            "x": 2602,
-            "y": 408,
+            "x": 2821,
+            "y": 409,
             "outcome": "yes"
           },
           {
