@@ -154,6 +154,13 @@
             "label": "Valuta la collaborazione",
             "x": 1517,
             "y": 155
+          },
+          {
+            "id": "n18",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 586,
+            "y": 330
           }
         ],
         "edges": [
