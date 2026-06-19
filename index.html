@@ -641,6 +641,61 @@
   .stream.loop .stream-header::before {
     content: "↻";
   }
+  .stream-del-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--branch-no);
+    font-size: 16px;
+    line-height: 1;
+    padding: 0 6px;
+    margin-left: auto;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 20px; height: 20px;
+    align-items: center; justify-content: center;
+  }
+  body.editing .stream-del-btn { display: inline-flex; }
+  .stream-del-btn:hover { background: rgba(156,70,40,0.08); }
+
+  .add-stream-btn { display: none; }
+  body.editing .add-stream-btn {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    background: transparent;
+    color: var(--ink-muted);
+    border: 1px dashed var(--hairline);
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    align-self: flex-start;
+    margin-top: 4px;
+  }
+  body.editing .add-stream-btn:hover {
+    color: var(--ink);
+    border-color: var(--gold);
+    background: var(--card-soft);
+  }
+
+  body.editing .stream-name {
+    cursor: text;
+    outline: 1px dashed transparent;
+    border-radius: 4px;
+    padding: 0 4px;
+    transition: outline-color 0.15s, background 0.15s;
+  }
+  body.editing .stream-name:hover { outline-color: var(--gold); }
+  body.editing .stream-name[contenteditable="true"]:focus {
+    outline: none;
+    background: var(--card);
+    box-shadow: 0 0 0 1px var(--gold-deep);
+  }
+
   .stream-name {
     font-family: var(--sans);
     font-size: 10.5px;
@@ -2267,15 +2322,16 @@
     return `<div class="rail">${items}${addBtn}</div>`;
   }
 
-  function renderStream(stream, phase) {
+  function renderStream(stream, phase, streamIdx) {
     const leadsHtml = (stream.leads != null)
       ? `<span class="stream-leads"><span class="num">${formatLeads(stream.leads)}</span> lead</span>`
       : "";
     return `
-      <div class="stream ${stream.loop ? "loop" : ""}">
+      <div class="stream ${stream.loop ? "loop" : ""}" data-phase-n="${phase.n}" data-stream-idx="${streamIdx}">
         <div class="stream-header">
-          <span class="stream-name">${stream.name}</span>
+          <span class="stream-name" data-original="${escapeAttr(stream.name)}">${escapeAttr(stream.name)}</span>
           ${leadsHtml}
+          <button type="button" class="stream-del-btn" data-action="delete-stream" title="Elimina stream">×</button>
         </div>
         ${renderRail(stream.touchpoints, phase)}
       </div>`;
@@ -2317,10 +2373,14 @@
     const isCurrent = !!p.current;
     let body = "";
     if (p.streams && p.streams.length) {
-      body = p.streams.map(s => renderStream(s, p)).join("");
+      body = p.streams.map((s, idx) => renderStream(s, p, idx)).join("");
     } else if (p.touchpoints && p.touchpoints.length) {
       body = renderRail(p.touchpoints, p);
     }
+    // Edit-mode: add an "+ Aggiungi stream" button at the end if the phase uses streams
+    const addStreamBtn = (p.streams && p.streams.length)
+      ? `<button type="button" class="add-stream-btn" data-action="add-stream" data-phase-n="${p.n}">+ Aggiungi stream</button>`
+      : "";
     return `
       <section class="col ${isCurrent ? "current" : ""}" id="phase-${p.n}" data-phase="${p.n}">
         <div class="col-header">
@@ -2334,6 +2394,7 @@
         <div class="col-body">
           ${p.annotation ? `<div class="annotation"><i class="ti ${p.annotation.icon}"></i>${p.annotation.text}</div>` : ""}
           ${body}
+          ${addStreamBtn}
           ${renderBranches(p.branches)}
         </div>
       </section>`;
@@ -2774,6 +2835,17 @@
       onAddTouchpoint(btn);
       return;
     }
+    if (action === "delete-stream") {
+      if (!editMode) return;
+      const streamEl = btn.closest(".stream");
+      if (streamEl) deleteStream(streamEl);
+      return;
+    }
+    if (action === "add-stream") {
+      if (!editMode) return;
+      addStream(btn);
+      return;
+    }
     const card = cardOf(btn);
     if (!card || !card.classList.contains("editing")) return;
     const tpId = card.dataset.tpId;
@@ -2966,6 +3038,133 @@
   track.addEventListener("input",  onInlineEdit);
   track.addEventListener("change", onInlineEdit);
   track.addEventListener("click",  onInlineAction);
+
+  // ----- Stream title editing (click to edit, blur/Enter saves) -----
+  track.addEventListener("click", (e) => {
+    if (!editMode) return;
+    const name = e.target.closest(".stream-name");
+    if (!name || name.isContentEditable) return;
+    name.contentEditable = "true";
+    name.dataset.original = name.textContent.trim();
+    name.focus();
+    const sel = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(name);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  });
+  track.addEventListener("blur", (e) => {
+    const name = e.target;
+    if (!name.classList || !name.classList.contains("stream-name")) return;
+    name.contentEditable = "false";
+    const original = (name.dataset.original || "").trim();
+    const current = (name.textContent || "").trim();
+    if (!current) { name.textContent = original; return; }
+    if (current === original) return;
+    saveStreamRename(name, current);
+  }, true);
+  track.addEventListener("keydown", (e) => {
+    const name = e.target;
+    if (!name.classList || !name.classList.contains("stream-name")) return;
+    if (e.key === "Enter") { e.preventDefault(); name.blur(); }
+    if (e.key === "Escape") {
+      name.textContent = name.dataset.original || "";
+      name.blur();
+    }
+  });
+
+  async function saveStreamRename(nameEl, newName) {
+    const streamEl = nameEl.closest(".stream");
+    const phaseN = +streamEl.dataset.phaseN;
+    const streamIdx = +streamEl.dataset.streamIdx;
+    nameEl.dataset.original = newName;
+    try {
+      const cur = await ggGet("data/journey.json");
+      const journey = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, "")))));
+      const phase = journey.channels[currentChannel].operativo.phases.find(p => p.n === phaseN);
+      if (!phase || !phase.streams || !phase.streams[streamIdx]) throw new Error("Stream non trovato");
+      phase.streams[streamIdx].name = newName;
+      const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(journey, null, 2))));
+      await ggPut("data/journey.json", newContent, `cms: rename stream (fase ${phaseN}) → ${newName}`);
+      const localPhase = CHANNELS[currentChannel].operativo.phases.find(p => p.n === phaseN);
+      if (localPhase && localPhase.streams[streamIdx]) localPhase.streams[streamIdx].name = newName;
+      if (typeof phases !== "undefined") {
+        const lp = phases.find(p => p.n === phaseN);
+        if (lp && lp.streams && lp.streams[streamIdx]) lp.streams[streamIdx].name = newName;
+      }
+    } catch (err) {
+      alert("Errore rename stream: " + (err.message || err));
+      nameEl.textContent = nameEl.dataset.original;
+    }
+  }
+
+  async function deleteStream(streamEl) {
+    const phaseN = +streamEl.dataset.phaseN;
+    const streamIdx = +streamEl.dataset.streamIdx;
+    if (!confirm("Eliminare questo stream e tutti i suoi touchpoint?")) return;
+    try {
+      const cur = await ggGet("data/journey.json");
+      const journey = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, "")))));
+      const phase = journey.channels[currentChannel].operativo.phases.find(p => p.n === phaseN);
+      if (!phase || !phase.streams) throw new Error("Fase senza stream");
+      const removed = phase.streams.splice(streamIdx, 1)[0];
+      const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(journey, null, 2))));
+      await ggPut("data/journey.json", newContent,
+        `cms: delete stream (fase ${phaseN}) — ${removed ? removed.name : ""}`);
+      const localPhase = CHANNELS[currentChannel].operativo.phases.find(p => p.n === phaseN);
+      if (localPhase && localPhase.streams) localPhase.streams.splice(streamIdx, 1);
+      if (typeof phases !== "undefined") {
+        const lp = phases.find(p => p.n === phaseN);
+        if (lp && lp.streams) lp.streams.splice(streamIdx, 1);
+      }
+      streamEl.remove();
+      // Refresh data-stream-idx on remaining streams to stay in sync
+      const colBody = streamEl.parentElement || document;
+      document.querySelectorAll(`.stream[data-phase-n="${phaseN}"]`).forEach((s, i) => {
+        s.dataset.streamIdx = i;
+      });
+    } catch (err) {
+      alert("Errore eliminazione stream: " + (err.message || err));
+    }
+  }
+
+  async function addStream(addBtn) {
+    const phaseN = +addBtn.dataset.phaseN;
+    const newName = prompt("Nome del nuovo stream:");
+    if (!newName || !newName.trim()) return;
+    try {
+      const cur = await ggGet("data/journey.json");
+      const journey = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, "")))));
+      const phase = journey.channels[currentChannel].operativo.phases.find(p => p.n === phaseN);
+      if (!phase) throw new Error("Fase non trovata");
+      if (!phase.streams) phase.streams = [];
+      const newStream = { name: newName.trim(), touchpoints: [] };
+      phase.streams.push(newStream);
+      const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(journey, null, 2))));
+      await ggPut("data/journey.json", newContent, `cms: add stream (fase ${phaseN}) — ${newName.trim()}`);
+      // Sync local
+      const localPhase = CHANNELS[currentChannel].operativo.phases.find(p => p.n === phaseN);
+      if (localPhase) {
+        if (!localPhase.streams) localPhase.streams = [];
+        localPhase.streams.push({ ...newStream });
+      }
+      if (typeof phases !== "undefined") {
+        const lp = phases.find(p => p.n === phaseN);
+        if (lp) {
+          if (!lp.streams) lp.streams = [];
+          lp.streams.push({ ...newStream });
+        }
+      }
+      // Insert a freshly rendered stream into the DOM before the add button
+      const newIdx = (phase.streams.length - 1);
+      const tmp = document.createElement("div");
+      tmp.innerHTML = renderStream(newStream, { n: phaseN }, newIdx);
+      const streamNode = tmp.firstElementChild;
+      addBtn.parentElement.insertBefore(streamNode, addBtn);
+    } catch (err) {
+      alert("Errore aggiunta stream: " + (err.message || err));
+    }
+  }
 
   editToggleBtn.addEventListener("click", () => {
     // No auth required — commits go through Netlify Function `commit`
