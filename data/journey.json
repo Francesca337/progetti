@@ -117,16 +117,16 @@
             "id": "n20",
             "type": "end",
             "label": "Entra il lista Mailup \"nuovi rivenditori\" e in lista Mailup \"rivenditori\"",
-            "x": 2046,
-            "y": 392,
+            "x": 2602,
+            "y": 408,
             "outcome": "yes"
           },
           {
             "id": "n21",
             "type": "end",
             "label": "",
-            "x": 1977,
-            "y": 566,
+            "x": 2816,
+            "y": 558,
             "outcome": "no"
           },
           {
