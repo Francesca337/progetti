@@ -613,8 +613,8 @@
             "type": "end",
             "outcome": "maybe",
             "label": "Tag P27/N27",
-            "x": 2702,
-            "y": 335
+            "x": 2584,
+            "y": 232
           },
           {
             "id": "n16",
@@ -628,8 +628,8 @@
             "id": "n17",
             "type": "touchpoint",
             "label": "Cliente acquisito: entra in DEM B2B + riattivazione Pasqua / Natale",
-            "x": 2740,
-            "y": 221
+            "x": 2615,
+            "y": 81
           },
           {
             "id": "n18",
