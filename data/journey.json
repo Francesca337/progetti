@@ -656,7 +656,7 @@
             "id": "n21",
             "type": "touchpoint",
             "label": "Follow-up da parte di Max",
-            "x": 935,
+            "x": 887,
             "y": 912
           },
           {
@@ -721,7 +721,7 @@
             "id": "e15",
             "from": "n13",
             "to": "n15",
-            "label": "FORSE"
+            "label": "RIMANDATO"
           },
           {
             "id": "e16",
