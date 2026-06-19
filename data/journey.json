@@ -125,16 +125,16 @@
             "id": "n21",
             "type": "end",
             "label": "",
-            "x": 2100,
-            "y": 684,
+            "x": 2112,
+            "y": 835,
             "outcome": "no"
           },
           {
             "id": "n22",
             "type": "end",
             "label": "Entra in pipeline Pasqua 27",
-            "x": 2104,
-            "y": 929,
+            "x": 2127,
+            "y": 1006,
             "outcome": "maybe"
           },
           {
