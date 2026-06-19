@@ -155,7 +155,7 @@
             "id": "n8",
             "type": "touchpoint",
             "label": "Viene contattato da Laura per riattivare la conversazione",
-            "x": 937,
+            "x": 911,
             "y": 709,
             "ops_phase": 2,
             "ops_text": "Verifica dei lead"
@@ -251,6 +251,12 @@
             "from": "n6",
             "to": "n16",
             "label": "FORNISCE LA MAIL"
+          },
+          {
+            "id": "e6",
+            "from": "n7",
+            "to": "n8",
+            "label": "ENTRA IN BIGIN"
           }
         ]
       },
