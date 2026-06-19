@@ -67,8 +67,8 @@
             "id": "n7",
             "type": "touchpoint",
             "label": "Clicca il link nella DEM e arriva sulla guida",
-            "x": 587,
-            "y": 1049,
+            "x": 533,
+            "y": 709,
             "ops_phase": 1,
             "ops_text": "DEM con tracking"
           },
