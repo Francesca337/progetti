@@ -612,7 +612,7 @@
             "id": "n15",
             "type": "end",
             "outcome": "maybe",
-            "label": "Rimanda all'anno prossimo / tag Pasqua 27",
+            "label": "Tag P27/N27",
             "x": 2702,
             "y": 335
           },
@@ -621,8 +621,8 @@
             "type": "end",
             "outcome": "no",
             "label": "Non procede (Chiusa persa)",
-            "x": 2679,
-            "y": 443
+            "x": 2720,
+            "y": 441
           },
           {
             "id": "n17",
