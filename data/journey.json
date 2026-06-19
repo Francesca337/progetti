@@ -15,8 +15,8 @@
             "id": "n1",
             "type": "entry",
             "label": "Vede ads Meta su Instagram / Facebook",
-            "x": 163,
-            "y": 160,
+            "x": 164,
+            "y": 99,
             "ops_phase": 1,
             "ops_text": "Generazione lead"
           },
@@ -49,8 +49,8 @@
             "id": "n5",
             "type": "touchpoint",
             "label": "Atterra sulla landing rivenditori",
-            "x": 535,
-            "y": 162,
+            "x": 534,
+            "y": 228,
             "ops_phase": 1,
             "ops_text": "Meta Ads Lead Gen"
           },
@@ -148,8 +148,8 @@
             "id": "n24",
             "type": "touchpoint",
             "label": "Vede ads di remarketing su Giotto per il retail",
-            "x": 534,
-            "y": 341
+            "x": 536,
+            "y": 340
           }
         ],
         "edges": [
@@ -248,6 +248,12 @@
             "from": "n7",
             "to": "n17",
             "label": "ENTRA IN BIGIN"
+          },
+          {
+            "id": "e8",
+            "from": "n4",
+            "to": "n5",
+            "label": ""
           }
         ]
       },
