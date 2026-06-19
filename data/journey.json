@@ -251,6 +251,12 @@
             "from": "n15",
             "to": "n16",
             "label": "ENTRA IN BIGIN"
+          },
+          {
+            "id": "e16",
+            "from": "n16",
+            "to": "n17",
+            "label": ""
           }
         ]
       },
