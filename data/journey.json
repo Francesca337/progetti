@@ -149,9 +149,9 @@
           {
             "id": "n18",
             "type": "touchpoint",
-            "label": "Nuovo touchpoint",
-            "x": 2633,
-            "y": 63
+            "label": "Riceve flusso DEM",
+            "x": 2631,
+            "y": 60
           },
           {
             "id": "n17",
