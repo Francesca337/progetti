@@ -165,7 +165,9 @@
             "type": "decision",
             "label": "Valuta la proposta",
             "x": 1639,
-            "y": 158
+            "y": 158,
+            "ops_phase": 3,
+            "ops_text": "Incontro fissato"
           }
         ],
         "edges": [
