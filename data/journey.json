@@ -187,16 +187,6 @@
             "outcome": null,
             "touchpoints": [
               {
-                "text": "Automation Zoho: importazione in lista MailUp rivenditori",
-                "system": "zoho",
-                "icon": "ti-database",
-                "actor": "auto",
-                "link": {
-                  "text": "trigger: stato Chiusa vinta",
-                  "icon": "ti-bolt"
-                }
-              },
-              {
                 "text": "Mail di benvenuto Pasticceria Giotto",
                 "system": "email",
                 "icon": "ti-mail",
