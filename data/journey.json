@@ -672,6 +672,13 @@
             "label": "Riceve bauletto Premium in azienda",
             "x": 173,
             "y": 1120
+          },
+          {
+            "id": "n23",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 580,
+            "y": 450
           }
         ],
         "edges": [
