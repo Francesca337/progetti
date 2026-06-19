@@ -73,51 +73,6 @@
             "ops_text": "DEM con tracking"
           },
           {
-            "id": "n9",
-            "type": "touchpoint",
-            "label": "Fissa un incontro a calendario con Laura",
-            "x": 1032,
-            "y": 825,
-            "ops_phase": 3,
-            "ops_text": "Incontro fissato"
-          },
-          {
-            "id": "n10",
-            "type": "touchpoint",
-            "label": "Incontro: listino, materiali, campionatura",
-            "x": 1251,
-            "y": 785,
-            "ops_phase": 3,
-            "ops_text": "Incontro"
-          },
-          {
-            "id": "n11",
-            "type": "decision",
-            "label": "Adotto Pasticceria Giotto per Natale 26?",
-            "x": 1240,
-            "y": 600
-          },
-          {
-            "id": "n13",
-            "type": "end",
-            "outcome": "maybe",
-            "label": "Rimanda a Pasqua 27 (riattivazione gennaio)",
-            "x": 1560,
-            "y": 600,
-            "ops_phase": 4,
-            "ops_text": "Fork Pasqua 27"
-          },
-          {
-            "id": "n14",
-            "type": "end",
-            "outcome": "no",
-            "label": "Non procede (Chiusa persa)",
-            "x": 1560,
-            "y": 820,
-            "ops_phase": 4,
-            "ops_text": "Chiusa persa"
-          },
-          {
             "id": "n15",
             "type": "touchpoint",
             "label": "Compila il form",
@@ -215,30 +170,6 @@
             "from": "n3",
             "to": "n7",
             "label": ""
-          },
-          {
-            "id": "e9",
-            "from": "n9",
-            "to": "n10",
-            "label": ""
-          },
-          {
-            "id": "e10",
-            "from": "n10",
-            "to": "n11",
-            "label": ""
-          },
-          {
-            "id": "e12",
-            "from": "n11",
-            "to": "n13",
-            "label": "forse"
-          },
-          {
-            "id": "e13",
-            "from": "n11",
-            "to": "n14",
-            "label": "no"
           },
           {
             "id": "e14",
