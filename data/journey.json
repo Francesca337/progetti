@@ -76,15 +76,15 @@
             "id": "n15",
             "type": "touchpoint",
             "label": "Compila il form",
-            "x": 1092,
-            "y": 228
+            "x": 1094,
+            "y": 230
           },
           {
             "id": "n16",
             "type": "touchpoint",
             "label": "Riceve la Guida Rivenditori in PDF",
-            "x": 1095,
-            "y": 599,
+            "x": 1094,
+            "y": 469,
             "ops_phase": 2,
             "ops_text": "Verifica del lead"
           },
@@ -92,15 +92,15 @@
             "id": "n18",
             "type": "touchpoint",
             "label": "Riceve flusso DEM",
-            "x": 2701,
-            "y": 693
+            "x": 2699,
+            "y": 585
           },
           {
             "id": "n17",
             "type": "touchpoint",
             "label": "Riceve follow-up da Laura per fissare incontro/call",
-            "x": 1409,
-            "y": 836,
+            "x": 1410,
+            "y": 692,
             "ops_phase": 2,
             "ops_text": "Verifica dei lead"
           },
@@ -108,8 +108,8 @@
             "id": "n19",
             "type": "decision",
             "label": "Ha incontrato Laura. Valuta la proposta",
-            "x": 1752,
-            "y": 833,
+            "x": 1747,
+            "y": 688,
             "ops_phase": 3,
             "ops_text": "Incontro fissato"
           },
@@ -117,39 +117,39 @@
             "id": "n20",
             "type": "end",
             "label": "Entra il lista Mailup \"nuovi rivenditori\" e in lista Mailup \"rivenditori\"",
-            "x": 2146,
-            "y": 693,
+            "x": 2141,
+            "y": 585,
             "outcome": "yes"
           },
           {
             "id": "n21",
             "type": "end",
             "label": "",
-            "x": 2108,
-            "y": 835,
+            "x": 2100,
+            "y": 684,
             "outcome": "no"
           },
           {
             "id": "n22",
             "type": "end",
             "label": "Entra in pipeline Pasqua 27",
-            "x": 2127,
-            "y": 1006,
+            "x": 2110,
+            "y": 772,
             "outcome": "maybe"
           },
           {
             "id": "n23",
             "type": "touchpoint",
             "label": "Riceve mail di benvenuto",
-            "x": 2457,
-            "y": 694
+            "x": 2461,
+            "y": 586
           },
           {
             "id": "n24",
             "type": "touchpoint",
             "label": "Vede Meta ads di remarketing su Giotto per il retail",
-            "x": 615,
-            "y": 231
+            "x": 711,
+            "y": 229
           },
           {
             "id": "n8",
