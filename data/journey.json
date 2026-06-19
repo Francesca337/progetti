@@ -24,8 +24,8 @@
             "id": "n2",
             "type": "entry",
             "label": "Riceve telefonata a freddo da Laura",
-            "x": 170,
-            "y": 487,
+            "x": 158,
+            "y": 605,
             "ops_phase": 1,
             "ops_text": "Generazione lead"
           },
@@ -33,8 +33,8 @@
             "id": "n3",
             "type": "entry",
             "label": "Riceve DEM riattivazione (è lead pre-Natale 24)",
-            "x": 185,
-            "y": 713,
+            "x": 172,
+            "y": 848,
             "ops_phase": 1,
             "ops_text": "Generazione lead"
           },
@@ -43,7 +43,7 @@
             "type": "entry",
             "label": "Passaparola: cerca «Pasticceria Giotto» su Google",
             "x": 169,
-            "y": 368
+            "y": 370
           },
           {
             "id": "n5",
@@ -67,8 +67,8 @@
             "id": "n7",
             "type": "touchpoint",
             "label": "Clicca il link nella DEM e arriva sulla Guida Rivenditori in PDF",
-            "x": 538,
-            "y": 712,
+            "x": 537,
+            "y": 845,
             "ops_phase": 1,
             "ops_text": "DEM con tracking"
           },
