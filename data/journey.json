@@ -157,6 +157,13 @@
             "label": "Atterra sul sito web > diventa rivenditore",
             "x": 533,
             "y": 368
+          },
+          {
+            "id": "n9",
+            "type": "entry",
+            "label": "Nuovo entry point",
+            "x": 220,
+            "y": 450
           }
         ],
         "edges": [
