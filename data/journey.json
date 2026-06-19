@@ -172,7 +172,7 @@
           {
             "id": "n20",
             "type": "end",
-            "label": "Nuovo esito",
+            "label": "Entra il lista Mailup \"nuovi rivenditori\" e in lista Mailup \"rivenditori\"",
             "x": 1897,
             "y": 61,
             "outcome": "yes"
