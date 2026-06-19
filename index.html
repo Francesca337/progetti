@@ -2514,6 +2514,38 @@
     return String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
   }
 
+  // ---- Commit helpers (via Netlify Function /.netlify/functions/commit) ----
+  // Top-scope so they're reachable from every view (operativo, customer, …)
+  async function ggGet(path) {
+    const res = await fetch(`/.netlify/functions/commit?path=${encodeURIComponent(path)}`);
+    if (res.status === 404) return null;
+    if (!res.ok) {
+      const detail = await ggReadErr(res);
+      throw new Error(`GET ${path}: ${res.status} ${detail}`);
+    }
+    return res.json();
+  }
+
+  async function ggPut(path, base64Content, message) {
+    const res = await fetch(`/.netlify/functions/commit`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ path, content: base64Content, message }),
+    });
+    if (!res.ok) {
+      const detail = await ggReadErr(res);
+      throw new Error(`PUT ${path}: ${res.status} ${detail}`);
+    }
+    return res.json();
+  }
+
+  async function ggReadErr(res) {
+    try {
+      const t = await res.text();
+      try { return JSON.parse(t).error || t; } catch { return t; }
+    } catch { return ""; }
+  }
+
   // ============================================================
   // DATA (populated from data/journey.json on boot)
   // ============================================================
@@ -3507,38 +3539,6 @@
     // which holds a GitHub PAT server-side. Anyone with the URL can edit.
     toggleEditMode();
   });
-
-  // ---- Commit helpers (via Netlify Function /.netlify/functions/commit) ----
-  async function ggGet(path) {
-    const res = await fetch(`/.netlify/functions/commit?path=${encodeURIComponent(path)}`);
-    if (res.status === 404) return null;
-    if (!res.ok) {
-      const detail = await ggReadErr(res);
-      throw new Error(`GET ${path}: ${res.status} ${detail}`);
-    }
-    return res.json();
-  }
-
-  async function ggPut(path, base64Content, message) {
-    const res = await fetch(`/.netlify/functions/commit`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path, content: base64Content, message }),
-    });
-    if (!res.ok) {
-      const detail = await ggReadErr(res);
-      throw new Error(`PUT ${path}: ${res.status} ${detail}`);
-    }
-    return res.json();
-  }
-
-  async function ggReadErr(res) {
-    try {
-      const t = await res.text();
-      // Try to extract { error: "..." } JSON, fall back to raw text
-      try { return JSON.parse(t).error || t; } catch { return t; }
-    } catch { return ""; }
-  }
 
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
