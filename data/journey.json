@@ -109,7 +109,8 @@
             "name": "Incontro fissato",
             "period": "Agosto – Settembre 2026",
             "outcome": {
-              "text": "Proposta presentata · decisione del rivenditore"
+              "text": "Proposta presentata · decisione del rivenditore",
+              "trigger": "promemoria definito da Laura"
             },
             "touchpoints": [
               {
