@@ -45,8 +45,8 @@
             "id": "n5",
             "type": "touchpoint",
             "label": "Atterra sulla landing rivenditori",
-            "x": 524,
-            "y": 160,
+            "x": 535,
+            "y": 162,
             "ops_phase": 1,
             "ops_text": "Meta Ads Lead Gen"
           },
@@ -199,7 +199,7 @@
             "id": "n24",
             "type": "touchpoint",
             "label": "Vede ads di remarketing su Giotto per il retail",
-            "x": 470,
+            "x": 542,
             "y": 320
           }
         ],
