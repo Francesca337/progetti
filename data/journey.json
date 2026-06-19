@@ -150,6 +150,13 @@
             "label": "Vede ads di remarketing su Giotto per il retail",
             "x": 535,
             "y": 264
+          },
+          {
+            "id": "n8",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 670,
+            "y": 360
           }
         ],
         "edges": [
