@@ -155,8 +155,10 @@
             "id": "n8",
             "type": "touchpoint",
             "label": "Viene contattato da Laura per riattivare la conversazione",
-            "x": 844,
-            "y": 695
+            "x": 937,
+            "y": 709,
+            "ops_phase": 2,
+            "ops_text": "Verifica dei lead"
           }
         ],
         "edges": [
