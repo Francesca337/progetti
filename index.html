@@ -2139,8 +2139,8 @@
 
   .cust-canvas {
     position: relative;
-    width: 1800px;
-    height: 1100px;
+    width: 3000px;
+    height: 1500px;
     background:
       radial-gradient(circle at 1px 1px, rgba(20,18,14,0.06) 1px, transparent 0)
       0 0 / 24px 24px,
@@ -4222,7 +4222,7 @@
         <span class="hint">Trascina i nodi · click <b>→</b> sul nodo per connettere · click sulla freccia per nominarla · click-destro sulla freccia per eliminarla</span>
       </div>
       <div class="cust-canvas" id="custCanvas">
-        <svg class="cust-edges" id="custEdges" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1100" preserveAspectRatio="none">
+        <svg class="cust-edges" id="custEdges" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 1500" preserveAspectRatio="none">
           <defs>
             <marker id="custArrow" viewBox="0 0 10 10" refX="9" refY="5"
                     markerWidth="9" markerHeight="9" orient="auto-start-reverse">
@@ -4536,8 +4536,8 @@
       const data = getCustData();
       const node = (data.nodes || []).find(n => n.id === custDragState.id);
       if (!node) return;
-      node.x = clamp(cx - custDragState.offsetX, 80, 1800 - 40);
-      node.y = clamp(cy - custDragState.offsetY, 60, 1100 - 40);
+      node.x = clamp(cx - custDragState.offsetX, 80, 3000 - 40);
+      node.y = clamp(cy - custDragState.offsetY, 60, 1500 - 40);
       custDragState.moved = true;
       const el = canvas.querySelector(`.cust-node[data-id="${cssEsc(node.id)}"]`);
       if (el) {
