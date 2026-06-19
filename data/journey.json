@@ -133,7 +133,7 @@
           {
             "id": "n15",
             "type": "touchpoint",
-            "label": "Compila il form",
+            "label": "Compila il form e riceve la Guida Rivenditori in PDF da Laura",
             "x": 905,
             "y": 157,
             "ops_phase": 2,
