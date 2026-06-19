@@ -32,7 +32,9 @@
             "type": "entry",
             "label": "Riceve DEM riattivazione (lead pre-Natale 24)",
             "x": 185,
-            "y": 713
+            "y": 713,
+            "ops_phase": 1,
+            "ops_text": "Generazione lead"
           },
           {
             "id": "n4",
