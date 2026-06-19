@@ -171,8 +171,8 @@
             "id": "n10",
             "type": "touchpoint",
             "label": "Riceve flusso DEM rivolto ai Clienti Attivi + Seconda Occasione",
-            "x": 550,
-            "y": 1082
+            "x": 544,
+            "y": 1071
           }
         ],
         "edges": [
@@ -288,6 +288,12 @@
             "id": "e10",
             "from": "n8",
             "to": "n15",
+            "label": ""
+          },
+          {
+            "id": "e11",
+            "from": "n9",
+            "to": "n10",
             "label": ""
           }
         ]
