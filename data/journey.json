@@ -606,16 +606,16 @@
             "type": "end",
             "outcome": "maybe",
             "label": "Tag P27/N27",
-            "x": 2580,
-            "y": 228
+            "x": 2474,
+            "y": 469
           },
           {
             "id": "n16",
             "type": "end",
             "outcome": "no",
             "label": "Non procede (Chiusa persa)",
-            "x": 2432,
-            "y": 657
+            "x": 2431,
+            "y": 668
           },
           {
             "id": "n17",
