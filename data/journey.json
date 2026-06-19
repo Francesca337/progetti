@@ -117,8 +117,8 @@
             "id": "n20",
             "type": "end",
             "label": "Entra il lista Mailup \"nuovi rivenditori\" e in lista Mailup \"rivenditori\"",
-            "x": 2015,
-            "y": 423,
+            "x": 2017,
+            "y": 392,
             "outcome": "yes"
           },
           {
@@ -141,8 +141,8 @@
             "id": "n23",
             "type": "touchpoint",
             "label": "Riceve mail di benvenuto",
-            "x": 2351,
-            "y": 217
+            "x": 2320,
+            "y": 391
           },
           {
             "id": "n24",
