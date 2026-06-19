@@ -134,8 +134,8 @@
             "id": "n15",
             "type": "touchpoint",
             "label": "Compila il form",
-            "x": 904,
-            "y": 136,
+            "x": 905,
+            "y": 157,
             "ops_phase": 2,
             "ops_text": "Verifica dei lead"
           }
