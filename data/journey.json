@@ -645,6 +645,13 @@
             "label": "Cliente inattivo (prima di N24)",
             "x": 154,
             "y": 928
+          },
+          {
+            "id": "n19",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 516,
+            "y": 550
           }
         ],
         "edges": [
