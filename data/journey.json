@@ -45,7 +45,7 @@
             "id": "n5",
             "type": "touchpoint",
             "label": "Atterra sulla landing rivenditori",
-            "x": 471,
+            "x": 524,
             "y": 160,
             "ops_phase": 1,
             "ops_text": "Meta Ads Lead Gen"
@@ -54,8 +54,8 @@
             "id": "n6",
             "type": "touchpoint",
             "label": "Risponde alla chiamata, ascolta la proposta",
-            "x": 466,
-            "y": 488,
+            "x": 527,
+            "y": 484,
             "ops_phase": 2,
             "ops_text": "Verifica lead"
           },
