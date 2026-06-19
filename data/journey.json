@@ -662,7 +662,7 @@
           {
             "id": "n12",
             "type": "touchpoint",
-            "label": "Nuovo touchpoint",
+            "label": "Riceve DEM di riattivazione",
             "x": 524,
             "y": 926
           }
