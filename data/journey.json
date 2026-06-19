@@ -92,8 +92,8 @@
             "id": "n18",
             "type": "touchpoint",
             "label": "Riceve flusso DEM",
-            "x": 2697,
-            "y": 543
+            "x": 2698,
+            "y": 589
           },
           {
             "id": "n17",
@@ -141,8 +141,8 @@
             "id": "n23",
             "type": "touchpoint",
             "label": "Riceve mail di benvenuto",
-            "x": 2456,
-            "y": 584
+            "x": 2461,
+            "y": 586
           },
           {
             "id": "n24",
