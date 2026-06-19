@@ -138,13 +138,6 @@
             "y": 157,
             "ops_phase": 2,
             "ops_text": "Verifica dei lead"
-          },
-          {
-            "id": "n16",
-            "type": "entry",
-            "label": "Nuovo entry point",
-            "x": 1188,
-            "y": 146
           }
         ],
         "edges": [
