@@ -197,7 +197,7 @@
             "id": "n23",
             "type": "touchpoint",
             "label": "Riceve mail di benvenuto",
-            "x": 2354,
+            "x": 2344,
             "y": 62
           }
         ],
@@ -326,7 +326,7 @@
             "id": "e21",
             "from": "n20",
             "to": "n23",
-            "label": ""
+            "label": "DA MAILUP"
           }
         ]
       },
