@@ -686,12 +686,6 @@
             "label": "compila"
           },
           {
-            "id": "e7",
-            "from": "n7",
-            "to": "n6",
-            "label": "click DEM"
-          },
-          {
             "id": "e8",
             "from": "n8",
             "to": "n9",
