@@ -16,7 +16,9 @@
             "type": "entry",
             "label": "Vede ads Meta su Instagram / Facebook",
             "x": 163,
-            "y": 160
+            "y": 160,
+            "ops_phase": 1,
+            "ops_text": "Generazione lead"
           },
           {
             "id": "n2",
