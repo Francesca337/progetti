@@ -191,7 +191,7 @@
             "label": "Nuovo esito",
             "x": 1898,
             "y": 248,
-            "outcome": "yes"
+            "outcome": "no"
           }
         ],
         "edges": [
