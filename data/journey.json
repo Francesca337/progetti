@@ -94,16 +94,6 @@
             "y": 600
           },
           {
-            "id": "n12",
-            "type": "end",
-            "outcome": "yes",
-            "label": "Diventa cliente: onboarding + DEM ricorrenti",
-            "x": 1560,
-            "y": 360,
-            "ops_phase": 5,
-            "ops_text": "Clienti acquisiti"
-          },
-          {
             "id": "n13",
             "type": "end",
             "outcome": "maybe",
@@ -239,12 +229,6 @@
             "from": "n10",
             "to": "n11",
             "label": ""
-          },
-          {
-            "id": "e11",
-            "from": "n11",
-            "to": "n12",
-            "label": "sì"
           },
           {
             "id": "e12",
