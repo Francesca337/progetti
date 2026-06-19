@@ -150,8 +150,8 @@
             "id": "n18",
             "type": "touchpoint",
             "label": "Riceve flusso DEM",
-            "x": 2631,
-            "y": 60
+            "x": 2604,
+            "y": 61
           },
           {
             "id": "n17",
@@ -327,6 +327,12 @@
             "from": "n20",
             "to": "n23",
             "label": "DA MAILUP"
+          },
+          {
+            "id": "e22",
+            "from": "n23",
+            "to": "n18",
+            "label": ""
           }
         ]
       },
