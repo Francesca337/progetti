@@ -658,6 +658,13 @@
             "label": "Follow-up da parte di Max",
             "x": 870,
             "y": 744
+          },
+          {
+            "id": "n12",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 400,
+            "y": 450
           }
         ],
         "edges": [
