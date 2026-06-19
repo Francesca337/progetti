@@ -159,6 +159,13 @@
             "label": "Riceve telefonata da Laura per fissare incontro/call",
             "x": 1514,
             "y": 155
+          },
+          {
+            "id": "n19",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 1760,
+            "y": 152
           }
         ],
         "edges": [
