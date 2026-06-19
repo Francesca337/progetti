@@ -142,9 +142,11 @@
           {
             "id": "n16",
             "type": "touchpoint",
-            "label": "Riceve la Guida Rivenditori in PDF e viene contattato da Laura",
-            "x": 1175,
-            "y": 146
+            "label": "Incontra Laura",
+            "x": 1190,
+            "y": 135,
+            "ops_phase": 3,
+            "ops_text": "Incontro fissato"
           }
         ],
         "edges": [
