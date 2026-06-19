@@ -756,6 +756,12 @@
             "from": "n5",
             "to": "n20",
             "label": "LASCIA LA MAIL"
+          },
+          {
+            "id": "e17",
+            "from": "n20",
+            "to": "n10",
+            "label": "MAX RICONTATTA"
           }
         ]
       },
