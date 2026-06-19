@@ -53,7 +53,7 @@
             "type": "touchpoint",
             "label": "Risponde alla chiamata, ascolta la proposta",
             "x": 489,
-            "y": 485,
+            "y": 486,
             "ops_phase": 2,
             "ops_text": "Verifica lead"
           },
