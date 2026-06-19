@@ -162,8 +162,8 @@
             "id": "n9",
             "type": "entry",
             "label": "È cliente attivo (P25, N25, P26)",
-            "x": 114,
-            "y": 1060,
+            "x": 158,
+            "y": 1065,
             "ops_phase": 3,
             "ops_text": "Incontro fissato"
           }
