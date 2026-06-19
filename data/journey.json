@@ -206,8 +206,8 @@
             "id": "n24",
             "type": "touchpoint",
             "label": "Vede ads di remarketing su Giotto per il retail",
-            "x": 475,
-            "y": 333
+            "x": 469,
+            "y": 307
           }
         ],
         "edges": [
@@ -329,6 +329,12 @@
             "id": "e22",
             "from": "n23",
             "to": "n18",
+            "label": ""
+          },
+          {
+            "id": "e4",
+            "from": "n5",
+            "to": "n24",
             "label": ""
           }
         ]
