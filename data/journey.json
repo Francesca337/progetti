@@ -99,8 +99,8 @@
             "id": "n17",
             "type": "touchpoint",
             "label": "Riceve telefonata da Laura per fissare incontro/call",
-            "x": 1634,
-            "y": 555,
+            "x": 2030,
+            "y": 566,
             "ops_phase": 2,
             "ops_text": "Verifica dei lead"
           },
@@ -117,8 +117,8 @@
             "id": "n20",
             "type": "end",
             "label": "Entra il lista Mailup \"nuovi rivenditori\" e in lista Mailup \"rivenditori\"",
-            "x": 2017,
-            "y": 392,
+            "x": 2280,
+            "y": 395,
             "outcome": "yes"
           },
           {
