@@ -570,8 +570,8 @@
             "id": "n8",
             "type": "touchpoint",
             "label": "Compila form",
-            "x": 999,
-            "y": 443
+            "x": 1040,
+            "y": 336
           },
           {
             "id": "n9",
@@ -691,12 +691,6 @@
             "id": "e4",
             "from": "n4",
             "to": "n7",
-            "label": ""
-          },
-          {
-            "id": "e6",
-            "from": "n6",
-            "to": "n8",
             "label": ""
           },
           {
