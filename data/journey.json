@@ -135,7 +135,9 @@
             "type": "touchpoint",
             "label": "Compila il form",
             "x": 904,
-            "y": 136
+            "y": 136,
+            "ops_phase": 2,
+            "ops_text": "Verifica dei lead"
           }
         ],
         "edges": [
