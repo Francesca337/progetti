@@ -656,8 +656,8 @@
             "id": "n20",
             "type": "touchpoint",
             "label": "Riceve guida Regali Aziendali",
-            "x": 920,
-            "y": 140
+            "x": 900,
+            "y": 141
           }
         ],
         "edges": [
@@ -750,6 +750,12 @@
             "from": "n6",
             "to": "n14",
             "label": ""
+          },
+          {
+            "id": "e14",
+            "from": "n5",
+            "to": "n20",
+            "label": "LASCIA LA MAIL"
           }
         ]
       },
