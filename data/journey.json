@@ -201,6 +201,13 @@
             "label": "Riceve mail di benvenuto",
             "x": 2359,
             "y": 61
+          },
+          {
+            "id": "n24",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 670,
+            "y": 450
           }
         ],
         "edges": [
