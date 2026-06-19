@@ -142,10 +142,10 @@
           {
             "id": "n16",
             "type": "touchpoint",
-            "label": "Incontra Laura: listino, comunicazione, campionatura",
+            "label": "Riceve la Guida Rivenditori in PDF",
             "x": 1281,
             "y": 157,
-            "ops_phase": 3,
+            "ops_phase": 2,
             "ops_text": "Incontro fissato"
           },
           {
