@@ -4288,6 +4288,7 @@
       <span class="cust-node-label" data-original="${escapeCust(node.label || "")}">${escapeCust(node.label || "")}</span>
       ${refHtml}
       <div class="cust-node-actions">
+        <button type="button" data-cust-action="link" title="Collega a una fase operativa"><i class="ti ti-link"></i></button>
         <button type="button" data-cust-action="connect" title="Connetti ad altro nodo"><i class="ti ti-arrow-right"></i></button>
         <button type="button" class="danger" data-cust-action="delete" title="Elimina nodo"><i class="ti ti-trash"></i></button>
       </div>
@@ -4449,6 +4450,8 @@
         deleteCustomerNode(id);
       } else if (actionBtn.dataset.custAction === "connect") {
         startCustomerConnect(id);
+      } else if (actionBtn.dataset.custAction === "link") {
+        editCustomerNodeOpsLink(id);
       }
       e.stopPropagation();
       return;
@@ -4664,6 +4667,46 @@
     renderCustomerNodes();
     switchCustomerEditMode(editMode);
     scheduleCustomerSave(`cms: customer ${currentChannel} · nuovo nodo`);
+  }
+
+  function editCustomerNodeOpsLink(id) {
+    const data = getCustData();
+    if (!data) return;
+    const node = (data.nodes || []).find(n => n.id === id);
+    if (!node) return;
+
+    // Build a list of available operativo phases for this channel
+    const ch = CHANNELS[currentChannel];
+    const phases = (ch && ch.operativo && ch.operativo.phases) || [];
+    const phaseList = phases.map(p => `${p.n} = ${p.name}`).join("\n");
+
+    const phaseAns = prompt(
+      `Collega a quale fase operativa?\n\n${phaseList}\n\nScrivi il numero (1-${phases.length}) — vuoto per rimuovere.`,
+      node.ops_phase || ""
+    );
+    if (phaseAns === null) return;
+    const phaseTrim = phaseAns.trim();
+    if (!phaseTrim) {
+      delete node.ops_phase;
+      delete node.ops_text;
+    } else {
+      const phaseN = parseInt(phaseTrim, 10);
+      if (!phaseN || !phases.find(p => p.n === phaseN)) {
+        alert("Fase non valida.");
+        return;
+      }
+      const phase = phases.find(p => p.n === phaseN);
+      const textAns = prompt(
+        `Etichetta del collegamento (es. "${phase.name}", "Verifica lead", ecc.):`,
+        node.ops_text || phase.name
+      );
+      if (textAns === null) return;
+      node.ops_phase = phaseN;
+      node.ops_text = textAns.trim();
+    }
+    renderCustomerNodes();
+    switchCustomerEditMode(editMode);
+    scheduleCustomerSave(`cms: customer ${currentChannel} · collegamento operativo`);
   }
 
   function deleteCustomerNode(id) {
