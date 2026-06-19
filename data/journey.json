@@ -148,15 +148,15 @@
             "id": "n24",
             "type": "touchpoint",
             "label": "Vede ads di remarketing su Giotto per il retail",
-            "x": 718,
-            "y": 270
+            "x": 708,
+            "y": 271
           },
           {
             "id": "n8",
             "type": "touchpoint",
             "label": "Atterra sul sito web",
-            "x": 442,
-            "y": 369
+            "x": 500,
+            "y": 363
           }
         ],
         "edges": [
