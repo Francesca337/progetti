@@ -613,16 +613,16 @@
             "type": "end",
             "outcome": "maybe",
             "label": "Tag P27/N27",
-            "x": 2584,
-            "y": 232
+            "x": 2580,
+            "y": 228
           },
           {
             "id": "n16",
             "type": "end",
             "outcome": "no",
             "label": "Non procede (Chiusa persa)",
-            "x": 2720,
-            "y": 441
+            "x": 2603,
+            "y": 343
           },
           {
             "id": "n17",
