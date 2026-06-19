@@ -658,6 +658,13 @@
             "label": "Riceve da Max la guida Regali Aziendali",
             "x": 895,
             "y": 141
+          },
+          {
+            "id": "n21",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 400,
+            "y": 450
           }
         ],
         "edges": [
