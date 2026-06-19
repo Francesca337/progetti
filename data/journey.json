@@ -127,8 +127,8 @@
             "id": "n15",
             "type": "touchpoint",
             "label": "Compila il form",
-            "x": 738,
-            "y": 158
+            "x": 822,
+            "y": 151
           },
           {
             "id": "n16",
@@ -199,7 +199,7 @@
             "id": "n24",
             "type": "touchpoint",
             "label": "Vede ads di remarketing su Giotto per il retail",
-            "x": 542,
+            "x": 535,
             "y": 320
           }
         ],
