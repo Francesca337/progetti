@@ -176,6 +176,14 @@
             "x": 1897,
             "y": 61,
             "outcome": "yes"
+          },
+          {
+            "id": "n21",
+            "type": "end",
+            "label": "Nuovo esito",
+            "x": 1499,
+            "y": 137,
+            "outcome": "yes"
           }
         ],
         "edges": [
