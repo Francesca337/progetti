@@ -99,8 +99,8 @@
             "id": "n17",
             "type": "touchpoint",
             "label": "Riceve telefonata da Laura per fissare incontro/call",
-            "x": 1493,
-            "y": 589,
+            "x": 1410,
+            "y": 692,
             "ops_phase": 2,
             "ops_text": "Verifica dei lead"
           },
