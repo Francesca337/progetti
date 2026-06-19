@@ -154,9 +154,9 @@
           {
             "id": "n8",
             "type": "touchpoint",
-            "label": "Nuovo touchpoint",
-            "x": 423,
-            "y": 374
+            "label": "Atterra sul sito web",
+            "x": 442,
+            "y": 369
           }
         ],
         "edges": [
