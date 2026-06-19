@@ -147,6 +147,13 @@
             "y": 153,
             "ops_phase": 3,
             "ops_text": "Incontro fissato"
+          },
+          {
+            "id": "n17",
+            "type": "decision",
+            "label": "Nuova decisione",
+            "x": 793,
+            "y": 358
           }
         ],
         "edges": [
