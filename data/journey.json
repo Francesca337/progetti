@@ -72,8 +72,8 @@
             "id": "n9",
             "type": "touchpoint",
             "label": "Fissa un incontro a calendario con Laura",
-            "x": 940,
-            "y": 460,
+            "x": 1032,
+            "y": 825,
             "ops_phase": 3,
             "ops_text": "Incontro fissato"
           },
@@ -81,8 +81,8 @@
             "id": "n10",
             "type": "touchpoint",
             "label": "Incontro: listino, materiali, campionatura",
-            "x": 1240,
-            "y": 360,
+            "x": 1251,
+            "y": 785,
             "ops_phase": 3,
             "ops_text": "Incontro"
           },
@@ -134,8 +134,8 @@
             "id": "n16",
             "type": "touchpoint",
             "label": "Riceve la Guida Rivenditori in PDF",
-            "x": 1051,
-            "y": 320,
+            "x": 1017,
+            "y": 385,
             "ops_phase": 2,
             "ops_text": "Verifica del lead"
           },
