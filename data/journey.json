@@ -644,6 +644,13 @@
             "label": "Visita il sito web > Regali aziendali",
             "x": 525,
             "y": 553
+          },
+          {
+            "id": "n14",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 784,
+            "y": 235
           }
         ],
         "edges": [
