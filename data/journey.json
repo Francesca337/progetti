@@ -108,8 +108,8 @@
             "id": "n19",
             "type": "decision",
             "label": "Ha incontrato Laura. Valuta la proposta",
-            "x": 1639,
-            "y": 569,
+            "x": 2398,
+            "y": 562,
             "ops_phase": 3,
             "ops_text": "Incontro fissato"
           },
@@ -117,8 +117,8 @@
             "id": "n20",
             "type": "end",
             "label": "Entra il lista Mailup \"nuovi rivenditori\" e in lista Mailup \"rivenditori\"",
-            "x": 2280,
-            "y": 395,
+            "x": 2046,
+            "y": 392,
             "outcome": "yes"
           },
           {
