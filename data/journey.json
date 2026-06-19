@@ -152,6 +152,13 @@
             "label": "Nuovo touchpoint",
             "x": 586,
             "y": 330
+          },
+          {
+            "id": "n17",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 670,
+            "y": 360
           }
         ],
         "edges": [
