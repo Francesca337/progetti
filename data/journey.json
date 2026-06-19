@@ -605,8 +605,8 @@
             "id": "n13",
             "type": "decision",
             "label": "L'azienda conferma l'ordine?",
-            "x": 2320,
-            "y": 332
+            "x": 2330,
+            "y": 336
           },
           {
             "id": "n15",
