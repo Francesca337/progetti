@@ -125,7 +125,7 @@
             "type": "touchpoint",
             "label": "Riceve la Guida Rivenditori in PDF",
             "x": 1017,
-            "y": 404,
+            "y": 358,
             "ops_phase": 2,
             "ops_text": "Verifica del lead"
           },
