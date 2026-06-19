@@ -177,7 +177,7 @@
             ],
             "outcome": {
               "text": "I lead entrano in lista \"Nuovi clienti \" Mailup + in lista rivenditori Mailup",
-              "trigger": "Manuale · Laura cambia stato in Bigin"
+              "trigger": "nuovi clienti ricevono mail di benvenuto da Mailup"
             }
           },
           {
