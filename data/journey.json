@@ -570,8 +570,8 @@
             "id": "n8",
             "type": "touchpoint",
             "label": "Compila form B2B (occasione, n° persone, budget, data)",
-            "x": 920,
-            "y": 420
+            "x": 912,
+            "y": 342
           },
           {
             "id": "n9",
