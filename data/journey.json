@@ -230,18 +230,6 @@
             "label": ""
           },
           {
-            "id": "e4",
-            "from": "n4",
-            "to": "n5",
-            "label": "form sito"
-          },
-          {
-            "id": "e5",
-            "from": "n5",
-            "to": "n6",
-            "label": "Laura richiama"
-          },
-          {
             "id": "e6",
             "from": "n7",
             "to": "n6",
