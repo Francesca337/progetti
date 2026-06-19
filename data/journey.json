@@ -99,8 +99,8 @@
             "id": "n17",
             "type": "touchpoint",
             "label": "Riceve follow-up da Laura per fissare incontro/call",
-            "x": 1410,
-            "y": 692,
+            "x": 1404,
+            "y": 845,
             "ops_phase": 2,
             "ops_text": "Verifica dei lead"
           },
@@ -109,7 +109,7 @@
             "type": "decision",
             "label": "Ha incontrato Laura. Valuta la proposta",
             "x": 1747,
-            "y": 688,
+            "y": 819,
             "ops_phase": 3,
             "ops_text": "Incontro fissato"
           },
