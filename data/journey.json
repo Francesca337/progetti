@@ -189,8 +189,8 @@
             "id": "n22",
             "type": "end",
             "label": "Entra in pipeline Pasqua 27",
-            "x": 1906,
-            "y": 245,
+            "x": 2014,
+            "y": 238,
             "outcome": "maybe"
           }
         ],
@@ -313,7 +313,7 @@
             "id": "e20",
             "from": "n19",
             "to": "n22",
-            "label": ""
+            "label": "TAG PASQUA27"
           }
         ]
       },
