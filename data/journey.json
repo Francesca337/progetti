@@ -548,7 +548,7 @@
           {
             "id": "n5",
             "type": "touchpoint",
-            "label": "Visita la landing Regali Aziendali su input di Max",
+            "label": "Visita la landing B2B su input di Max",
             "x": 560,
             "y": 140
           },
@@ -563,8 +563,8 @@
             "id": "n7",
             "type": "touchpoint",
             "label": "Riceve DEM di riattivazione con catalogo Natale 26",
-            "x": 560,
-            "y": 980
+            "x": 557,
+            "y": 747
           },
           {
             "id": "n8",
