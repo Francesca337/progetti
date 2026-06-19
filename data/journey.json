@@ -651,6 +651,13 @@
             "label": "Vede ads Meta di remarketing",
             "x": 831,
             "y": 233
+          },
+          {
+            "id": "n20",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 804,
+            "y": 139
           }
         ],
         "edges": [
