@@ -663,8 +663,8 @@
             "id": "n12",
             "type": "touchpoint",
             "label": "Riceve DEM di riattivazione",
-            "x": 524,
-            "y": 926
+            "x": 533,
+            "y": 932
           }
         ],
         "edges": [
@@ -780,6 +780,12 @@
             "id": "e21",
             "from": "n21",
             "to": "n11",
+            "label": ""
+          },
+          {
+            "id": "e11",
+            "from": "n18",
+            "to": "n12",
             "label": ""
           }
         ]
