@@ -166,8 +166,8 @@
             "id": "n21",
             "type": "end",
             "label": "",
-            "x": 2040,
-            "y": 353,
+            "x": 1994,
+            "y": 352,
             "outcome": "no"
           },
           {
@@ -276,7 +276,7 @@
             "id": "e19",
             "from": "n19",
             "to": "n21",
-            "label": "SPOSTATO IN \"CHIUSA/PERSA\""
+            "label": "CHIUSA/PERSA"
           },
           {
             "id": "e20",
