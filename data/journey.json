@@ -665,6 +665,13 @@
             "label": "Riceve DEM di riattivazione",
             "x": 535,
             "y": 922
+          },
+          {
+            "id": "n22",
+            "type": "entry",
+            "label": "Nuovo entry point",
+            "x": 237,
+            "y": 845
           }
         ],
         "edges": [
