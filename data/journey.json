@@ -192,6 +192,13 @@
             "x": 2014,
             "y": 238,
             "outcome": "maybe"
+          },
+          {
+            "id": "n23",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 580,
+            "y": 450
           }
         ],
         "edges": [
