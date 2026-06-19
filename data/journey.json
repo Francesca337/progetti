@@ -15,7 +15,7 @@
             "id": "n1",
             "type": "entry",
             "label": "Vede ads Meta su Instagram / Facebook",
-            "x": 240,
+            "x": 163,
             "y": 160
           },
           {
@@ -43,8 +43,8 @@
             "id": "n5",
             "type": "touchpoint",
             "label": "Atterra sulla landing rivenditori",
-            "x": 600,
-            "y": 160,
+            "x": 496,
+            "y": 157,
             "ops_phase": 1,
             "ops_text": "Meta Ads Lead Gen"
           },
