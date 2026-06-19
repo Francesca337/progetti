@@ -108,8 +108,8 @@
             "id": "n19",
             "type": "decision",
             "label": "Ha incontrato Laura. Valuta la proposta",
-            "x": 2398,
-            "y": 562,
+            "x": 2424,
+            "y": 565,
             "ops_phase": 3,
             "ops_text": "Incontro fissato"
           },
