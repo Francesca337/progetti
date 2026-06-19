@@ -621,8 +621,8 @@
             "type": "end",
             "outcome": "no",
             "label": "Non procede (Chiusa persa)",
-            "x": 2400,
-            "y": 880
+            "x": 2704,
+            "y": 464
           },
           {
             "id": "n17",
