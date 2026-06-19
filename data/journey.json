@@ -206,8 +206,8 @@
             "id": "n24",
             "type": "touchpoint",
             "label": "Nuovo touchpoint",
-            "x": 670,
-            "y": 450
+            "x": 475,
+            "y": 333
           }
         ],
         "edges": [
