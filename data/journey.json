@@ -217,12 +217,6 @@
             "label": ""
           },
           {
-            "id": "e6",
-            "from": "n7",
-            "to": "n6",
-            "label": "Laura richiama"
-          },
-          {
             "id": "e9",
             "from": "n9",
             "to": "n10",
