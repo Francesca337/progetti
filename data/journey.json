@@ -173,8 +173,8 @@
             "id": "n20",
             "type": "end",
             "label": "Entra il lista Mailup \"nuovi rivenditori\" e in lista Mailup \"rivenditori\"",
-            "x": 1897,
-            "y": 61,
+            "x": 1933,
+            "y": 63,
             "outcome": "yes"
           },
           {
@@ -188,7 +188,7 @@
           {
             "id": "n22",
             "type": "end",
-            "label": "Nuovo esito",
+            "label": "Entra in pipeline Pasqua 27",
             "x": 1898,
             "y": 248,
             "outcome": "maybe"
