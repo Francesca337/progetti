@@ -584,15 +584,15 @@
             "id": "n10",
             "type": "touchpoint",
             "label": "Call di scoperta con Max: capisce esigenze e budget",
-            "x": 1546,
-            "y": 228
+            "x": 1523,
+            "y": 259
           },
           {
             "id": "n11",
             "type": "touchpoint",
             "label": "Riceve proposta personalizzata (preventivo, mockup confezione)",
-            "x": 1898,
-            "y": 229
+            "x": 1876,
+            "y": 262
           },
           {
             "id": "n12",
