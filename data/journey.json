@@ -711,13 +711,13 @@
             "id": "e15",
             "from": "n13",
             "to": "n15",
-            "label": "forse"
+            "label": "FORSE"
           },
           {
             "id": "e16",
             "from": "n13",
             "to": "n16",
-            "label": "no"
+            "label": "NO"
           },
           {
             "id": "e3",
