@@ -52,8 +52,8 @@
             "id": "n6",
             "type": "touchpoint",
             "label": "Risponde alla chiamata, ascolta la proposta",
-            "x": 568,
-            "y": 867,
+            "x": 489,
+            "y": 485,
             "ops_phase": 2,
             "ops_text": "Verifica lead"
           },
