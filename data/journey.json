@@ -642,8 +642,8 @@
             "id": "n19",
             "type": "touchpoint",
             "label": "Visita il sito web > Regali aziendali",
-            "x": 525,
-            "y": 553
+            "x": 560,
+            "y": 554
           },
           {
             "id": "n14",
@@ -762,6 +762,12 @@
             "from": "n20",
             "to": "n10",
             "label": "MAX RICONTATTA"
+          },
+          {
+            "id": "e18",
+            "from": "n3",
+            "to": "n19",
+            "label": ""
           }
         ]
       },
