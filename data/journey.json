@@ -656,8 +656,8 @@
             "id": "n21",
             "type": "touchpoint",
             "label": "Follow-up da parte di Max",
-            "x": 870,
-            "y": 744
+            "x": 887,
+            "y": 838
           },
           {
             "id": "n12",
@@ -786,6 +786,12 @@
             "id": "e11",
             "from": "n18",
             "to": "n12",
+            "label": ""
+          },
+          {
+            "id": "e13",
+            "from": "n12",
+            "to": "n21",
             "label": ""
           }
         ]
