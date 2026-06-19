@@ -638,6 +638,13 @@
             "label": "Cliente acquisito: entra in DEM B2B + riattivazione Pasqua / Natale",
             "x": 2780,
             "y": 320
+          },
+          {
+            "id": "n18",
+            "type": "entry",
+            "label": "Nuovo entry point",
+            "x": 624,
+            "y": 401
           }
         ],
         "edges": [
