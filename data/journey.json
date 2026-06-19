@@ -69,15 +69,6 @@
             "ops_text": "DEM con tracking"
           },
           {
-            "id": "n8",
-            "type": "touchpoint",
-            "label": "Riceve la Guida Rivenditori in PDF",
-            "x": 940,
-            "y": 260,
-            "ops_phase": 2,
-            "ops_text": "Automation Zoho"
-          },
-          {
             "id": "n9",
             "type": "touchpoint",
             "label": "Fissa un incontro a calendario con Laura",
@@ -236,18 +227,6 @@
             "from": "n7",
             "to": "n6",
             "label": "Laura richiama"
-          },
-          {
-            "id": "e7",
-            "from": "n6",
-            "to": "n8",
-            "label": "verificato"
-          },
-          {
-            "id": "e8",
-            "from": "n8",
-            "to": "n9",
-            "label": ""
           },
           {
             "id": "e9",
