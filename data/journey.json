@@ -663,8 +663,8 @@
             "id": "n12",
             "type": "touchpoint",
             "label": "Riceve DEM di riattivazione",
-            "x": 533,
-            "y": 932
+            "x": 535,
+            "y": 922
           }
         ],
         "edges": [
