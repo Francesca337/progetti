@@ -605,16 +605,8 @@
             "id": "n13",
             "type": "decision",
             "label": "L'azienda conferma l'ordine?",
-            "x": 2178,
-            "y": 337
-          },
-          {
-            "id": "n14",
-            "type": "end",
-            "outcome": "yes",
-            "label": "Ordine confermato → produzione → consegna in sede",
-            "x": 2400,
-            "y": 320
+            "x": 2320,
+            "y": 332
           },
           {
             "id": "n15",
@@ -716,12 +708,6 @@
             "label": ""
           },
           {
-            "id": "e14",
-            "from": "n13",
-            "to": "n14",
-            "label": "sì"
-          },
-          {
             "id": "e15",
             "from": "n13",
             "to": "n15",
@@ -732,12 +718,6 @@
             "from": "n13",
             "to": "n16",
             "label": "no"
-          },
-          {
-            "id": "e17",
-            "from": "n14",
-            "to": "n17",
-            "label": "post-consegna"
           }
         ]
       },
