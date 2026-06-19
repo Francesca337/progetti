@@ -181,9 +181,9 @@
             "id": "n21",
             "type": "end",
             "label": "Nuovo esito",
-            "x": 1903,
-            "y": 267,
-            "outcome": "yes"
+            "x": 1905,
+            "y": 152,
+            "outcome": "no"
           }
         ],
         "edges": [
