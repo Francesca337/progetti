@@ -76,7 +76,7 @@
             "id": "n15",
             "type": "touchpoint",
             "label": "Compila il form",
-            "x": 937,
+            "x": 1092,
             "y": 228
           },
           {
@@ -92,8 +92,8 @@
             "id": "n18",
             "type": "touchpoint",
             "label": "Riceve flusso DEM",
-            "x": 2699,
-            "y": 585
+            "x": 2697,
+            "y": 543
           },
           {
             "id": "n17",
@@ -141,15 +141,15 @@
             "id": "n23",
             "type": "touchpoint",
             "label": "Riceve mail di benvenuto",
-            "x": 2461,
-            "y": 586
+            "x": 2456,
+            "y": 584
           },
           {
             "id": "n24",
             "type": "touchpoint",
             "label": "Vede Meta ads di remarketing su Giotto per il retail",
-            "x": 711,
-            "y": 229
+            "x": 792,
+            "y": 233
           },
           {
             "id": "n8",
