@@ -228,13 +228,13 @@
             "id": "e19",
             "from": "n19",
             "to": "n21",
-            "label": "CHIUSA/PERSA"
+            "label": "NO"
           },
           {
             "id": "e20",
             "from": "n19",
             "to": "n22",
-            "label": "TAG PASQUA27"
+            "label": "FORSE"
           },
           {
             "id": "e21",
