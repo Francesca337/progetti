@@ -158,7 +158,9 @@
             "type": "touchpoint",
             "label": "Riceve telefonata da Laura per fissare incontro/call",
             "x": 1365,
-            "y": 158
+            "y": 158,
+            "ops_phase": 2,
+            "ops_text": "Verifica dei lead"
           },
           {
             "id": "n19",
