@@ -598,8 +598,8 @@
             "id": "n13",
             "type": "decision",
             "label": "L'azienda conferma l'ordine?",
-            "x": 2030,
-            "y": 620
+            "x": 1927,
+            "y": 894
           },
           {
             "id": "n15",
@@ -614,8 +614,8 @@
             "type": "end",
             "outcome": "no",
             "label": "Non procede (Chiusa persa)",
-            "x": 2431,
-            "y": 668
+            "x": 2221,
+            "y": 1042
           },
           {
             "id": "n17",
