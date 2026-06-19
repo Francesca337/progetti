@@ -166,6 +166,13 @@
             "y": 1074,
             "ops_phase": 3,
             "ops_text": "Incontro fissato"
+          },
+          {
+            "id": "n10",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 310,
+            "y": 450
           }
         ],
         "edges": [
