@@ -2055,6 +2055,342 @@
     border: 3px solid var(--bg);
   }
   .scroll-area::-webkit-scrollbar-thumb:hover { background: rgba(20,18,14,0.28); }
+
+  /* ============================================================
+     CUSTOMER VIEW — bubble + arrows graph
+     ============================================================ */
+  .cust-wrap {
+    padding: 40px 56px 80px 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .cust-intro {
+    max-width: 760px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .cust-intro .kicker {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    color: var(--gold-deep);
+    font-weight: 500;
+  }
+  .cust-intro h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 28px;
+    margin: 0;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .cust-intro p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 14px;
+    max-width: 640px;
+  }
+
+  .cust-toolbar {
+    display: none;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 14px;
+    background: var(--card-soft);
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    width: max-content;
+    font-size: 13px;
+  }
+  body.editing .cust-toolbar { display: inline-flex; }
+  .cust-toolbar .group {
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .cust-toolbar .label {
+    color: var(--ink-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .cust-toolbar button {
+    appearance: none;
+    border: 1px solid var(--hairline);
+    background: var(--bg);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font: inherit;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .cust-toolbar button:hover { background: var(--gold-pale); border-color: var(--gold-soft); }
+  .cust-toolbar button .ti { font-size: 14px; color: var(--gold-deep); }
+  .cust-toolbar .hint {
+    color: var(--ink-muted);
+    font-size: 12px;
+    font-style: italic;
+  }
+
+  .cust-canvas {
+    position: relative;
+    width: 1800px;
+    height: 1100px;
+    background:
+      radial-gradient(circle at 1px 1px, rgba(20,18,14,0.06) 1px, transparent 0)
+      0 0 / 24px 24px,
+      var(--card-softer);
+    border: 1px solid var(--hairline);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  body.editing .cust-canvas {
+    background:
+      radial-gradient(circle at 1px 1px, rgba(168,144,96,0.18) 1px, transparent 0)
+      0 0 / 24px 24px,
+      var(--card-softer);
+  }
+  body.editing.cust-connect-mode .cust-canvas { cursor: crosshair; }
+
+  .cust-edges {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+  }
+  .cust-edges path {
+    fill: none;
+    stroke: #A89060;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.78;
+    transition: stroke 0.15s, stroke-width 0.15s, opacity 0.15s;
+  }
+  body.editing .cust-edges path { pointer-events: stroke; cursor: pointer; }
+  body.editing .cust-edges path:hover {
+    stroke: var(--actor-manual);
+    stroke-width: 2.2;
+    opacity: 1;
+  }
+  .cust-edges .edge-label {
+    font-family: var(--sans);
+    font-size: 11px;
+    fill: var(--ink-muted);
+    paint-order: stroke;
+    stroke: var(--card-softer);
+    stroke-width: 4;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+
+  .cust-node {
+    position: absolute;
+    min-width: 160px;
+    max-width: 240px;
+    padding: 12px 14px;
+    background: var(--card);
+    border: 1.5px solid var(--hairline);
+    border-radius: 16px;
+    box-shadow: 0 4px 14px -8px rgba(20,18,14,0.18);
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.35;
+    transform: translate(-50%, -50%);
+    transition: box-shadow 0.15s, border-color 0.15s, transform 0.05s;
+    user-select: none;
+  }
+  .cust-node .cust-node-kicker {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ink-muted);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .cust-node .cust-node-label {
+    display: block;
+    color: var(--ink);
+    font-weight: 450;
+    outline: none;
+  }
+  .cust-node .cust-node-ref {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--card-soft);
+    border: 1px solid var(--hairline-soft);
+    font-size: 10.5px;
+    color: var(--ink-muted);
+    letter-spacing: 0.3px;
+  }
+  .cust-node .cust-node-ref .ti { font-size: 11px; color: var(--gold); }
+
+  /* type variants */
+  .cust-node.type-entry {
+    background: var(--gold-pale);
+    border-color: var(--gold-soft);
+    border-radius: 999px;
+    padding: 14px 22px;
+    max-width: 280px;
+  }
+  .cust-node.type-entry .cust-node-kicker { color: var(--gold-deep); }
+  .cust-node.type-entry .cust-node-label { color: var(--ink); font-weight: 500; }
+
+  .cust-node.type-touchpoint {
+    background: var(--card);
+  }
+
+  .cust-node.type-decision {
+    background: #FBF6E8;
+    border-color: var(--branch-maybe);
+    border-style: dashed;
+    border-radius: 14px;
+  }
+  .cust-node.type-decision .cust-node-kicker { color: var(--branch-maybe); }
+
+  .cust-node.type-end {
+    background: var(--card);
+    border-radius: 12px;
+    border-width: 2px;
+  }
+  .cust-node.type-end.outcome-yes  { border-color: var(--branch-yes);   background: var(--branch-yes-bg); }
+  .cust-node.type-end.outcome-yes .cust-node-kicker { color: var(--branch-yes); }
+  .cust-node.type-end.outcome-maybe { border-color: var(--branch-maybe); background: var(--branch-maybe-bg); }
+  .cust-node.type-end.outcome-maybe .cust-node-kicker { color: var(--branch-maybe); }
+  .cust-node.type-end.outcome-no    { border-color: var(--branch-no);    background: var(--branch-no-bg); }
+  .cust-node.type-end.outcome-no .cust-node-kicker { color: var(--branch-no); }
+
+  body.editing .cust-node {
+    cursor: grab;
+  }
+  body.editing .cust-node.dragging {
+    cursor: grabbing;
+    z-index: 50;
+    box-shadow: 0 10px 28px -10px rgba(20,18,14,0.32);
+    transform: translate(-50%, -50%) scale(1.02);
+  }
+  body.editing .cust-node.connect-source {
+    box-shadow: 0 0 0 3px var(--gold-soft), 0 4px 14px -8px rgba(20,18,14,0.18);
+    border-color: var(--gold-deep);
+  }
+  body.editing .cust-node .cust-node-label[contenteditable="true"] {
+    cursor: text;
+  }
+  body.editing .cust-node .cust-node-label:focus {
+    background: var(--gold-pale);
+    box-shadow: inset 0 -2px 0 var(--gold);
+    border-radius: 3px;
+  }
+
+  /* hover actions in edit mode */
+  .cust-node-actions {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    display: none;
+    gap: 4px;
+    background: var(--card);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 3px;
+    box-shadow: 0 4px 12px -4px rgba(20,18,14,0.18);
+  }
+  body.editing .cust-node:hover .cust-node-actions,
+  body.editing .cust-node.dragging .cust-node-actions {
+    display: inline-flex;
+  }
+  .cust-node-actions button {
+    appearance: none;
+    border: none;
+    background: transparent;
+    width: 22px; height: 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    color: var(--ink-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s;
+  }
+  .cust-node-actions button:hover { background: var(--gold-pale); color: var(--gold-deep); }
+  .cust-node-actions button.danger:hover { background: var(--branch-no-bg); color: var(--branch-no); }
+  .cust-node-actions button .ti { font-size: 14px; }
+
+  .cust-node-type-pill {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    background: var(--card);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 2px 4px 2px 8px;
+    font-size: 10px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+  }
+  body.editing .cust-node:hover .cust-node-type-pill { display: inline-flex; align-items: center; gap: 4px; }
+  .cust-node-type-pill select {
+    appearance: none;
+    border: none;
+    background: transparent;
+    font: inherit;
+    color: var(--ink);
+    font-weight: 500;
+    padding: 0 14px 0 0;
+    cursor: pointer;
+    background-image: linear-gradient(45deg, transparent 50%, var(--gold-deep) 50%),
+                      linear-gradient(135deg, var(--gold-deep) 50%, transparent 50%);
+    background-position: calc(100% - 6px) 50%, calc(100% - 3px) 50%;
+    background-size: 3px 3px;
+    background-repeat: no-repeat;
+  }
+
+  /* drag-edge preview line during connect mode */
+  .cust-edge-preview {
+    stroke: var(--gold-deep);
+    stroke-width: 1.8;
+    stroke-dasharray: 6 4;
+    fill: none;
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  .cust-legend {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--ink-muted);
+    align-items: center;
+    margin-top: 4px;
+  }
+  .cust-legend .dot {
+    display: inline-block;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 1.5px solid var(--hairline);
+    margin-right: 6px;
+    vertical-align: -2px;
+  }
+  .cust-legend .dot.entry    { background: var(--gold-pale); border-color: var(--gold-soft); }
+  .cust-legend .dot.tp       { background: var(--card); }
+  .cust-legend .dot.decision { background: #FBF6E8; border-color: var(--branch-maybe); border-style: dashed; }
+  .cust-legend .dot.end-yes  { background: var(--branch-yes-bg); border-color: var(--branch-yes); border-radius: 3px; }
+  .cust-legend .dot.end-no   { background: var(--branch-no-bg);  border-color: var(--branch-no);  border-radius: 3px; }
 </style>
 </head>
 <body>
@@ -3833,6 +4169,563 @@
     if (svg) [...svg.querySelectorAll("path.link")].forEach(n => n.remove());
   }
 
+  // ============================================================
+  // CUSTOMER VIEW — bubble + arrows graph (per-channel)
+  // ============================================================
+  const CUST_TYPES = [
+    { key: "entry",      label: "Entry point",  kicker: "Entry" },
+    { key: "touchpoint", label: "Touchpoint",   kicker: "Touchpoint" },
+    { key: "decision",   label: "Decisione",    kicker: "Decisione" },
+    { key: "end",        label: "Esito finale", kicker: "Esito" },
+  ];
+  const CUST_END_OUTCOMES = [
+    { key: "yes",   label: "Positivo" },
+    { key: "maybe", label: "Rimandato" },
+    { key: "no",    label: "Negativo" },
+  ];
+
+  let custIsBoundToDocument = false;
+  let custConnectSourceId = null;       // node id while drawing a new edge
+  let custDragState = null;             // { id, dx, dy, moved }
+  let custSaveTimer = null;             // debounce timer for journey writes
+
+  function escapeCust(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function renderCustomerView(viewData) {
+    clearTrack();
+    document.body.classList.remove("cust-connect-mode");
+    custConnectSourceId = null;
+    custDragState = null;
+    const track = document.getElementById("track");
+    track.style.display = "";
+
+    const data = viewData; // { persona, intro, nodes, edges }
+    const wrap = document.createElement("div");
+    wrap.className = "cust-wrap";
+    wrap.innerHTML = `
+      <div class="cust-intro">
+        <span class="kicker">Customer journey · ${escapeCust(data.persona || "")}</span>
+        <h2 contenteditable="false" id="custIntroTitle">${escapeCust(data.intro_title || "Come arriva, cosa vive, dove arriva")}</h2>
+        <p contenteditable="false" id="custIntroText">${escapeCust(data.intro || "")}</p>
+      </div>
+      <div class="cust-toolbar" id="custToolbar">
+        <span class="label">Aggiungi nodo</span>
+        ${CUST_TYPES.map(t => `
+          <button type="button" data-add="${t.key}">
+            <i class="ti ${t.key === "entry" ? "ti-flag" : t.key === "touchpoint" ? "ti-point" : t.key === "decision" ? "ti-arrows-split-2" : "ti-flag-check"}"></i>${t.label}
+          </button>
+        `).join("")}
+        <span class="hint">Trascina i nodi · click <b>＋</b> sul nodo per connettere · doppio click sulla freccia per nominarla · click sulla freccia per eliminarla</span>
+      </div>
+      <div class="cust-canvas" id="custCanvas">
+        <svg class="cust-edges" id="custEdges" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1100" preserveAspectRatio="none">
+          <defs>
+            <marker id="custArrow" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10" fill="none" stroke="#A89060" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+      <div class="cust-legend">
+        <span><span class="dot entry"></span>Entry point</span>
+        <span><span class="dot tp"></span>Touchpoint</span>
+        <span><span class="dot decision"></span>Decisione</span>
+        <span><span class="dot end-yes"></span>Esito positivo</span>
+        <span><span class="dot end-no"></span>Esito negativo</span>
+      </div>
+    `;
+    track.appendChild(wrap);
+
+    renderCustomerNodes();
+    renderCustomerEdges();
+    bindCustomerHandlers();
+    bindCustomerIntroEditing();
+  }
+
+  function getCustData() {
+    const ch = CHANNELS[currentChannel];
+    return ch && ch.customer;
+  }
+
+  function renderCustomerNodes() {
+    const canvas = document.getElementById("custCanvas");
+    if (!canvas) return;
+    // Wipe existing nodes (keep SVG)
+    [...canvas.querySelectorAll(".cust-node")].forEach(n => n.remove());
+    const data = getCustData();
+    if (!data || !Array.isArray(data.nodes)) return;
+    data.nodes.forEach(node => canvas.appendChild(buildCustomerNode(node)));
+  }
+
+  function buildCustomerNode(node) {
+    const el = document.createElement("div");
+    const typeCls = "type-" + (node.type || "touchpoint");
+    const outcomeCls = node.type === "end" && node.outcome ? "outcome-" + node.outcome : "";
+    el.className = `cust-node ${typeCls} ${outcomeCls}`.trim();
+    el.dataset.id = node.id;
+    el.style.left = (node.x || 200) + "px";
+    el.style.top  = (node.y || 200) + "px";
+
+    const typeMeta = CUST_TYPES.find(t => t.key === node.type) || CUST_TYPES[1];
+    const kicker = node.type === "end" && node.outcome
+      ? (CUST_END_OUTCOMES.find(o => o.key === node.outcome) || {}).label || typeMeta.kicker
+      : typeMeta.kicker;
+
+    let refHtml = "";
+    if (node.ops_phase || node.ops_text) {
+      refHtml = `<span class="cust-node-ref" title="Collegamento all'operativo">
+        <i class="ti ti-link"></i>${node.ops_phase ? "Fase " + escapeCust(node.ops_phase) : ""}${node.ops_phase && node.ops_text ? " · " : ""}${escapeCust(node.ops_text || "")}
+      </span>`;
+    }
+
+    el.innerHTML = `
+      <span class="cust-node-kicker">${escapeCust(kicker)}</span>
+      <span class="cust-node-label" data-original="${escapeCust(node.label || "")}">${escapeCust(node.label || "")}</span>
+      ${refHtml}
+      <div class="cust-node-actions">
+        <button type="button" data-cust-action="connect" title="Connetti ad altro nodo"><i class="ti ti-arrow-right"></i></button>
+        <button type="button" class="danger" data-cust-action="delete" title="Elimina nodo"><i class="ti ti-trash"></i></button>
+      </div>
+      <span class="cust-node-type-pill">
+        <select data-cust-field="type">
+          ${CUST_TYPES.map(t => `<option value="${t.key}" ${t.key === (node.type || "touchpoint") ? "selected" : ""}>${t.label}</option>`).join("")}
+        </select>
+        ${node.type === "end" ? `
+          <select data-cust-field="outcome" style="margin-left:6px">
+            ${CUST_END_OUTCOMES.map(o => `<option value="${o.key}" ${o.key === (node.outcome || "yes") ? "selected" : ""}>${o.label}</option>`).join("")}
+          </select>` : ""}
+      </span>
+    `;
+    return el;
+  }
+
+  function renderCustomerEdges() {
+    const svg = document.getElementById("custEdges");
+    if (!svg) return;
+    [...svg.querySelectorAll("path.cust-edge, text.edge-label")].forEach(n => n.remove());
+    const data = getCustData();
+    if (!data) return;
+    const nodeById = new Map((data.nodes || []).map(n => [n.id, n]));
+    (data.edges || []).forEach(edge => {
+      const a = nodeById.get(edge.from);
+      const b = nodeById.get(edge.to);
+      if (!a || !b) return;
+      const d = buildEdgePath(a, b);
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", d);
+      path.setAttribute("class", "cust-edge");
+      path.setAttribute("marker-end", "url(#custArrow)");
+      path.dataset.id = edge.id;
+      svg.appendChild(path);
+      if (edge.label) {
+        const mid = midpoint(a, b);
+        const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        txt.setAttribute("class", "edge-label");
+        txt.setAttribute("x", mid.x);
+        txt.setAttribute("y", mid.y - 6);
+        txt.setAttribute("text-anchor", "middle");
+        txt.textContent = edge.label;
+        svg.appendChild(txt);
+      }
+    });
+  }
+
+  function buildEdgePath(a, b) {
+    // Curved cubic bezier from a to b. Pull control points along the dominant axis.
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    const dist = Math.hypot(dx, dy);
+    const horiz = Math.abs(dx) >= Math.abs(dy);
+    const k = Math.min(220, Math.max(60, dist * 0.45));
+    const c1x = horiz ? a.x + Math.sign(dx) * k : a.x;
+    const c1y = horiz ? a.y : a.y + Math.sign(dy) * k;
+    const c2x = horiz ? b.x - Math.sign(dx) * k : b.x;
+    const c2y = horiz ? b.y : b.y - Math.sign(dy) * k;
+    // Slightly retract end point so arrowhead doesn't pierce node
+    const retract = 14;
+    const angle = Math.atan2(b.y - c2y, b.x - c2x);
+    const ex = b.x - Math.cos(angle) * retract;
+    const ey = b.y - Math.sin(angle) * retract;
+    return `M ${a.x} ${a.y} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${ex} ${ey}`;
+  }
+
+  function midpoint(a, b) {
+    return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+  }
+
+  // ---- Editing interactions -----------------------------------
+  function bindCustomerHandlers() {
+    const canvas = document.getElementById("custCanvas");
+    const toolbar = document.getElementById("custToolbar");
+    if (!canvas) return;
+
+    // Toolbar add-node buttons
+    toolbar.querySelectorAll("button[data-add]").forEach(btn => {
+      btn.addEventListener("click", () => addCustomerNode(btn.dataset.add));
+    });
+
+    // Delegated handlers on the canvas
+    canvas.addEventListener("click", onCustomerCanvasClick);
+    canvas.addEventListener("dblclick", onCustomerCanvasDblClick);
+    canvas.addEventListener("mousedown", onCustomerCanvasMouseDown);
+    canvas.addEventListener("change", onCustomerCanvasChange);
+    canvas.addEventListener("focusout", onCustomerCanvasFocusOut, true);
+
+    // Bind document-level handlers once (drag end, connect-mode cancel)
+    if (!custIsBoundToDocument) {
+      custIsBoundToDocument = true;
+      document.addEventListener("mouseup", onCustomerDocMouseUp);
+      document.addEventListener("mousemove", onCustomerCanvasMouseMove);
+      document.addEventListener("keydown", onCustomerDocKeyDown);
+    }
+
+    // Wire the header Edit toggle — bootDashboard isn't called on this view,
+    // so we attach our own handler that owns the editMode state for the customer canvas.
+    const editToggleBtn   = document.getElementById("editToggle");
+    const editToggleLabel = document.getElementById("editToggleLabel");
+    if (editToggleBtn && !editToggleBtn.dataset.custBound) {
+      editToggleBtn.dataset.custBound = "1";
+      editToggleBtn.addEventListener("click", () => {
+        editMode = !editMode;
+        document.body.classList.toggle("editing", editMode);
+        editToggleLabel.textContent = editMode ? "Esci modifica" : "Modifica";
+        editToggleBtn.title = editMode ? "Esci dalla modifica" : "Attiva modifica";
+        switchCustomerEditMode(editMode);
+      });
+    }
+  }
+
+  function bindCustomerIntroEditing() {
+    const title = document.getElementById("custIntroTitle");
+    const text  = document.getElementById("custIntroText");
+    [title, text].forEach(el => {
+      if (!el) return;
+      el.addEventListener("focus", () => { el.dataset.original = el.textContent; });
+      el.addEventListener("blur", () => {
+        const cur = (el.textContent || "").trim();
+        if (cur === (el.dataset.original || "").trim()) return;
+        const data = getCustData();
+        if (!data) return;
+        if (el.id === "custIntroTitle") data.intro_title = cur;
+        else data.intro = cur;
+        scheduleCustomerSave(`cms: customer ${currentChannel} · intro aggiornata`);
+      });
+    });
+    // Toggle contenteditable depending on edit mode (handled in switchCustomerEditMode)
+    switchCustomerEditMode(editMode);
+  }
+
+  function switchCustomerEditMode(on) {
+    const canvas = document.getElementById("custCanvas");
+    if (!canvas) return;
+    canvas.querySelectorAll(".cust-node-label").forEach(lbl => {
+      lbl.setAttribute("contenteditable", on ? "true" : "false");
+    });
+    const title = document.getElementById("custIntroTitle");
+    const text  = document.getElementById("custIntroText");
+    if (title) title.setAttribute("contenteditable", on ? "true" : "false");
+    if (text)  text.setAttribute("contenteditable",  on ? "true" : "false");
+    if (!on) {
+      document.body.classList.remove("cust-connect-mode");
+      custConnectSourceId = null;
+      [...canvas.querySelectorAll(".connect-source")].forEach(n => n.classList.remove("connect-source"));
+      const prev = document.getElementById("custEdgePreview");
+      if (prev) prev.remove();
+    }
+  }
+
+  function onCustomerCanvasClick(e) {
+    if (!editMode) return;
+    const actionBtn = e.target.closest("[data-cust-action]");
+    const node = e.target.closest(".cust-node");
+    if (actionBtn && node) {
+      const id = node.dataset.id;
+      if (actionBtn.dataset.custAction === "delete") {
+        deleteCustomerNode(id);
+      } else if (actionBtn.dataset.custAction === "connect") {
+        startCustomerConnect(id);
+      }
+      e.stopPropagation();
+      return;
+    }
+    // If we're in connect mode, clicking another node completes the edge
+    if (custConnectSourceId && node && node.dataset.id !== custConnectSourceId) {
+      completeCustomerConnect(node.dataset.id);
+      return;
+    }
+    // Click on edge → delete (with confirm)
+    const edgePath = e.target.closest("path.cust-edge");
+    if (edgePath) {
+      deleteCustomerEdge(edgePath.dataset.id);
+      return;
+    }
+    // Click on empty canvas → cancel connect
+    if (custConnectSourceId && !node) cancelCustomerConnect();
+  }
+
+  function onCustomerCanvasDblClick(e) {
+    if (!editMode) return;
+    const edgePath = e.target.closest("path.cust-edge");
+    if (edgePath) {
+      const data = getCustData();
+      const edge = (data.edges || []).find(ed => ed.id === edgePath.dataset.id);
+      if (!edge) return;
+      const cur = prompt("Etichetta della freccia (lascia vuoto per rimuovere):", edge.label || "");
+      if (cur === null) return;
+      edge.label = cur.trim() || "";
+      renderCustomerEdges();
+      scheduleCustomerSave(`cms: customer ${currentChannel} · etichetta freccia`);
+    }
+  }
+
+  function onCustomerCanvasMouseDown(e) {
+    if (!editMode) return;
+    const node = e.target.closest(".cust-node");
+    if (!node) return;
+    // Don't start drag on interactive children
+    if (e.target.closest("button, select, [contenteditable=\"true\"]")) return;
+    const data = getCustData();
+    if (!data) return;
+    const id = node.dataset.id;
+    const nodeData = (data.nodes || []).find(n => n.id === id);
+    if (!nodeData) return;
+    const z = (typeof zoomLevel === "number" && zoomLevel) ? zoomLevel : 1;
+    const canvas = document.getElementById("custCanvas");
+    const rect = canvas.getBoundingClientRect();
+    const mouseCanvasX = (e.clientX - rect.left) / z;
+    const mouseCanvasY = (e.clientY - rect.top)  / z;
+    custDragState = {
+      id,
+      offsetX: mouseCanvasX - (nodeData.x || 0),
+      offsetY: mouseCanvasY - (nodeData.y || 0),
+      moved: false,
+    };
+    node.classList.add("dragging");
+    e.preventDefault();
+  }
+
+  function onCustomerCanvasMouseMove(e) {
+    if (!editMode) return;
+    if (!custDragState && !custConnectSourceId) return;
+    const canvas = document.getElementById("custCanvas");
+    if (!canvas) return;
+    const z = (typeof zoomLevel === "number" && zoomLevel) ? zoomLevel : 1;
+    const rect = canvas.getBoundingClientRect();
+    const cx = (e.clientX - rect.left) / z;
+    const cy = (e.clientY - rect.top)  / z;
+
+    if (custDragState) {
+      const data = getCustData();
+      const node = (data.nodes || []).find(n => n.id === custDragState.id);
+      if (!node) return;
+      node.x = clamp(cx - custDragState.offsetX, 80, 1800 - 40);
+      node.y = clamp(cy - custDragState.offsetY, 60, 1100 - 40);
+      custDragState.moved = true;
+      const el = canvas.querySelector(`.cust-node[data-id="${cssEsc(node.id)}"]`);
+      if (el) {
+        el.style.left = node.x + "px";
+        el.style.top  = node.y + "px";
+      }
+      renderCustomerEdges();
+    } else if (custConnectSourceId) {
+      const data = getCustData();
+      const src = (data.nodes || []).find(n => n.id === custConnectSourceId);
+      if (!src) return;
+      const svg = document.getElementById("custEdges");
+      if (!svg) return;
+      let prev = document.getElementById("custEdgePreview");
+      if (!prev) {
+        prev = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        prev.setAttribute("id", "custEdgePreview");
+        prev.setAttribute("class", "cust-edge-preview");
+        svg.appendChild(prev);
+      }
+      prev.setAttribute("d", buildEdgePath(src, { x: cx, y: cy }));
+    }
+  }
+
+  function onCustomerDocMouseUp() {
+    if (!custDragState) return;
+    const canvas = document.getElementById("custCanvas");
+    if (canvas) {
+      const node = canvas.querySelector(`.cust-node[data-id="${cssEsc(custDragState.id)}"]`);
+      if (node) node.classList.remove("dragging");
+    }
+    if (custDragState.moved) {
+      scheduleCustomerSave(`cms: customer ${currentChannel} · riposiziona nodo`);
+    }
+    custDragState = null;
+  }
+
+  function onCustomerDocKeyDown(e) {
+    if (e.key === "Escape" && custConnectSourceId) {
+      cancelCustomerConnect();
+    }
+  }
+
+  function onCustomerCanvasChange(e) {
+    if (!editMode) return;
+    const node = e.target.closest(".cust-node");
+    if (!node) return;
+    const data = getCustData();
+    if (!data) return;
+    const nodeData = (data.nodes || []).find(n => n.id === node.dataset.id);
+    if (!nodeData) return;
+    if (e.target.matches("[data-cust-field=\"type\"]")) {
+      nodeData.type = e.target.value;
+      if (nodeData.type === "end" && !nodeData.outcome) nodeData.outcome = "yes";
+      if (nodeData.type !== "end") delete nodeData.outcome;
+      renderCustomerNodes();
+      renderCustomerEdges();
+      switchCustomerEditMode(editMode);
+      scheduleCustomerSave(`cms: customer ${currentChannel} · cambia tipo nodo`);
+    } else if (e.target.matches("[data-cust-field=\"outcome\"]")) {
+      nodeData.outcome = e.target.value;
+      renderCustomerNodes();
+      renderCustomerEdges();
+      switchCustomerEditMode(editMode);
+      scheduleCustomerSave(`cms: customer ${currentChannel} · cambia esito`);
+    }
+  }
+
+  function onCustomerCanvasFocusOut(e) {
+    if (!editMode) return;
+    const lbl = e.target.closest(".cust-node-label");
+    if (!lbl) return;
+    const node = lbl.closest(".cust-node");
+    if (!node) return;
+    const original = lbl.dataset.original || "";
+    const cur = (lbl.textContent || "").trim();
+    if (cur === original.trim()) return;
+    const data = getCustData();
+    if (!data) return;
+    const nodeData = (data.nodes || []).find(n => n.id === node.dataset.id);
+    if (!nodeData) return;
+    nodeData.label = cur;
+    lbl.dataset.original = cur;
+    scheduleCustomerSave(`cms: customer ${currentChannel} · rinomina nodo`);
+  }
+
+  function startCustomerConnect(id) {
+    if (custConnectSourceId === id) { cancelCustomerConnect(); return; }
+    cancelCustomerConnect();
+    custConnectSourceId = id;
+    document.body.classList.add("cust-connect-mode");
+    const canvas = document.getElementById("custCanvas");
+    const src = canvas.querySelector(`.cust-node[data-id="${cssEsc(id)}"]`);
+    if (src) src.classList.add("connect-source");
+  }
+
+  function cancelCustomerConnect() {
+    custConnectSourceId = null;
+    document.body.classList.remove("cust-connect-mode");
+    const canvas = document.getElementById("custCanvas");
+    if (canvas) [...canvas.querySelectorAll(".connect-source")].forEach(n => n.classList.remove("connect-source"));
+    const prev = document.getElementById("custEdgePreview");
+    if (prev) prev.remove();
+  }
+
+  function completeCustomerConnect(targetId) {
+    const data = getCustData();
+    if (!data) return;
+    data.edges = data.edges || [];
+    // Avoid duplicate edge
+    const exists = data.edges.some(e => e.from === custConnectSourceId && e.to === targetId);
+    if (!exists) {
+      data.edges.push({ id: nextCustId("e", data.edges), from: custConnectSourceId, to: targetId, label: "" });
+      renderCustomerEdges();
+      scheduleCustomerSave(`cms: customer ${currentChannel} · nuova connessione`);
+    }
+    cancelCustomerConnect();
+  }
+
+  function addCustomerNode(type) {
+    const data = getCustData();
+    if (!data) return;
+    data.nodes = data.nodes || [];
+    const id = nextCustId("n", data.nodes);
+    const node = {
+      id,
+      type,
+      label: type === "entry" ? "Nuovo entry point"
+           : type === "decision" ? "Nuova decisione"
+           : type === "end" ? "Nuovo esito"
+           : "Nuovo touchpoint",
+      x: 220 + (data.nodes.length % 6) * 90,
+      y: 180 + Math.floor(data.nodes.length / 6) * 90,
+    };
+    if (type === "end") node.outcome = "yes";
+    data.nodes.push(node);
+    renderCustomerNodes();
+    switchCustomerEditMode(editMode);
+    scheduleCustomerSave(`cms: customer ${currentChannel} · nuovo nodo`);
+  }
+
+  function deleteCustomerNode(id) {
+    const data = getCustData();
+    if (!data) return;
+    const node = (data.nodes || []).find(n => n.id === id);
+    if (!node) return;
+    if (!confirm(`Elimina nodo "${node.label || id}"?`)) return;
+    data.nodes = (data.nodes || []).filter(n => n.id !== id);
+    data.edges = (data.edges || []).filter(e => e.from !== id && e.to !== id);
+    renderCustomerNodes();
+    renderCustomerEdges();
+    scheduleCustomerSave(`cms: customer ${currentChannel} · elimina nodo`);
+  }
+
+  function deleteCustomerEdge(id) {
+    const data = getCustData();
+    if (!data) return;
+    const edge = (data.edges || []).find(e => e.id === id);
+    if (!edge) return;
+    if (!confirm("Elimina questa connessione?")) return;
+    data.edges = data.edges.filter(e => e.id !== id);
+    renderCustomerEdges();
+    scheduleCustomerSave(`cms: customer ${currentChannel} · elimina freccia`);
+  }
+
+  function nextCustId(prefix, arr) {
+    let i = 1;
+    const used = new Set((arr || []).map(x => x.id));
+    while (used.has(prefix + i)) i++;
+    return prefix + i;
+  }
+
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  function cssEsc(s) {
+    return String(s).replace(/(["\\\\])/g, "\\$1");
+  }
+
+  // Debounced commit to data/journey.json — collapse rapid edits into one PR
+  function scheduleCustomerSave(message) {
+    if (custSaveTimer) clearTimeout(custSaveTimer);
+    custSaveTimer = setTimeout(() => saveCustomerToGitHub(message), 1200);
+  }
+
+  async function saveCustomerToGitHub(message) {
+    const localCh = CHANNELS[currentChannel];
+    if (!localCh) return;
+    try {
+      const cur = await ggGet("data/journey.json");
+      const journey = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, "")))));
+      journey.channels = journey.channels || {};
+      journey.channels[currentChannel] = journey.channels[currentChannel] || {};
+      journey.channels[currentChannel].customer = localCh.customer;
+      const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(journey, null, 2))));
+      await ggPut("data/journey.json", newContent, message || `cms: customer ${currentChannel}`);
+    } catch (err) {
+      console.error("Customer save failed:", err);
+      alert("Errore salvataggio customer view: " + (err.message || err));
+    }
+  }
+
   function showCurrentView() {
     updateBrandSubtitle();
     const ch = CHANNELS[currentChannel];
@@ -3870,8 +4763,10 @@
       laura  = viewData.laura  || {};
       dems   = viewData.dems   || {};
       bootDashboard();
+    } else if (currentView === "customer") {
+      renderCustomerView(viewData);
     } else {
-      // Customer / Timeline — placeholder until commits 2 & 3
+      // Timeline — placeholder until commit 3
       clearTrack();
       emptyEl.hidden = false;
       const view = VIEWS.find(v => v.key === currentView);

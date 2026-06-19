@@ -6,7 +6,47 @@
       "icon": "ti-building-store",
       "campaign": "Natale 2026",
       "active": true,
-      "customer": null,
+      "customer": {
+        "persona": "Rivenditore",
+        "intro_title": "Come arriva, cosa vive, dove finisce",
+        "intro": "Mappa lato cliente: dai diversi entry point fino a diventare cliente attivo (o a rimandare a Pasqua). Trascina i nodi per riorganizzare, click su ＋ per collegarli.",
+        "nodes": [
+          { "id": "n1", "type": "entry", "label": "Vede ads Meta su Instagram / Facebook", "x": 240,  "y": 160 },
+          { "id": "n2", "type": "entry", "label": "Riceve telefonata a freddo da Laura",   "x": 240,  "y": 360 },
+          { "id": "n3", "type": "entry", "label": "Riceve DEM riattivazione (lead pre-Natale 24)", "x": 240, "y": 560 },
+          { "id": "n4", "type": "entry", "label": "Passaparola: cerca «Pasticceria Giotto» su Google", "x": 240, "y": 760 },
+
+          { "id": "n5", "type": "touchpoint", "label": "Atterra sulla landing rivenditori e compila il form", "x": 600, "y": 160, "ops_phase": 1, "ops_text": "Meta Ads Lead Gen" },
+          { "id": "n6", "type": "touchpoint", "label": "Risponde alla chiamata, ascolta la proposta",          "x": 600, "y": 360, "ops_phase": 2, "ops_text": "Verifica lead" },
+          { "id": "n7", "type": "touchpoint", "label": "Clicca il link nella DEM e arriva sulla guida",         "x": 600, "y": 560, "ops_phase": 1, "ops_text": "DEM con tracking" },
+
+          { "id": "n8", "type": "touchpoint", "label": "Riceve la Guida Rivenditori in PDF",        "x": 940, "y": 260, "ops_phase": 2, "ops_text": "Automation Zoho" },
+          { "id": "n9", "type": "touchpoint", "label": "Fissa un incontro a calendario con Laura", "x": 940, "y": 460, "ops_phase": 3, "ops_text": "Incontro fissato" },
+
+          { "id": "n10", "type": "touchpoint", "label": "Incontro: listino, materiali, campionatura", "x": 1240, "y": 360, "ops_phase": 3, "ops_text": "Incontro" },
+
+          { "id": "n11", "type": "decision", "label": "Adotto Pasticceria Giotto per Natale 26?", "x": 1240, "y": 600 },
+
+          { "id": "n12", "type": "end", "outcome": "yes",   "label": "Diventa cliente: onboarding + DEM ricorrenti", "x": 1560, "y": 360, "ops_phase": 5, "ops_text": "Clienti acquisiti" },
+          { "id": "n13", "type": "end", "outcome": "maybe", "label": "Rimanda a Pasqua 27 (riattivazione gennaio)",  "x": 1560, "y": 600, "ops_phase": 4, "ops_text": "Fork Pasqua 27" },
+          { "id": "n14", "type": "end", "outcome": "no",    "label": "Non procede (Chiusa persa)",                    "x": 1560, "y": 820, "ops_phase": 4, "ops_text": "Chiusa persa" }
+        ],
+        "edges": [
+          { "id": "e1",  "from": "n1", "to": "n5", "label": "" },
+          { "id": "e2",  "from": "n2", "to": "n6", "label": "" },
+          { "id": "e3",  "from": "n3", "to": "n7", "label": "" },
+          { "id": "e4",  "from": "n4", "to": "n5", "label": "form sito" },
+          { "id": "e5",  "from": "n5", "to": "n6", "label": "Laura richiama" },
+          { "id": "e6",  "from": "n7", "to": "n6", "label": "Laura richiama" },
+          { "id": "e7",  "from": "n6", "to": "n8", "label": "verificato" },
+          { "id": "e8",  "from": "n8", "to": "n9", "label": "" },
+          { "id": "e9",  "from": "n9", "to": "n10", "label": "" },
+          { "id": "e10", "from": "n10", "to": "n11", "label": "" },
+          { "id": "e11", "from": "n11", "to": "n12", "label": "sì" },
+          { "id": "e12", "from": "n11", "to": "n13", "label": "forse" },
+          { "id": "e13", "from": "n11", "to": "n14", "label": "no" }
+        ]
+      },
       "timeline": null,
       "operativo": {
         "phases": [
