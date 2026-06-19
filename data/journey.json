@@ -83,8 +83,8 @@
             "id": "n16",
             "type": "touchpoint",
             "label": "Riceve la Guida Rivenditori in PDF",
-            "x": 1282,
-            "y": 375,
+            "x": 1319,
+            "y": 382,
             "ops_phase": 2,
             "ops_text": "Verifica del lead"
           },
