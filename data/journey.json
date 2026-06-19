@@ -158,9 +158,9 @@
           {
             "id": "n18",
             "type": "touchpoint",
-            "label": "Vede ads di remarketinf",
-            "x": 600,
-            "y": 346
+            "label": "Nuovo touchpoint",
+            "x": 586,
+            "y": 330
           }
         ],
         "edges": [
@@ -181,6 +181,18 @@
             "from": "n3",
             "to": "n7",
             "label": ""
+          },
+          {
+            "id": "e4",
+            "from": "n4",
+            "to": "n5",
+            "label": "form sito"
+          },
+          {
+            "id": "e5",
+            "from": "n5",
+            "to": "n6",
+            "label": "Laura richiama"
           },
           {
             "id": "e6",
@@ -240,24 +252,6 @@
             "id": "e16",
             "from": "n16",
             "to": "n17",
-            "label": ""
-          },
-          {
-            "id": "e4",
-            "from": "n5",
-            "to": "n18",
-            "label": ""
-          },
-          {
-            "id": "e5",
-            "from": "n18",
-            "to": "n15",
-            "label": ""
-          },
-          {
-            "id": "e15",
-            "from": "n15",
-            "to": "n16",
             "label": ""
           }
         ]
