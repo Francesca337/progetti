@@ -151,9 +151,9 @@
           {
             "id": "n17",
             "type": "decision",
-            "label": "Nuova decisione",
-            "x": 1483,
-            "y": 145
+            "label": "Valuta la collaborazione",
+            "x": 1517,
+            "y": 155
           }
         ],
         "edges": [
