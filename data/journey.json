@@ -147,13 +147,6 @@
             "ops_text": "Verifica del lead"
           },
           {
-            "id": "n17",
-            "type": "decision",
-            "label": "Valuta la collaborazione",
-            "x": 1517,
-            "y": 155
-          },
-          {
             "id": "n18",
             "type": "touchpoint",
             "label": "Nuovo touchpoint",
@@ -244,12 +237,6 @@
             "id": "e14",
             "from": "n5",
             "to": "n15",
-            "label": ""
-          },
-          {
-            "id": "e16",
-            "from": "n16",
-            "to": "n17",
             "label": ""
           },
           {
