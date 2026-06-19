@@ -176,7 +176,7 @@
               }
             ],
             "outcome": {
-              "text": "Lead spostato in 'Chiusa vinta'",
+              "text": "I lead entrano in lista \"Nuovi clienti \" Mailup + in lista rivenditori Mailup",
               "trigger": "Manuale · Laura cambia stato in Bigin"
             }
           },
