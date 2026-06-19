@@ -180,7 +180,7 @@
           {
             "id": "n21",
             "type": "end",
-            "label": "Nuovo esito",
+            "label": "",
             "x": 1897,
             "y": 153,
             "outcome": "no"
