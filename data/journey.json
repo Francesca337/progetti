@@ -196,9 +196,9 @@
           {
             "id": "n23",
             "type": "touchpoint",
-            "label": "Nuovo touchpoint",
-            "x": 2339,
-            "y": 63
+            "label": "Riceve mail di benvenuto",
+            "x": 2354,
+            "y": 62
           }
         ],
         "edges": [
