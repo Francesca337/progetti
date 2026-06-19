@@ -168,6 +168,14 @@
             "y": 158,
             "ops_phase": 3,
             "ops_text": "Incontro fissato"
+          },
+          {
+            "id": "n20",
+            "type": "end",
+            "label": "Nuovo esito",
+            "x": 310,
+            "y": 450,
+            "outcome": "yes"
           }
         ],
         "edges": [
