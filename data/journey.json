@@ -556,8 +556,8 @@
             "id": "n6",
             "type": "touchpoint",
             "label": "Atterra sulla landing B2B",
-            "x": 560,
-            "y": 420
+            "x": 527,
+            "y": 337
           },
           {
             "id": "n7",
@@ -659,12 +659,6 @@
             "from": "n2",
             "to": "n6",
             "label": ""
-          },
-          {
-            "id": "e3",
-            "from": "n3",
-            "to": "n6",
-            "label": "passa il link"
           },
           {
             "id": "e4",
