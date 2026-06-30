@@ -964,9 +964,9 @@
           {
             "id": "n20",
             "type": "touchpoint",
-            "label": "Vede contenuti sul progetto sociale",
-            "x": 1825,
-            "y": 149
+            "label": "Vede adv targeted per follower su webapp di sconti",
+            "x": 1827,
+            "y": 156
           }
         ],
         "edges": [
