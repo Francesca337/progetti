@@ -977,10 +977,11 @@
           },
           {
             "id": "n10",
-            "type": "touchpoint",
+            "type": "end",
             "label": "Nuovo touchpoint",
             "x": 1499,
-            "y": 488
+            "y": 488,
+            "outcome": "yes"
           }
         ],
         "edges": [
