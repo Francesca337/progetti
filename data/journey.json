@@ -876,13 +876,6 @@
             "y": 385
           },
           {
-            "id": "n8",
-            "type": "touchpoint",
-            "label": "Salva il contenuto",
-            "x": 867,
-            "y": 482
-          },
-          {
             "id": "n9",
             "type": "touchpoint",
             "label": "Vede adv retargeting per chi ha interagito coi contenuti",
@@ -1000,18 +993,6 @@
             "id": "e6",
             "from": "n6",
             "to": "n7",
-            "label": ""
-          },
-          {
-            "id": "e7",
-            "from": "n7",
-            "to": "n8",
-            "label": ""
-          },
-          {
-            "id": "e8",
-            "from": "n8",
-            "to": "n9",
             "label": ""
           },
           {
