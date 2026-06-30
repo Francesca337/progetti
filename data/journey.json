@@ -943,8 +943,8 @@
             "type": "end",
             "outcome": "yes",
             "label": "Visita lo store",
-            "x": 2080,
-            "y": 350
+            "x": 2166,
+            "y": 156
           },
           {
             "id": "n17",
@@ -1089,6 +1089,12 @@
             "id": "e19",
             "from": "n18",
             "to": "n20",
+            "label": ""
+          },
+          {
+            "id": "e20",
+            "from": "n20",
+            "to": "n16",
             "label": ""
           }
         ]
