@@ -958,8 +958,8 @@
             "id": "n18",
             "type": "touchpoint",
             "label": "Inizia a seguire",
-            "x": 1185,
-            "y": 156
+            "x": 1144,
+            "y": 87
           }
         ],
         "edges": [
@@ -967,12 +967,6 @@
             "id": "e1",
             "from": "n1",
             "to": "n2",
-            "label": ""
-          },
-          {
-            "id": "e4",
-            "from": "n4",
-            "to": "n5",
             "label": ""
           },
           {
