@@ -953,6 +953,13 @@
             "label": "Diventa follower attivo",
             "x": 2080,
             "y": 970
+          },
+          {
+            "id": "n18",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 1048,
+            "y": 240
           }
         ],
         "edges": [
