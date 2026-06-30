@@ -865,8 +865,8 @@
             "id": "n5",
             "type": "touchpoint",
             "label": "Vede adv targeted per follower (promo, novità, giornate speciali)",
-            "x": 1834,
-            "y": 154
+            "x": 1831,
+            "y": 72
           },
           {
             "id": "n6",
@@ -971,7 +971,7 @@
           {
             "id": "n20",
             "type": "touchpoint",
-            "label": "Nuovo touchpoint",
+            "label": "Vede contenuti sul progetto sociale",
             "x": 1793,
             "y": 280
           }
