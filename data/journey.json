@@ -1010,6 +1010,13 @@
             "label": "Riceve i racconti dal carcere",
             "x": 1598,
             "y": 1129
+          },
+          {
+            "id": "n26",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 310,
+            "y": 540
           }
         ],
         "edges": [
