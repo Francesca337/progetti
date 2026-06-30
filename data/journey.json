@@ -865,8 +865,8 @@
             "id": "n5",
             "type": "touchpoint",
             "label": "Vede adv targeted per follower (promo, novità, giornate speciali)",
-            "x": 1555,
-            "y": 148
+            "x": 1837,
+            "y": 154
           },
           {
             "id": "n6",
@@ -965,8 +965,8 @@
             "id": "n19",
             "type": "touchpoint",
             "label": "Vede adv di awereness  su Pasticceria/Gelateria Giotto",
-            "x": 1161,
-            "y": 243
+            "x": 1159,
+            "y": 158
           }
         ],
         "edges": [
