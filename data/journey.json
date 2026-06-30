@@ -974,6 +974,13 @@
             "label": "Vede contenuti su progetto sociale con invito a Seconda Occasione",
             "x": 1824,
             "y": 246
+          },
+          {
+            "id": "n21",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 400,
+            "y": 450
           }
         ],
         "edges": [
