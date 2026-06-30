@@ -964,7 +964,7 @@
           {
             "id": "n20",
             "type": "touchpoint",
-            "label": "Vede adv  di lead generation targeted per follower su webapp di sconti",
+            "label": "Vede adv  di lead generation targeted per follower non di Padova su webapp di sconti",
             "x": 1826,
             "y": 150
           },
@@ -972,8 +972,8 @@
             "id": "n3",
             "type": "touchpoint",
             "label": "Vede contenuti su progetto sociale",
-            "x": 1816,
-            "y": 229
+            "x": 1817,
+            "y": 245
           }
         ],
         "edges": [
