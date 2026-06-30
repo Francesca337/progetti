@@ -865,7 +865,7 @@
             "id": "n5",
             "type": "touchpoint",
             "label": "Vede adv targeted per follower (promo, novità, giornate speciali)",
-            "x": 1837,
+            "x": 1834,
             "y": 154
           },
           {
@@ -958,8 +958,8 @@
             "id": "n18",
             "type": "touchpoint",
             "label": "Inizia a seguire",
-            "x": 1126,
-            "y": 70
+            "x": 1461,
+            "y": 155
           },
           {
             "id": "n19",
