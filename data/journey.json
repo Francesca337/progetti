@@ -1009,7 +1009,7 @@
             "type": "touchpoint",
             "label": "Riceve i racconti dal carcere",
             "x": 1597,
-            "y": 1124
+            "y": 1133
           }
         ],
         "edges": [
@@ -1161,6 +1161,12 @@
             "id": "e25",
             "from": "n23",
             "to": "n24",
+            "label": ""
+          },
+          {
+            "id": "e26",
+            "from": "n24",
+            "to": "n25",
             "label": ""
           }
         ]
