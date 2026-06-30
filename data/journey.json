@@ -982,6 +982,13 @@
             "x": 1499,
             "y": 488,
             "outcome": "yes"
+          },
+          {
+            "id": "n22",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 490,
+            "y": 450
           }
         ],
         "edges": [
