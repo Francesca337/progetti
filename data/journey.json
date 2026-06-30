@@ -967,6 +967,13 @@
             "label": "Visita i profili Meta",
             "x": 851,
             "y": 402
+          },
+          {
+            "id": "n9",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 310,
+            "y": 450
           }
         ],
         "edges": [
