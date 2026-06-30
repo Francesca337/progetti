@@ -876,13 +876,6 @@
             "y": 385
           },
           {
-            "id": "n10",
-            "type": "touchpoint",
-            "label": "Cerca su Google Maps «gelateria / pasticceria vicina»",
-            "x": 1620,
-            "y": 560
-          },
-          {
             "id": "n11",
             "type": "entry",
             "label": "È già cliente Pasticceria / Gelateria Giotto ma non segue i social",
@@ -987,12 +980,6 @@
             "from": "n6",
             "to": "n7",
             "label": ""
-          },
-          {
-            "id": "e10",
-            "from": "n10",
-            "to": "n16",
-            "label": "indirizzo store"
           },
           {
             "id": "e11",
