@@ -858,8 +858,8 @@
             "id": "n4",
             "type": "touchpoint",
             "label": "Entra nei profili social e inizia a seguire",
-            "x": 1260,
-            "y": 150
+            "x": 859,
+            "y": 155
           },
           {
             "id": "n5",
@@ -1038,6 +1038,12 @@
             "id": "e16",
             "from": "n1",
             "to": "n3",
+            "label": ""
+          },
+          {
+            "id": "e2",
+            "from": "n2",
+            "to": "n4",
             "label": ""
           }
         ]
