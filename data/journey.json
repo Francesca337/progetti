@@ -1016,7 +1016,7 @@
             "type": "end",
             "label": "Si fidelizza maggiormente al brand",
             "x": 2078,
-            "y": 1121,
+            "y": 1132,
             "outcome": "yes"
           }
         ],
@@ -1175,6 +1175,12 @@
             "id": "e26",
             "from": "n24",
             "to": "n25",
+            "label": ""
+          },
+          {
+            "id": "e27",
+            "from": "n25",
+            "to": "n26",
             "label": ""
           }
         ]
