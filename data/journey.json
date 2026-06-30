@@ -979,8 +979,8 @@
             "id": "n21",
             "type": "touchpoint",
             "label": "Cerca su google \"pasticceria\" o \"gelateria\"",
-            "x": 544,
-            "y": 585
+            "x": 542,
+            "y": 602
           }
         ],
         "edges": [
