@@ -996,6 +996,13 @@
             "label": "Vede adv Meta su iscrizione a Seconda Occasione",
             "x": 917,
             "y": 1130
+          },
+          {
+            "id": "n24",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 670,
+            "y": 450
           }
         ],
         "edges": [
