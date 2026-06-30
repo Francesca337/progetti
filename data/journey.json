@@ -964,16 +964,9 @@
           {
             "id": "n19",
             "type": "touchpoint",
-            "label": "Vede adv di awereness  su Pasticceria/Gelateria Giotto",
-            "x": 1159,
-            "y": 158
-          },
-          {
-            "id": "n20",
-            "type": "touchpoint",
             "label": "Vede adv di awereness su visitatori dei profili social Meta",
             "x": 1159,
-            "y": 299
+            "y": 158
           }
         ],
         "edges": [
@@ -1077,12 +1070,6 @@
             "id": "e17",
             "from": "n19",
             "to": "n18",
-            "label": ""
-          },
-          {
-            "id": "e18",
-            "from": "n19",
-            "to": "n20",
             "label": ""
           }
         ]
