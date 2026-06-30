@@ -960,6 +960,13 @@
             "label": "Inizia a seguire",
             "x": 1126,
             "y": 70
+          },
+          {
+            "id": "n19",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 1137,
+            "y": 237
           }
         ],
         "edges": [
