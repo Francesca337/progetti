@@ -833,45 +833,219 @@
         "intro_title": "Come arriva fino allo store (o al profilo)",
         "intro": "Tre profili di partenza diversi (padovano, turista in vacanza, cliente già attivo non-social) che convergono su due esiti: visitare lo store o diventare follower attivo.",
         "nodes": [
-          { "id": "n1",  "type": "entry",      "label": "Vive a Padova o nelle vicinanze",                                "x": 180,  "y": 150 },
-          { "id": "n2",  "type": "touchpoint", "label": "Vede adv Instagram / Facebook degli store Giotto",               "x": 540,  "y": 150 },
-          { "id": "n3",  "type": "touchpoint", "label": "Vede video TikTok degli store Giotto",                           "x": 900,  "y": 150 },
-          { "id": "n4",  "type": "touchpoint", "label": "Entra nei profili social e inizia a seguire",                   "x": 1260, "y": 150 },
-          { "id": "n5",  "type": "touchpoint", "label": "Riceve adv targeted per follower (promo, novità, giornate speciali)", "x": 1620, "y": 150 },
-
-          { "id": "n6",  "type": "entry",      "label": "Si trova a Padova in vacanza",                                  "x": 180,  "y": 560 },
-          { "id": "n7",  "type": "touchpoint", "label": "Vede adv Instagram / Facebook nella sua lingua",                "x": 540,  "y": 560 },
-          { "id": "n8",  "type": "touchpoint", "label": "Salva il contenuto",                                            "x": 900,  "y": 560 },
-          { "id": "n9",  "type": "touchpoint", "label": "Vede adv retargeting per chi ha interagito coi contenuti",      "x": 1260, "y": 560 },
-          { "id": "n10", "type": "touchpoint", "label": "Cerca su Google Maps «gelateria / pasticceria vicina»",         "x": 1620, "y": 560 },
-
-          { "id": "n11", "type": "entry",      "label": "È già cliente Pasticceria / Gelateria Giotto ma non segue i social", "x": 180,  "y": 970 },
-          { "id": "n12", "type": "touchpoint", "label": "Scansiona il QR sui tavoli dello store",                        "x": 540,  "y": 970 },
-          { "id": "n13", "type": "touchpoint", "label": "Vede adv Instagram / Facebook su novità gelateria & pasticceria", "x": 900,  "y": 970 },
-          { "id": "n14", "type": "touchpoint", "label": "Inizia a seguire i profili social",                             "x": 1260, "y": 970 },
-          { "id": "n15", "type": "touchpoint", "label": "Riceve adv targeted per follower (promo, novità, giornate speciali)", "x": 1620, "y": 970 },
-
-          { "id": "n16", "type": "end", "outcome": "yes", "label": "Visita lo store",            "x": 2080, "y": 350 },
-          { "id": "n17", "type": "end", "outcome": "yes", "label": "Diventa follower attivo",    "x": 2080, "y": 970 }
+          {
+            "id": "n1",
+            "type": "entry",
+            "label": "Vive a Padova o nelle vicinanze",
+            "x": 180,
+            "y": 150
+          },
+          {
+            "id": "n2",
+            "type": "touchpoint",
+            "label": "Vede adv Instagram / Facebook degli store Giotto",
+            "x": 540,
+            "y": 150
+          },
+          {
+            "id": "n3",
+            "type": "touchpoint",
+            "label": "Vede video TikTok degli store Giotto",
+            "x": 543,
+            "y": 290
+          },
+          {
+            "id": "n4",
+            "type": "touchpoint",
+            "label": "Entra nei profili social e inizia a seguire",
+            "x": 1260,
+            "y": 150
+          },
+          {
+            "id": "n5",
+            "type": "touchpoint",
+            "label": "Riceve adv targeted per follower (promo, novità, giornate speciali)",
+            "x": 1620,
+            "y": 150
+          },
+          {
+            "id": "n6",
+            "type": "entry",
+            "label": "Si trova a Padova in vacanza",
+            "x": 180,
+            "y": 560
+          },
+          {
+            "id": "n7",
+            "type": "touchpoint",
+            "label": "Vede adv Instagram / Facebook nella sua lingua",
+            "x": 540,
+            "y": 560
+          },
+          {
+            "id": "n8",
+            "type": "touchpoint",
+            "label": "Salva il contenuto",
+            "x": 900,
+            "y": 560
+          },
+          {
+            "id": "n9",
+            "type": "touchpoint",
+            "label": "Vede adv retargeting per chi ha interagito coi contenuti",
+            "x": 1260,
+            "y": 560
+          },
+          {
+            "id": "n10",
+            "type": "touchpoint",
+            "label": "Cerca su Google Maps «gelateria / pasticceria vicina»",
+            "x": 1620,
+            "y": 560
+          },
+          {
+            "id": "n11",
+            "type": "entry",
+            "label": "È già cliente Pasticceria / Gelateria Giotto ma non segue i social",
+            "x": 180,
+            "y": 970
+          },
+          {
+            "id": "n12",
+            "type": "touchpoint",
+            "label": "Scansiona il QR sui tavoli dello store",
+            "x": 540,
+            "y": 970
+          },
+          {
+            "id": "n13",
+            "type": "touchpoint",
+            "label": "Vede adv Instagram / Facebook su novità gelateria & pasticceria",
+            "x": 900,
+            "y": 970
+          },
+          {
+            "id": "n14",
+            "type": "touchpoint",
+            "label": "Inizia a seguire i profili social",
+            "x": 1260,
+            "y": 970
+          },
+          {
+            "id": "n15",
+            "type": "touchpoint",
+            "label": "Riceve adv targeted per follower (promo, novità, giornate speciali)",
+            "x": 1620,
+            "y": 970
+          },
+          {
+            "id": "n16",
+            "type": "end",
+            "outcome": "yes",
+            "label": "Visita lo store",
+            "x": 2080,
+            "y": 350
+          },
+          {
+            "id": "n17",
+            "type": "end",
+            "outcome": "yes",
+            "label": "Diventa follower attivo",
+            "x": 2080,
+            "y": 970
+          }
         ],
         "edges": [
-          { "id": "e1",  "from": "n1",  "to": "n2",  "label": "" },
-          { "id": "e2",  "from": "n2",  "to": "n3",  "label": "" },
-          { "id": "e3",  "from": "n3",  "to": "n4",  "label": "" },
-          { "id": "e4",  "from": "n4",  "to": "n5",  "label": "" },
-          { "id": "e5",  "from": "n5",  "to": "n16", "label": "promo / evento" },
-
-          { "id": "e6",  "from": "n6",  "to": "n7",  "label": "" },
-          { "id": "e7",  "from": "n7",  "to": "n8",  "label": "" },
-          { "id": "e8",  "from": "n8",  "to": "n9",  "label": "" },
-          { "id": "e9",  "from": "n9",  "to": "n10", "label": "" },
-          { "id": "e10", "from": "n10", "to": "n16", "label": "indirizzo store" },
-
-          { "id": "e11", "from": "n11", "to": "n12", "label": "in store" },
-          { "id": "e12", "from": "n12", "to": "n13", "label": "" },
-          { "id": "e13", "from": "n13", "to": "n14", "label": "" },
-          { "id": "e14", "from": "n14", "to": "n15", "label": "" },
-          { "id": "e15", "from": "n15", "to": "n17", "label": "" }
+          {
+            "id": "e1",
+            "from": "n1",
+            "to": "n2",
+            "label": ""
+          },
+          {
+            "id": "e2",
+            "from": "n2",
+            "to": "n3",
+            "label": ""
+          },
+          {
+            "id": "e3",
+            "from": "n3",
+            "to": "n4",
+            "label": ""
+          },
+          {
+            "id": "e4",
+            "from": "n4",
+            "to": "n5",
+            "label": ""
+          },
+          {
+            "id": "e5",
+            "from": "n5",
+            "to": "n16",
+            "label": "promo / evento"
+          },
+          {
+            "id": "e6",
+            "from": "n6",
+            "to": "n7",
+            "label": ""
+          },
+          {
+            "id": "e7",
+            "from": "n7",
+            "to": "n8",
+            "label": ""
+          },
+          {
+            "id": "e8",
+            "from": "n8",
+            "to": "n9",
+            "label": ""
+          },
+          {
+            "id": "e9",
+            "from": "n9",
+            "to": "n10",
+            "label": ""
+          },
+          {
+            "id": "e10",
+            "from": "n10",
+            "to": "n16",
+            "label": "indirizzo store"
+          },
+          {
+            "id": "e11",
+            "from": "n11",
+            "to": "n12",
+            "label": "in store"
+          },
+          {
+            "id": "e12",
+            "from": "n12",
+            "to": "n13",
+            "label": ""
+          },
+          {
+            "id": "e13",
+            "from": "n13",
+            "to": "n14",
+            "label": ""
+          },
+          {
+            "id": "e14",
+            "from": "n14",
+            "to": "n15",
+            "label": ""
+          },
+          {
+            "id": "e15",
+            "from": "n15",
+            "to": "n17",
+            "label": ""
+          }
         ]
       },
       "timeline": null,
