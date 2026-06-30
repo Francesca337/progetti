@@ -978,7 +978,7 @@
           {
             "id": "n10",
             "type": "end",
-            "label": "Nuovo touchpoint",
+            "label": "Visita gli store",
             "x": 1499,
             "y": 488,
             "outcome": "yes"
