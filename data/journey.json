@@ -844,15 +844,8 @@
             "id": "n2",
             "type": "touchpoint",
             "label": "Vede adv Instagram / Facebook degli store Giotto",
-            "x": 557,
-            "y": 62
-          },
-          {
-            "id": "n3",
-            "type": "touchpoint",
-            "label": "Vede video TikTok degli store Giotto",
-            "x": 554,
-            "y": 238
+            "x": 558,
+            "y": 145
           },
           {
             "id": "n4",
@@ -1050,20 +1043,8 @@
             "label": ""
           },
           {
-            "id": "e16",
-            "from": "n1",
-            "to": "n3",
-            "label": ""
-          },
-          {
             "id": "e2",
             "from": "n2",
-            "to": "n4",
-            "label": ""
-          },
-          {
-            "id": "e3",
-            "from": "n3",
             "to": "n4",
             "label": ""
           },
