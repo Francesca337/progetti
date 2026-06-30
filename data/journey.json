@@ -1003,6 +1003,13 @@
             "label": "Si iscrive alla newsletter",
             "x": 1249,
             "y": 1128
+          },
+          {
+            "id": "n25",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 220,
+            "y": 540
           }
         ],
         "edges": [
