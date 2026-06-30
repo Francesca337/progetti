@@ -974,6 +974,13 @@
             "label": "Vede adv di retargeting su follower di lingue straniere con prelibatezze invernali Giotto",
             "x": 1166,
             "y": 399
+          },
+          {
+            "id": "n10",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 400,
+            "y": 450
           }
         ],
         "edges": [
