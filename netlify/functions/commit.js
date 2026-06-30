@@ -3,9 +3,15 @@
 // Personal Access Token lives in Netlify env vars, never in client code).
 //
 // Endpoints (same function path, dispatched by HTTP method):
-//   GET  /.netlify/functions/commit?path=PATH  → returns { content, sha, ... }
-//   POST /.netlify/functions/commit             → body: { path, content (b64), message }
-//                                                 → commits to repo, returns GitHub response
+//   GET  /.netlify/functions/commit?path=PATH           → returns { content, sha, ... }
+//   GET  /.netlify/functions/commit?path=PATH&raw=1     → returns the decoded file body
+//                                                         (used by the dashboard to read
+//                                                          journey.json live from GitHub
+//                                                          without a Netlify rebuild)
+//   POST /.netlify/functions/commit                     → body: { path, content (b64), message }
+//                                                         → commits to repo, returns GitHub response
+//                                                         Commit messages get [skip ci] appended
+//                                                         so CMS edits don't burn build minutes.
 
 const TOKEN  = process.env.GITHUB_TOKEN;
 const REPO   = process.env.GITHUB_REPO   || "Francesca337/progetti";
@@ -33,7 +39,9 @@ exports.handler = async (event) => {
 
   try {
     if (event.httpMethod === "GET") {
-      const path = (event.queryStringParameters || {}).path;
+      const qs   = event.queryStringParameters || {};
+      const path = qs.path;
+      const raw  = qs.raw === "1";
       if (!path) {
         return { statusCode: 400, headers: corsHeaders, body: JSON.stringify({ error: "path required" }) };
       }
@@ -49,6 +57,27 @@ exports.handler = async (event) => {
         return { statusCode: res.status, headers: corsHeaders, body: JSON.stringify({ error: txt }) };
       }
       const data = await res.json();
+      if (raw) {
+        const decoded = Buffer.from(data.content || "", "base64").toString("utf8");
+        // Pick a Content-Type by extension so JSON callers can fetch().json()
+        const ext = (path.split(".").pop() || "").toLowerCase();
+        const contentType =
+          ext === "json" ? "application/json; charset=utf-8" :
+          ext === "html" ? "text/html; charset=utf-8" :
+          ext === "css"  ? "text/css; charset=utf-8" :
+          ext === "js"   ? "text/javascript; charset=utf-8" :
+                            "text/plain; charset=utf-8";
+        return {
+          statusCode: 200,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": contentType,
+            // Always-fresh: the whole point of bypassing rebuilds is live reads.
+            "Cache-Control": "no-store, max-age=0",
+          },
+          body: decoded,
+        };
+      }
       return { statusCode: 200, headers: corsHeaders, body: JSON.stringify(data) };
     }
 
@@ -70,8 +99,15 @@ exports.handler = async (event) => {
         sha = cur.sha;
       }
 
+      // Append [skip ci] so CMS edits don't trigger Netlify rebuilds.
+      // Data is read live via this Function (raw=1), so no rebuild is needed.
+      const baseMsg = message || `cms: update ${path}`;
+      const finalMsg = /\[(skip ci|skip netlify|netlify skip)\]/i.test(baseMsg)
+        ? baseMsg
+        : `${baseMsg} [skip ci]`;
+
       const payload = {
-        message: message || `cms: update ${path}`,
+        message: finalMsg,
         content,
         branch: BRANCH,
         ...(sha ? { sha } : {}),
