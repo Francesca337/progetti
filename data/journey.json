@@ -967,6 +967,13 @@
             "label": "Vede adv  di lead generation targeted per follower su webapp di sconti",
             "x": 1826,
             "y": 150
+          },
+          {
+            "id": "n3",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 310,
+            "y": 450
           }
         ],
         "edges": [
