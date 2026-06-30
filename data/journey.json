@@ -858,7 +858,7 @@
             "id": "n5",
             "type": "touchpoint",
             "label": "Vede adv targeted per follower promo natalizie in-store",
-            "x": 1829,
+            "x": 1827,
             "y": 60
           },
           {
@@ -965,8 +965,8 @@
             "id": "n20",
             "type": "touchpoint",
             "label": "Vede adv targeted per follower su webapp di sconti",
-            "x": 1827,
-            "y": 156
+            "x": 1826,
+            "y": 148
           }
         ],
         "edges": [
