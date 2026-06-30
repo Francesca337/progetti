@@ -960,6 +960,13 @@
             "label": "Cerca su google \"pasticceria\" o \"gelateria\"",
             "x": 537,
             "y": 561
+          },
+          {
+            "id": "n8",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 220,
+            "y": 450
           }
         ],
         "edges": [
