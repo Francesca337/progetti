@@ -967,6 +967,13 @@
             "label": "Vede adv di awereness  su Pasticceria/Gelateria Giotto",
             "x": 1159,
             "y": 158
+          },
+          {
+            "id": "n20",
+            "type": "touchpoint",
+            "label": "Nuovo touchpoint",
+            "x": 310,
+            "y": 450
           }
         ],
         "edges": [
