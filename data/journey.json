@@ -876,13 +876,6 @@
             "y": 385
           },
           {
-            "id": "n9",
-            "type": "touchpoint",
-            "label": "Vede adv retargeting per chi ha interagito coi contenuti",
-            "x": 1175,
-            "y": 480
-          },
-          {
             "id": "n10",
             "type": "touchpoint",
             "label": "Cerca su Google Maps «gelateria / pasticceria vicina»",
@@ -993,12 +986,6 @@
             "id": "e6",
             "from": "n6",
             "to": "n7",
-            "label": ""
-          },
-          {
-            "id": "e9",
-            "from": "n9",
-            "to": "n10",
             "label": ""
           },
           {
