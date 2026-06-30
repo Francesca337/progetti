@@ -1013,10 +1013,11 @@
           },
           {
             "id": "n26",
-            "type": "touchpoint",
-            "label": "Nuovo touchpoint",
+            "type": "end",
+            "label": "Si fidelizza maggiormente al brand",
             "x": 2041,
-            "y": 1119
+            "y": 1119,
+            "outcome": "yes"
           }
         ],
         "edges": [
